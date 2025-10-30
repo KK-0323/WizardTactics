@@ -2,9 +2,31 @@
 //
 
 #include "framework.h"
+#include <cstdlib>
+#include <string>
 #include "WizardTactics.h"
+#include "Engine\\Direct3D.h"
+#include "Engine\\Camera.h"
+#include "Engine\\Transform.h"
+#include "Engine\\Input.h"
+
+//#include "Engine\\RootJob.h"
+//#include "Engine\\Model.h"
+
+#pragma comment(lib,"winmm.lib")
+
+
+HWND hWnd = nullptr; // ウィンドウハンドル
+
+
 
 #define MAX_LOADSTRING 100
+
+const wchar_t* WIN_CLASS_NAME = L"WIZARD TACTICS"; // ウィンドウ クラス名
+const int WINDOW_WIDTH = 1280;  //ウィンドウの幅
+const int WINDOW_HEIGHT = 720; //ウィンドウの高さ //SVGAサイズ
+
+//RootJob* pRootJob = nullptr;
 
 // グローバル変数:
 HINSTANCE hInst;                                // 現在のインターフェイス
@@ -18,41 +40,130 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR    lpCmdLine,
+    _In_ int       nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: ここにコードを挿入してください。
 
+    //szWindowClass = WIN_CLASS_NAME; // ウィンドウ クラス名を設定
+
     // グローバル文字列を初期化する
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_WIZARDTACTICS, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
+
     // アプリケーション初期化の実行:
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
 
+    //Direct3D初期化
+    HRESULT hr;
+    hr = Direct3D::Initialize(WINDOW_WIDTH, WINDOW_HEIGHT, hWnd);
+    if (FAILED(hr))
+    {
+        return 0;
+    }
+
+    Input::Initialize(hWnd); // 入力初期化
+
+    Camera::Initialize(); // カメラの初期化
+
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WIZARDTACTICS));
 
-    MSG msg;
+    MSG msg = {};
+
+    //pRootJob = new RootJob(nullptr);
+    //pRootJob->Initialize();
 
     // メイン メッセージ ループ:
-    while (GetMessage(&msg, nullptr, 0, 0))
+    while (msg.message != WM_QUIT)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        //メッセージあり
+
+        while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+        //メッセージなし
+        //static long int cnt = 0;
+        //string str = "Sample Game cnt:" + std::to_string(cnt++);
+
+        //timeBeginPeriod(1);
+        //static DWORD countFps = 0; // FPS計測用カウンタ
+        //static DWORD startTime = timeGetTime(); // 初回の時間を保存
+        //DWORD nowTime = timeGetTime(); // 現在の時間を取得
+        //static DWORD lastUpdateTime = nowTime;
+
+        //if (nowTime - startTime >= 1000)
+        //{
+        //    std::string str = "FPS:" + std::to_string(nowTime - startTime)
+        //        + ", " + std::to_string(countFps);
+        //    SetWindowTextA(hWnd, str.c_str());
+        //    countFps = 0;
+        //    startTime = nowTime;
+        //}
+
+        //if (nowTime - lastUpdateTime <= 1000.0f / 60)
+        //{
+        //    continue;
+        //}
+        //lastUpdateTime = nowTime;
+
+        //countFps++;
+        ////startTime = nowTime;
+        //timeEndPeriod(1);
+
+        ////ゲームの処理
+        Camera::Update(); // カメラの更新
+        Input::Update(); //　入力更新
+
+        //pRootJob->Update();
+
+        if (Input::IsKeyDown(DIK_ESCAPE))
+        {
+            static int cnt = 0;
+            cnt++;
+            if (cnt >= 3)
+            {
+                PostQuitMessage(0);
+            }
+
+        }
+
+        if (Input::IsMouseButtonDown(0))
+        {
+            static int cnt = 0;
+            cnt++;
+            if (cnt >= 3)
+            {
+                PostQuitMessage(0);
+            }
+        }
+
+        Direct3D::BeginDraw();
+
+    //    //pRootJobから全てのオブジェクトを描画する
+    //    pRootJob->DrawSub();
+    //    pRootJob->UpdateSub();
+
+        Direct3D::EndDraw();
     }
 
-    return (int) msg.wParam;
+    //Model::Release();
+    Input::Release();
+    //pRootJob->ReleaseSub();
+    Direct3D::Release();
+
+
+    return (int)msg.wParam;
 }
 
 
@@ -68,17 +179,17 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WIZARDTACTICS));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_WIZARDTACTICS);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDC_WIZARDTACTICS));
+    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.lpszMenuName = NULL;
+    wcex.lpszClassName = szWindowClass;
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     return RegisterClassExW(&wcex);
 }
@@ -95,20 +206,27 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
+    hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    //ウィンドウサイズの計算
+    RECT winRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+    AdjustWindowRect(&winRect, WS_OVERLAPPEDWINDOW, FALSE);
+    int winW = winRect.right - winRect.left;     //ウィンドウ幅
+    int winH = winRect.bottom - winRect.top;     //ウィンドウ高さ
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    hWnd = CreateWindowW(szWindowClass, WIN_CLASS_NAME, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0, winW, winH, nullptr, nullptr, hInstance, nullptr);
 
-   return TRUE;
+    if (!hWnd)
+    {
+        return FALSE;
+    }
+
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
+
+    return TRUE;
 }
 
 //
@@ -126,30 +244,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        // 選択されたメニューの解析:
+        switch (wmId)
         {
-            int wmId = LOWORD(wParam);
-            // 選択されたメニューの解析:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+        case IDM_ABOUT:
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
         }
-        break;
+    }
+    break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: HDC を使用する描画コードをここに追加してください...
-            EndPaint(hWnd, &ps);
-        }
-        break;
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        // TODO: HDC を使用する描画コードをここに追加してください...
+        EndPaint(hWnd, &ps);
+    }
+    break;
+    case WM_MOUSEMOVE:
+    {
+        int x = LOWORD(lParam);
+        int y = LOWORD(lParam);
+        Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
+        OutputDebugStringA((std::to_string(x) + "," + std::to_string(y) + "\n").c_str());
+    }
+    break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
