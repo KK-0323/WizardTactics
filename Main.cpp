@@ -1,10 +1,10 @@
-﻿// WizardTactics.cpp : アプリケーションのエントリ ポイントを定義します。
+﻿// Main.cpp : アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "framework.h"
 #include <cstdlib>
 #include <string>
-#include "WizardTactics.h"
+#include "Main.h"
 #include "Engine\\Direct3D.h"
 #include "Engine\\Camera.h"
 #include "Engine\\Transform.h"
@@ -53,7 +53,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // グローバル文字列を初期化する
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_WIZARDTACTICS, szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_Main, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
 
@@ -75,7 +75,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     Camera::Initialize(); // カメラの初期化
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WIZARDTACTICS));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_Main));
 
     MSG msg = {};
 
@@ -184,7 +184,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDC_WIZARDTACTICS));
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDC_Main));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = NULL;

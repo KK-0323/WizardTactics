@@ -1,17 +1,17 @@
 ﻿//{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ で生成されたインクルード ファイルです。
-// 次で使用: WizardTactics.rc
+// 次で使用: Main.rc
 
 #define IDS_APP_TITLE			103
 
 #define IDR_MAINFRAME			128
-#define IDD_WIZARDTACTICS_DIALOG	102
+#define IDD_Main_DIALOG	102
 #define IDD_ABOUTBOX			103
 #define IDM_ABOUT				104
 #define IDM_EXIT				105
-#define IDI_WIZARDTACTICS			107
+#define IDI_Main			107
 #define IDI_SMALL				108
-#define IDC_WIZARDTACTICS			109
+#define IDC_Main			109
 #define IDC_MYICON				2
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
