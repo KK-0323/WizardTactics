@@ -9,8 +9,7 @@
 #include "Engine\\Camera.h"
 #include "Engine\\Transform.h"
 #include "Engine\\Input.h"
-
-//#include "Engine\\RootJob.h"
+#include "Engine\\RootJob.h"
 //#include "Engine\\Model.h"
 
 #pragma comment(lib,"winmm.lib")
@@ -26,7 +25,7 @@ const wchar_t* WIN_CLASS_NAME = L"WIZARD TACTICS"; // ウィンドウ クラス�
 const int WINDOW_WIDTH = 1280;  //ウィンドウの幅
 const int WINDOW_HEIGHT = 720; //ウィンドウの高さ //SVGAサイズ
 
-//RootJob* pRootJob = nullptr;
+RootJob* pRootJob = nullptr;
 
 // グローバル変数:
 HINSTANCE hInst;                                // 現在のインターフェイス
@@ -79,8 +78,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg = {};
 
-    //pRootJob = new RootJob(nullptr);
-    //pRootJob->Initialize();
+    pRootJob = new RootJob(nullptr);
+    pRootJob->Initialize();
 
     // メイン メッセージ ループ:
     while (msg.message != WM_QUIT)
@@ -93,73 +92,72 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             DispatchMessage(&msg);
         }
         //メッセージなし
-        //static long int cnt = 0;
-        //string str = "Sample Game cnt:" + std::to_string(cnt++);
+        static long int cnt = 0;
+        string str = "Sample Game cnt:" + std::to_string(cnt++);
 
-        //timeBeginPeriod(1);
-        //static DWORD countFps = 0; // FPS計測用カウンタ
-        //static DWORD startTime = timeGetTime(); // 初回の時間を保存
-        //DWORD nowTime = timeGetTime(); // 現在の時間を取得
-        //static DWORD lastUpdateTime = nowTime;
+        timeBeginPeriod(1);
+        static DWORD countFps = 0; // FPS計測用カウンタ
+        static DWORD startTime = timeGetTime(); // 初回の時間を保存
+        DWORD nowTime = timeGetTime(); // 現在の時間を取得
+        static DWORD lastUpdateTime = nowTime;
 
-        //if (nowTime - startTime >= 1000)
-        //{
-        //    std::string str = "FPS:" + std::to_string(nowTime - startTime)
-        //        + ", " + std::to_string(countFps);
-        //    SetWindowTextA(hWnd, str.c_str());
-        //    countFps = 0;
-        //    startTime = nowTime;
-        //}
+        if (nowTime - startTime >= 1000)
+        {
+            std::string str = "FPS:" + std::to_string(nowTime - startTime)
+                + ", " + std::to_string(countFps);
+            SetWindowTextA(hWnd, str.c_str());
+            countFps = 0;
+            startTime = nowTime;
+        }
 
-        //if (nowTime - lastUpdateTime <= 1000.0f / 60)
-        //{
-        //    continue;
-        //}
-        //lastUpdateTime = nowTime;
+        if (nowTime - lastUpdateTime <= 1000.0f / 60)
+        {
+            continue;
+        }
+        lastUpdateTime = nowTime;
 
-        //countFps++;
-        ////startTime = nowTime;
-        //timeEndPeriod(1);
+        countFps++;
+        //startTime = nowTime;
+        timeEndPeriod(1);
 
         ////ゲームの処理
         Camera::Update(); // カメラの更新
         Input::Update(); //　入力更新
 
-        //pRootJob->Update();
+        pRootJob->Update();
 
-        if (Input::IsKeyDown(DIK_ESCAPE))
-        {
-            static int cnt = 0;
-            cnt++;
-            if (cnt >= 3)
-            {
-                PostQuitMessage(0);
-            }
+        //if (Input::IsKeyDown(DIK_ESCAPE))
+        //{
+        //    static int cnt = 0;
+        //    cnt++;
+        //    if (cnt >= 3)
+        //    {
+        //        PostQuitMessage(0);
+        //    }
+        //}
 
-        }
-
-        if (Input::IsMouseButtonDown(0))
-        {
-            static int cnt = 0;
-            cnt++;
-            if (cnt >= 3)
-            {
-                PostQuitMessage(0);
-            }
-        }
+        //if (Input::IsMouseButtonDown(0))
+        //{
+        //    static int cnt = 0;
+        //    cnt++;
+        //    if (cnt >= 3)
+        //    {
+        //        PostQuitMessage(0);
+        //    }
+        //}
 
         Direct3D::BeginDraw();
 
-    //    //pRootJobから全てのオブジェクトを描画する
-    //    pRootJob->DrawSub();
-    //    pRootJob->UpdateSub();
+        //pRootJobから全てのオブジェクトを描画する
+        pRootJob->DrawSub();
+        pRootJob->UpdateSub();
 
         Direct3D::EndDraw();
     }
 
     //Model::Release();
     Input::Release();
-    //pRootJob->ReleaseSub();
+    pRootJob->ReleaseSub();
     Direct3D::Release();
 
 
