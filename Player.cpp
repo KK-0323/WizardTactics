@@ -13,20 +13,17 @@ Player::~Player()
 void Player::Initialize()
 {
 	pFbx_ = new Fbx;
-	//pFbx_がnullptrじゃなかったらのチェックを入れたほうがいい
 	pFbx_->Load("Player.fbx");
-	transform_.scale_.x = 0.7f;
-	transform_.scale_.y = 0.7f;
-	transform_.scale_.z = 0.7f;
+	transform_.position_ = { -20.0f, 0.0f, 30.0f };
 }
 
 void Player::Update()
 {
-	transform_.rotate_.y += 1.0f;
-	if (transform_.rotate_.y > 360.0f)
-	{
-		KillMe();
-	}
+	//transform_.rotate_.y += 1.0f;
+	//if (transform_.rotate_.y > 360.0f)
+	//{
+	//	KillMe();
+	//}
 }
 
 void Player::Draw()

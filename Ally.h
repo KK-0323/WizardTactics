@@ -1,14 +1,13 @@
 #pragma once
 #include "Engine\\GameObject.h"
+#include "Engine\\Fbx.h"
 
-class Fbx; // ‘O•ûéŒ¾
-
-class Player :
+class Ally :
     public GameObject
 {
 public:
-    Player(GameObject* parent);
-    ~Player();
+    Ally(GameObject* parent);
+    ~Ally();
     void Initialize() override;
     void Update() override;
     void Draw() override;
