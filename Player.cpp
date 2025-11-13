@@ -1,8 +1,9 @@
 #include "Player.h"
 #include "Engine\\Fbx.h"
+#include "Engine\\Input.h"
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), pFbx_(nullptr)
+	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed(0.5f)
 {
 }
 
@@ -15,15 +16,19 @@ void Player::Initialize()
 	pFbx_ = new Fbx;
 	pFbx_->Load("Player.fbx");
 	transform_.position_ = { -20.0f, 0.0f, 30.0f };
+	transform_.rotate_.y = 90.0f;
 }
 
 void Player::Update()
 {
-	//transform_.rotate_.y += 1.0f;
-	//if (transform_.rotate_.y > 360.0f)
-	//{
-	//	KillMe();
-	//}
+	if (Input::IsKey(DIK_LEFT))
+	{
+		transform_.position_.x -= moveSpeed;
+	}
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		transform_.position_.x += moveSpeed;
+	}
 }
 
 void Player::Draw()

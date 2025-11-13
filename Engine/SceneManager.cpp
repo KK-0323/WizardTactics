@@ -30,6 +30,7 @@ void SceneManager::Update()
 		switch (nextSceneID_)
 		{
 		case SCENE_ID_TITLE:
+			Instantiate<TitleScene>(this);
 			break;
 		case SCENE_ID_PLAY:
 			Instantiate<PlayScene>(this);
@@ -45,6 +46,7 @@ void SceneManager::Update()
 		default:
 			break;
 		}
+		currentSceneID_ = nextSceneID_;
 	}
 }
 
