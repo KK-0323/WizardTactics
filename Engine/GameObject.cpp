@@ -56,3 +56,43 @@ void GameObject::KillMe()
 {
 	isDead_ = true;
 }
+
+GameObject* GameObject::GetRootJob()
+{
+	if (pParent_ == nullptr)
+	{
+		return this; // RootJob
+	}
+	else
+	{
+		return pParent_->GetRootJob();
+
+	}
+}
+
+GameObject* GameObject::FindChildObject(const string& name)
+{
+	if (this->objectName_ == name)
+	{
+		return this;
+	}
+	else
+	{
+		for (auto child : childList_)
+		{
+			GameObject* result = child->FindChildObject(name);
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+	return this;
+}
+
+GameObject* GameObject::FindObject(const string& name)
+{
+	GameObject* rootJob = GetRootJob();
+	GameObject* result = rootJob->FindChildObject(name);
+	return result;
+}

@@ -1,5 +1,6 @@
 #include "RootJob.h"
-#include "..\PlayScene.h"
+#include "..\\PlayScene.h"
+#include "SceneManager.h"
 
 RootJob::RootJob(GameObject* parent)
 	:GameObject(parent, "RootJob")
@@ -12,7 +13,8 @@ RootJob::~RootJob()
 
 void RootJob::Initialize()
 {
-	Instantiate<PlayScene>(this);
+	//Instantiate<PlayScene>(this);
+	Instantiate<SceneManager>(this);
 }
 
 void RootJob::Update()
