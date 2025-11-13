@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "Engine\\Input.h"
 #include "Engine\\SceneManager.h"
+#include "Stage.h"
 
 TitleScene::TitleScene(GameObject* parent)
 	:GameObject(parent, "TitleScene")
@@ -13,6 +14,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
+	Instantiate<Stage>(this);
 }
 
 void TitleScene::Update()
