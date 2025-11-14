@@ -1,4 +1,7 @@
 #include "Stage.h"
+#include <fstream>
+#include <sstream>
+#include <string>
 
 Stage::Stage(GameObject* parent)
 	:GameObject(parent, "Stage"), pFbx_(nullptr)
