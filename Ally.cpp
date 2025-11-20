@@ -14,15 +14,16 @@ void Ally::Initialize()
 {
 	pFbx_ = new Fbx;
 	pFbx_->Load("Ally.fbx");
-	transform_.position_ = { 0.0f, 0.0f, 30.0f };
+	transform_.position_ = { -20.0f, 0.0f, 30.0f };
 	transform_.rotate_.y = 90.0f;
 
-	// ポインタ取得
-	pTargetPlayer_ = FindObject("Player");
+	
 }
 
 void Ally::Update()
 {
+	// ポインタ取得
+	pTargetPlayer_ = FindObject("Player");
 	// Playerの位置に合わせて追従
 	if (pTargetPlayer_)
 	{
