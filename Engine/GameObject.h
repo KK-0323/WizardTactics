@@ -30,6 +30,8 @@ public:
 	GameObject* FindChildObject(const string& name);
 	GameObject* FindObject(const string& name);
 
+	const XMFLOAT3& GetPosition() const { return transform_.position_; }
+
 	template <typename T>
 	void Instantiate(GameObject* parent)
 	{

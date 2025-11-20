@@ -14,5 +14,7 @@ public:
     void Release() override;
 private:
     Fbx* pFbx_;
+    float moveSpeed_;
+    GameObject* pTargetPlayer_;
 };
 
