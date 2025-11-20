@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine\\GameObject.h"
 #include "Engine\\Fbx.h"
+#include <cmath>
 
 class Enemy :
     public GameObject
@@ -14,5 +15,11 @@ public:
 	void Release() override;
 private:
 	Fbx* pFbx_;
+
+	float initialX_;
+	float amplitude_ = 5.0f;
+	float speed_ = 1.0f;
+
+	float time_ = 0.0f;
 };
 
