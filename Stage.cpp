@@ -15,13 +15,14 @@ Stage::~Stage()
 void Stage::Initialize()
 {
 	pFbx_ = new Fbx;
-	pFbx_->Load("Road.fbx");
+	pFbx_->Load("Stage.fbx");
 	transform_.position_ = { 0.0f, 0.0f, 0.0f };
-	//transform_.rotate_.y = 0.0f;
+	
 }
 
 void Stage::Update()
 {
+	transform_.rotate_.y += 0.5f;
 }
 
 void Stage::Draw()
