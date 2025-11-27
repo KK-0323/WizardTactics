@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Ally::Ally(GameObject* parent)
-	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f)
+	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed__(0.5f)
 {
 }
 
@@ -14,7 +14,7 @@ void Ally::Initialize()
 {
 	pFbx_ = new Fbx;
 	pFbx_->Load("Ally.fbx");
-	transform_.position_ = { -20.0f, 0.0f, 30.0f };
+	transform_.position_ = { -20.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	

@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Engine\\SphereCollider.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -15,9 +16,12 @@ void Enemy::Initialize()
 {
 	pFbx_ = new Fbx;
 	pFbx_->Load("Enemy.fbx");
-	transform_.position_ = { 20.0f, 0.0f, 30.0f };
+	transform_.position_ = { 20.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 	initialX_ = transform_.position_.x;
+
+	SphereCollider* col = new SphereCollider(0.5f);
+	AddCollider(col);
 }
 
 void Enemy::Update()
@@ -42,4 +46,9 @@ void Enemy::Release()
 		delete pFbx_;
 		pFbx_ = nullptr;
 	}
+}
+
+void Enemy::OnCollision(GameObject* pTarget)
+{
+	MessageBoxA(0, "“–‚½‚Á‚½", "Collider", MB_OK);
 }

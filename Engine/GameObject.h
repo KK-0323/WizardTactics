@@ -4,6 +4,8 @@
 #include <string>
 #include "Transform.h"
 
+class SphereCollider;
+
 using std::string;
 using std::list;
 
@@ -30,6 +32,11 @@ public:
 	GameObject* FindChildObject(const string& name);
 	GameObject* FindObject(const string& name);
 
+	void AddCollider(SphereCollider* pCollider);
+	void Collision(GameObject* pTarget);
+	void RoundRobin(GameObject* pTarget);
+	virtual void OnCollision(GameObject* pTarget);
+
 	const XMFLOAT3& GetPosition() const { return transform_.position_; }
 
 	template <typename T>
@@ -45,6 +52,7 @@ protected:
 	Transform transform_;
 	GameObject* pParent_;
 	string objectName_;
+	SphereCollider* pCollider_;
 
 private:
 	bool isDead_;

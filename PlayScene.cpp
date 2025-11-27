@@ -2,7 +2,10 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Ally.h"
+#include "Stage.h"
+#include "Engine\\SceneManager.h"
 #include "Engine\\Camera.h"
+#include "Engine\\Input.h"
 
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent, "PlayScene")
@@ -18,6 +21,7 @@ void PlayScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
 	Instantiate<Ally>(this);
+	Instantiate<Stage>(this);
 }
 
 void PlayScene::Update()
@@ -28,7 +32,7 @@ void PlayScene::Update()
 		XMFLOAT3 pPos = pPlayer->GetPosition();
 		XMVECTOR playerPos = XMLoadFloat3(&pPos);
 
-		XMVECTOR cameraOffset = XMVectorSet(0.0f, 0.0f, -40.0f, 0.0f);
+		XMVECTOR cameraOffset = XMVectorSet(0.0f, 3.0f, -20.0f, 0.0f);
 		XMVECTOR cameraPos = XMVectorAdd(playerPos, cameraOffset);
 
 		XMVECTOR targetOffset = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
@@ -39,6 +43,19 @@ void PlayScene::Update()
 
 		Camera::Update();
 	}
+	if (Input::IsKeyDown(DIK_B))
+	{
+		GameObject* sceneManagerObj = this->GetRootJob()->FindObject("SceneManager");
+		if (sceneManagerObj != nullptr)
+		{
+			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneManagerObj);
+			if (sceneManager != nullptr)
+			{
+				sceneManager->ChangeScene(SCENE_ID_BUTTLE);
+			}
+		}
+	}
+	
 }
 
 void PlayScene::Draw()

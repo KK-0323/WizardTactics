@@ -17,12 +17,12 @@ void Stage::Initialize()
 	pFbx_ = new Fbx;
 	pFbx_->Load("Stage.fbx");
 	transform_.position_ = { 0.0f, 0.0f, 0.0f };
-	
+	transform_.scale_ = { 5.0f, 1.0f, 1.0f };
 }
 
 void Stage::Update()
 {
-	transform_.rotate_.y += 0.5f;
+	//transform_.rotate_.y += 0.5f;
 }
 
 void Stage::Draw()

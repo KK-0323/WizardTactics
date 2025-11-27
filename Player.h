@@ -15,6 +15,6 @@ public:
     void Release() override;
 private:
     Fbx* pFbx_;
-    float moveSpeed;
+    float moveSpeed_;
 };
 

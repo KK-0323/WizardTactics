@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ally.h" />
+    <ClInclude Include="ButtleScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Direct3D.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\RootJob.h" />
     <ClInclude Include="Engine\SceneManager.h" />
+    <ClInclude Include="Engine\SphereCollider.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="framework.h" />
@@ -169,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ally.cpp" />
+    <ClCompile Include="ButtleScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\Direct3D.cpp" />
@@ -177,6 +180,7 @@
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\RootJob.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
+    <ClCompile Include="Engine\SphereCollider.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Main.cpp" />

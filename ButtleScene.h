@@ -1,20 +1,14 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include "Engine\\Fbx.h"
-
-class Ally :
+class ButtleScene :
     public GameObject
 {
 public:
-    Ally(GameObject* parent);
-    ~Ally();
+    ButtleScene(GameObject* parent);
+    ~ButtleScene();
     void Initialize() override;
     void Update() override;
     void Draw() override;
     void Release() override;
-private:
-    Fbx* pFbx_;
-    float moveSpeed__;
-    GameObject* pTargetPlayer_;
 };
 

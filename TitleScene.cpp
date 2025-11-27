@@ -14,7 +14,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
-	Instantiate<Stage>(this);
+	
 }
 
 void TitleScene::Update()
