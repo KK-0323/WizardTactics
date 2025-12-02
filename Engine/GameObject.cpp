@@ -10,6 +10,10 @@ GameObject::GameObject()
 GameObject::GameObject(GameObject* parent, const std::string& name)
 	:pParent_(parent), objectName_(name)
 {
+	if (parent != nullptr)
+	{
+		transform_.pParent_ = (&parent->transform_);
+	}
 }
 
 GameObject::~GameObject()
@@ -34,6 +38,20 @@ void GameObject::UpdateSub()
 	for (auto child : this->childList_)
 	{
 		child->UpdateSub();
+	}
+
+	for (auto itr = childList_.begin(); itr != childList_.end();)
+	{
+		if ((*itr)->isDead_)
+		{
+			(*itr)->ReleaseSub();
+			delete (*itr);
+			itr = childList_.erase(itr);
+		}
+		else
+		{
+			++itr;
+		}
 	}
 }
 
@@ -70,7 +88,6 @@ GameObject* GameObject::GetRootJob()
 	else
 	{
 		return pParent_->GetRootJob();
-
 	}
 }
 
@@ -120,6 +137,7 @@ void GameObject::Collision(GameObject* pTarget)
 	//②コライダー同士が交差していたら
 	if (dist <= thre)
 	{
+		OnCollision(pTarget);
 		//③なんかする
 		//MessageBoxA(0, "ぶつかった", "Collider", MB_OK);
 	}

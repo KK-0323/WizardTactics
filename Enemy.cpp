@@ -1,5 +1,7 @@
 #include "Enemy.h"
+#include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
+#include "Engine\\SceneManager.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -14,8 +16,8 @@ Enemy::~Enemy()
 
 void Enemy::Initialize()
 {
-	pFbx_ = new Fbx;
-	pFbx_->Load("Enemy.fbx");
+	hModel_ = Model::Load("Enemy.fbx");
+	assert(hModel_ >= 0);
 	transform_.position_ = { 20.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 	initialX_ = transform_.position_.x;
@@ -26,29 +28,41 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	time_ += DELTA_TIME;
+	//time_ += DELTA_TIME;
 
-	float offsetX = amplitude_ * std::sin(speed_ * time_);
+	//float offsetX = amplitude_ * std::sin(speed_ * time_);
 
-	transform_.position_.x = initialX_ + offsetX;
+	//transform_.position_.x = initialX_ + offsetX;
 }
 
 void Enemy::Draw()
 {
-	pFbx_->Draw(transform_);
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
 }
 
 void Enemy::Release()
 {
 	if (pFbx_)
 	{
-		pFbx_->Release();
-		delete pFbx_;
-		pFbx_ = nullptr;
+		Model::Release();
 	}
 }
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	MessageBoxA(0, "“–‚½‚Á‚½", "Collider", MB_OK);
+	if (pTarget->GetName() == "Player")
+	{
+		//MessageBoxA(0, "‚Ô‚Â‚©‚Á‚½", "Collider", MB_OK);
+		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
+		if (sceneObj != nullptr)
+		{
+			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
+			if (sceneManager != nullptr)
+			{
+				sceneManager->ChangeScene(SCENE_ID_BUTTLE);
+			}
+		}
+	}
+	
 }

@@ -155,6 +155,7 @@
     <ClInclude Include="Engine\Fbx.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Input.h" />
+    <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\RootJob.h" />
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\SphereCollider.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Engine\Fbx.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
+    <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\RootJob.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
     <ClCompile Include="Engine\SphereCollider.cpp" />

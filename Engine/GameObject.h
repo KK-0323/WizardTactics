@@ -47,6 +47,8 @@ public:
 		childList_.push_back(obj);
 	}
 
+	string GetName() const { return objectName_; }
+
 protected:
 	list<GameObject* > childList_;
 	Transform transform_;

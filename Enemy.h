@@ -1,7 +1,8 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include "Engine\\Fbx.h"
 #include <cmath>
+
+class Fbx;
 
 class Enemy :
     public GameObject
@@ -16,11 +17,11 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 private:
 	Fbx* pFbx_;
+	int hModel_;
 
 	float initialX_;
 	float amplitude_ = 5.0f;
 	float speed_ = 1.0f;
-
 	float time_ = 0.0f;
 };
 
