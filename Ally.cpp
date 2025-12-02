@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Ally::Ally(GameObject* parent)
-	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed__(0.5f)
+	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed__(0.5f), pTargetPlayer_(nullptr)
 {
 }
 

@@ -26,23 +26,23 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
-	GameObject* pPlayer = FindObject("Player");
-	if (pPlayer != nullptr)
-	{
-		XMFLOAT3 pPos = pPlayer->GetPosition();
-		XMVECTOR playerPos = XMLoadFloat3(&pPos);
+	//GameObject* pPlayer = FindObject("Player");
+	//if (pPlayer != nullptr)
+	//{
+	//	XMFLOAT3 pPos = pPlayer->GetPosition();
+	//	XMVECTOR playerPos = XMLoadFloat3(&pPos);
 
-		XMVECTOR cameraOffset = XMVectorSet(0.0f, 3.0f, -20.0f, 0.0f);
-		XMVECTOR cameraPos = XMVectorAdd(playerPos, cameraOffset);
+	//	XMVECTOR cameraOffset = XMVectorSet(0.0f, 3.0f, -20.0f, 0.0f);
+	//	XMVECTOR cameraPos = XMVectorAdd(playerPos, cameraOffset);
 
-		XMVECTOR targetOffset = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-		XMVECTOR targetPos = XMVectorAdd(playerPos, targetOffset);
+	//	XMVECTOR targetOffset = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	//	XMVECTOR targetPos = XMVectorAdd(playerPos, targetOffset);
 
-		Camera::SetPosition(cameraPos);
-		Camera::SetTarget(targetPos);
+	//	Camera::SetPosition(cameraPos);
+	//	Camera::SetTarget(targetPos);
 
-		Camera::Update();
-	}
+	//	Camera::Update();
+	//}
 	if (Input::IsKeyDown(DIK_B))
 	{
 		GameObject* sceneManagerObj = this->GetRootJob()->FindObject("SceneManager");
