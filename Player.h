@@ -18,6 +18,7 @@ public:
 private:
     Fbx* pFbx_;
     int hModel_;
+    float gravity_;
     float moveSpeed_;
 };
 

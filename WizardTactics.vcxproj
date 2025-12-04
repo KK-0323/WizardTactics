@@ -150,6 +150,8 @@
     <ClInclude Include="Ally.h" />
     <ClInclude Include="ButtleScene.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Engine\BaseCollider.h" />
+    <ClInclude Include="Engine\BoxCollider.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Direct3D.h" />
     <ClInclude Include="Engine\Fbx.h" />
@@ -174,6 +176,7 @@
     <ClCompile Include="Ally.cpp" />
     <ClCompile Include="ButtleScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Engine\BoxCollider.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\Direct3D.cpp" />
     <ClCompile Include="Engine\Fbx.cpp" />

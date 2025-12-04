@@ -6,7 +6,7 @@
 const float DELTA_TIME = 1.0f / 60.0f;
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f)
+	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f), gravity_(5.0f)
 {
 }
 

@@ -1,6 +1,15 @@
 #include "GameObject.h"
 #include "SphereCollider.h"
+#include "BoxCollider.h"
 #include <Windows.h>
+
+// 当たり判定のペア
+enum PairCollsion
+{
+	SPHERES,
+	BOXES,
+	SPEREBOX
+};
 
 GameObject::GameObject()
 	:pParent_(nullptr)
@@ -118,29 +127,71 @@ GameObject* GameObject::FindObject(const string& name)
 	return result;
 }
 
-void GameObject::AddCollider(SphereCollider* pCollider)
+void GameObject::AddCollider(BaseCollider* pCollider)
 {
 	pCollider_ = pCollider;
 }
 
 void GameObject::Collision(GameObject* pTarget)
 {
-	float thisR = this->pCollider_->GetRadius();
-	float tgtR = pTarget->pCollider_->GetRadius();
-	float thre = (thisR + tgtR) * (thisR + tgtR);
-	//①２つのコライダーの距離計算をする
-	XMFLOAT3 thisP = this->transform_.position_;
-	XMFLOAT3 tgtP = pTarget->transform_.position_;
-	float dist = (thisP.x - tgtP.x) * (thisP.x - tgtP.x) +
-		(thisP.y - tgtP.y) * (thisP.y - tgtP.y) +
-		(thisP.z - tgtP.z) * (thisP.z - tgtP.z);
-	//②コライダー同士が交差していたら
-	if (dist <= thre)
+	// 当たり判定のスキップ処理
+	if (pCollider_ == nullptr || pTarget->pCollider_ == nullptr)
 	{
-		OnCollision(pTarget);
-		//③なんかする
-		//MessageBoxA(0, "ぶつかった", "Collider", MB_OK);
+		return;
 	}
+
+	// コライダーのタイプ取得
+	BaseCollider::ColliderType thisType = pCollider_->GetType();
+	BaseCollider::ColliderType targetType = pTarget->pCollider_->GetType();
+
+	// ペアのタイプ
+	PairCollsion pCollision;
+
+	if (thisType == BaseCollider::SPHERE && targetType == BaseCollider::SPHERE)
+	{
+		pCollision = SPHERES;
+	}
+	else if (thisType == BaseCollider::BOX && targetType == BaseCollider::BOX)
+	{
+		pCollision = BOXES;
+	}
+	else if ((thisType == BaseCollider::SPHERE && targetType == BaseCollider::BOX) ||
+		thisType == BaseCollider::BOX && targetType == BaseCollider::SPHERE)
+	{
+		pCollision = SPHERES;
+	}
+
+	// switch_caseでそれぞれのペアの処理振り分け
+	switch (pCollision)
+	{
+	case SPHERES:
+	{
+		SphereCollider* thisS = static_cast<SphereCollider*>(pCollider_);
+		SphereCollider* tgtS = static_cast<SphereCollider*>(pTarget->pCollider_);
+
+		float thisR = thisS->GetRadius();
+		float tgtR = tgtS->GetRadius();
+		float thre = (thisR + tgtR) * (thisR + tgtR);
+		//①２つのコライダーの距離計算をする
+		XMFLOAT3 thisP = this->transform_.position_;
+		XMFLOAT3 tgtP = pTarget->transform_.position_;
+		float dist = (thisP.x - tgtP.x) * (thisP.x - tgtP.x) +
+			(thisP.y - tgtP.y) * (thisP.y - tgtP.y) +
+			(thisP.z - tgtP.z) * (thisP.z - tgtP.z);
+		//②コライダー同士が交差していたら
+		if (dist <= thre)
+		{
+			OnCollision(pTarget);
+		}
+	}
+	break;
+	case BOXES:
+		break;
+	case SPEREBOX:
+		break;
+	default:
+		break;
+	}	
 }
 
 void GameObject::RoundRobin(GameObject* pTarget)
@@ -158,5 +209,4 @@ void GameObject::RoundRobin(GameObject* pTarget)
 
 void GameObject::OnCollision(GameObject* pTarget)
 {
-
 }

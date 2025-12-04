@@ -1,5 +1,7 @@
 #include "Ally.h"
 #include "Player.h"
+#include "Engine\\Model.h"
+#include "Engine\\SphereCollider.h"
 
 Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed__(0.5f), pTargetPlayer_(nullptr)
@@ -12,12 +14,13 @@ Ally::~Ally()
 
 void Ally::Initialize()
 {
-	pFbx_ = new Fbx;
-	pFbx_->Load("Ally.fbx");
+	hModel_ = Model::Load("Ally.fbx");
+	assert(hModel_ >= 0);
 	transform_.position_ = { -20.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
-	
+	SphereCollider* col = new SphereCollider(0.5f);
+	AddCollider(col);
 }
 
 void Ally::Update()
@@ -39,15 +42,18 @@ void Ally::Update()
 
 void Ally::Draw()
 {
-	pFbx_->Draw(transform_);
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
 }
 
 void Ally::Release()
 {
 	if (pFbx_)
 	{
-		pFbx_->Release();
-		delete pFbx_;
-		pFbx_ = nullptr;
+		Model::Release();
 	}
+}
+
+void Ally::OnCollision(GameObject* pTarget)
+{
 }

@@ -3,8 +3,10 @@
 #include <list>
 #include <string>
 #include "Transform.h"
+#include "BaseCollider.h"
 
 class SphereCollider;
+class BoxCollider;
 
 using std::string;
 using std::list;
@@ -32,7 +34,7 @@ public:
 	GameObject* FindChildObject(const string& name);
 	GameObject* FindObject(const string& name);
 
-	void AddCollider(SphereCollider* pCollider);
+	void AddCollider(BaseCollider* pCollider);
 	void Collision(GameObject* pTarget);
 	void RoundRobin(GameObject* pTarget);
 	virtual void OnCollision(GameObject* pTarget);
@@ -54,7 +56,7 @@ protected:
 	Transform transform_;
 	GameObject* pParent_;
 	string objectName_;
-	SphereCollider* pCollider_;
+	BaseCollider* pCollider_;
 
 private:
 	bool isDead_;
