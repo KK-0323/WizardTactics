@@ -186,9 +186,85 @@ void GameObject::Collision(GameObject* pTarget)
 	}
 	break;
 	case BOXES:
-		break;
+	{
+		BoxCollider* thisB = static_cast<BoxCollider*>(pCollider_);
+		BoxCollider* tgtB = static_cast<BoxCollider*>(pTarget->pCollider_);
+
+		// 自分の判定情報
+		const DirectX::XMFLOAT3& thisHalf = thisB->GetHalfExtent();
+		const DirectX::XMFLOAT3& thisPos = transform_.position_;
+
+		// 相手の判定情報
+		const DirectX::XMFLOAT3& tgtHalf = tgtB->GetHalfExtent();
+		const DirectX::XMFLOAT3& tgtPos = pTarget->GetPosition();
+
+		// 中心距離の計算
+		float distX = abs(thisPos.x - tgtPos.x);
+		float distY = abs(thisPos.y - tgtPos.y);
+		float distZ = abs(thisPos.z - tgtPos.z);
+
+		// 衝突の閾値計算
+		float threX = thisHalf.x + tgtHalf.x;
+		float threY = thisHalf.y + tgtHalf.y;
+		float threZ = thisHalf.z + tgtHalf.z;
+
+		// 判定
+		if (distX <= threX &&
+			distY <= threY &&
+			distZ <= threZ)
+		{
+			OnCollision(pTarget);
+		}
+	}
+	break;
 	case SPEREBOX:
-		break;
+	{
+		// 三角形と四角形の情報
+		SphereCollider* pSphere;
+		BoxCollider* pBox;
+		const DirectX::XMFLOAT3* pSpherePos;
+		const DirectX::XMFLOAT3* pBoxPos;
+
+		if (thisType == BaseCollider::SPHERE)
+		{
+			pSphere = static_cast<SphereCollider*>(pCollider_);
+			pBox = static_cast<BoxCollider*>(pTarget->pCollider_);
+			pSpherePos = &transform_.position_;
+			pBoxPos = &pTarget->GetPosition();
+		}
+		else // 相手が三角形の場合
+		{
+			pSphere = static_cast<SphereCollider*>(pTarget->pCollider_);
+			pBox = static_cast<BoxCollider*>(pCollider_);
+			pSpherePos = &pTarget->GetPosition();
+			pBoxPos = &transform_.position_;
+		}
+
+		const DirectX::XMFLOAT3& halfExtent = pBox->GetHalfExtent();
+
+		XMFLOAT3 closestPoint;
+		XMFLOAT3 sphereCenter = *pSpherePos;
+		XMFLOAT3 boxCenter = *pBoxPos;
+
+		closestPoint.x = max(boxCenter.x - halfExtent.x, min(sphereCenter.x, boxCenter.x + halfExtent.x));
+		closestPoint.y = max(boxCenter.y - halfExtent.y, min(sphereCenter.y, boxCenter.y + halfExtent.y));
+		closestPoint.z = max(boxCenter.z - halfExtent.z, min(sphereCenter.z, boxCenter.z + halfExtent.z));
+
+		float dx = sphereCenter.x - closestPoint.x;
+		float dy = sphereCenter.y - closestPoint.y;
+		float dz = sphereCenter.z - closestPoint.z;
+
+		float distanceSquared = (dx * dx) + (dy * dy) + (dz * dz);
+
+		float radius = pSphere->GetRadius();
+		float radiusSquared = radius * radius;
+
+		if (distanceSquared <= radiusSquared)
+		{
+			OnCollision(pTarget);
+		}
+	}
+	break;
 	default:
 		break;
 	}	

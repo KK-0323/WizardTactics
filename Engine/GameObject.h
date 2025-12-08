@@ -2,6 +2,7 @@
 
 #include <list>
 #include <string>
+#include <algorithm>
 #include "Transform.h"
 #include "BaseCollider.h"
 
