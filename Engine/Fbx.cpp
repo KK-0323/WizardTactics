@@ -76,19 +76,19 @@ void Fbx::Draw(Transform& transform)
 	cb.matWVP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());
 	cb.matNormal = transform.GetNormalMatrix();
 
-	//for (int i = 0;i < materialCount_;i++)
-	//{
-	//	if (pMaterialList_[i].pTexture)
-	//	{
-	//		cb.materialFlag = { 1, 1, 1,1 };
-	//		cb.diffuse = XMFLOAT4(1, 1, 1, 1);//保険
-	//	}
-	//	else
-	//	{
-	//		cb.materialFlag = { 0,0,0,0 };
-	//		cb.diffuse = pMaterialList_[i].diffuse;
-	//	}
-	//}
+	for (int i = 0;i < materialCount_;i++)
+	{
+		if (pMaterialList_[i].pTexture)
+		{
+			cb.materialFlag = { 1 };
+			cb.diffuse = XMFLOAT4(1, 1, 1, 1);//保険
+		}
+		else
+		{
+			cb.materialFlag = { 0 };
+			cb.diffuse = pMaterialList_[i].diffuse;
+		}
+	}
 
 	//頂点バッファ、インデックスバッファ、コンスタントバッファをパイプラインにセット
 	//頂点バッファ
@@ -164,7 +164,7 @@ void Fbx::InitVertex(FbxMesh* mesh)
 			FbxLayerElementUV* pUV = mesh->GetLayer(0)->GetUVs();
 			int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
 			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
-			vertices[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f, 0.0f);
+			vertices[index].uv = XMVectorSet((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f, 1.0f);
 
 			//頂点の法線
 			FbxVector4 normal;

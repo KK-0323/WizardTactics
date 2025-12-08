@@ -41,6 +41,7 @@ public:
 	virtual void OnCollision(GameObject* pTarget);
 
 	const XMFLOAT3& GetPosition() const { return transform_.position_; }
+	const XMFLOAT3& GetScale() const { return transform_.scale_; }
 
 	template <typename T>
 	void Instantiate(GameObject* parent)

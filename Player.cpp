@@ -19,7 +19,7 @@ void Player::Initialize()
 {
 	hModel_ = Model::Load("Player.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { -10.0f, 0.0f, 0.0f };
+	transform_.position_ = { 0.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	SphereCollider* col = new SphereCollider(0.5f);
@@ -28,6 +28,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	isOnGround_ = false;
 	if (Input::IsKey(DIK_LEFT) || Input::IsKey(DIK_A))
 	{
 		transform_.position_.x -= moveSpeed_ * DELTA_TIME;
@@ -47,7 +48,6 @@ void Player::Update()
 	}
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;
-	isOnGround_ = false;
 }
 
 void Player::Draw()
@@ -65,14 +65,23 @@ void Player::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetName() == "Stage")
 	{
-		velocityY_ = 0.0f;
-		isOnGround_ = true;
-
 		float stageY = pTarget->GetPosition().y;
-		float stageHalfHeight = 0.5f;
-		float stageTopY = stageY + stageHalfHeight;
+		float stageScaleY = pTarget->GetScale().y;
+		float stageHalfExtentY = 1.0f;
+
+		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
 
 		float playerRadius = 0.5f;
-		transform_.position_.y = stageTopY + playerRadius;
+
+		float playerBottomY = transform_.position_.y - playerRadius;
+
+		float overlap = stageTopY - playerBottomY;
+
+		if (overlap > 0.0f)
+		{
+			transform_.position_.y += overlap;
+			isOnGround_ = true;
+			velocityY_ = 0.0f;
+		}
 	}
 }

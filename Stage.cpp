@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include "Engine\\Model.h"
-#include "Engine\\SphereCollider.h"
+#include "Engine\\BoxCollider.h"
 
 Stage::Stage(GameObject* parent)
 	:GameObject(parent, "Stage"), pFbx_(nullptr)
@@ -16,12 +16,16 @@ Stage::~Stage()
 
 void Stage::Initialize()
 {
-	hModel_ = Model::Load("Stage.fbx");
+	hModel_ = Model::Load("Road.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { 0.0f, -1.0f, 0.0f };
-	transform_.scale_.x += 10.0f;
+	transform_.position_ = { 0.0f,-1.0f, 0.0f };
+	transform_.scale_ = { 20.0f, 1.0f, 4.0f };
 
-	SphereCollider* col = new SphereCollider(0.5f);
+	float cX = transform_.scale_.x * 0.5f;
+	float cY = transform_.scale_.y * 0.5f;
+	float cZ = transform_.scale_.z * 0.5f;
+
+	BoxCollider* col = new BoxCollider({ cX, cY, cZ });
 	AddCollider(col);
 }
 

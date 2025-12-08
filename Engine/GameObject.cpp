@@ -219,7 +219,7 @@ void GameObject::Collision(GameObject* pTarget)
 	break;
 	case SPEREBOX:
 	{
-		// 三角形と四角形の情報
+		// 球と四角形の情報
 		SphereCollider* pSphere;
 		BoxCollider* pBox;
 		const DirectX::XMFLOAT3* pSpherePos;
@@ -232,7 +232,7 @@ void GameObject::Collision(GameObject* pTarget)
 			pSpherePos = &transform_.position_;
 			pBoxPos = &pTarget->GetPosition();
 		}
-		else // 相手が三角形の場合
+		else // 相手が球の場合
 		{
 			pSphere = static_cast<SphereCollider*>(pTarget->pCollider_);
 			pBox = static_cast<BoxCollider*>(pCollider_);
@@ -241,14 +241,20 @@ void GameObject::Collision(GameObject* pTarget)
 		}
 
 		const DirectX::XMFLOAT3& halfExtent = pBox->GetHalfExtent();
+		const DirectX::XMFLOAT3& boxScale = pBox == pCollider_ ? transform_.scale_ : pTarget->GetScale();
+
+		XMFLOAT3 worldHalfExtent;
+		worldHalfExtent.x = halfExtent.x * boxScale.x;
+		worldHalfExtent.y = halfExtent.y * boxScale.y;
+		worldHalfExtent.z = halfExtent.z * boxScale.z;
 
 		XMFLOAT3 closestPoint;
 		XMFLOAT3 sphereCenter = *pSpherePos;
 		XMFLOAT3 boxCenter = *pBoxPos;
 
-		closestPoint.x = max(boxCenter.x - halfExtent.x, min(sphereCenter.x, boxCenter.x + halfExtent.x));
-		closestPoint.y = max(boxCenter.y - halfExtent.y, min(sphereCenter.y, boxCenter.y + halfExtent.y));
-		closestPoint.z = max(boxCenter.z - halfExtent.z, min(sphereCenter.z, boxCenter.z + halfExtent.z));
+		closestPoint.x = max(boxCenter.x - worldHalfExtent.x, min(sphereCenter.x, boxCenter.x + worldHalfExtent.x));
+		closestPoint.y = max(boxCenter.y - worldHalfExtent.y, min(sphereCenter.y, boxCenter.y + worldHalfExtent.y));
+		closestPoint.z = max(boxCenter.z - worldHalfExtent.z, min(sphereCenter.z, boxCenter.z + worldHalfExtent.z));
 
 		float dx = sphereCenter.x - closestPoint.x;
 		float dy = sphereCenter.y - closestPoint.y;
