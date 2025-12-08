@@ -20,5 +20,7 @@ private:
     int hModel_;
     float gravity_;
     float moveSpeed_;
+    float velocityY_;
+    bool isOnGround_;
 };
 

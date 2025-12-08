@@ -6,7 +6,8 @@
 const float DELTA_TIME = 1.0f / 60.0f;
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f), gravity_(5.0f)
+	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f),
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
 {
 }
 
@@ -35,6 +36,18 @@ void Player::Update()
 	{
 		transform_.position_.x += moveSpeed_ * DELTA_TIME;
 	}
+	
+	if (!isOnGround_)
+	{
+		velocityY_ -= gravity_ * DELTA_TIME;
+	}
+	else
+	{
+		velocityY_ = 0.0f;
+	}
+	// Y座標に速度を適用
+	transform_.position_.y += velocityY_ * DELTA_TIME;
+	isOnGround_ = false;
 }
 
 void Player::Draw()
@@ -50,5 +63,16 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
+	if (pTarget->GetName() == "Stage")
+	{
+		velocityY_ = 0.0f;
+		isOnGround_ = true;
 
+		float stageY = pTarget->GetPosition().y;
+		float stageHalfHeight = 0.5f;
+		float stageTopY = stageY + stageHalfHeight;
+
+		float playerRadius = 0.5f;
+		transform_.position_.y = stageTopY + playerRadius;
+	}
 }
