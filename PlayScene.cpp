@@ -26,7 +26,7 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
-	 //プレイヤーに視点が追従
+	//プレイヤーに視点が追従
 	GameObject* pPlayer = FindObject("Player");
 	if (pPlayer != nullptr)
 	{
