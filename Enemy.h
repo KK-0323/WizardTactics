@@ -19,9 +19,15 @@ private:
 	Fbx* pFbx_;
 	int hModel_;
 
-	float initialX_;
+	// 往復運動(仮)
+	float initialX_ = 0.0f;
 	float amplitude_ = 5.0f;
-	float speed_ = 1.0f;
+	float moveSpeed_ = 5.0f;
 	float time_ = 0.0f;
+
+	// ステージとの当たり判定用
+	float gravity_;
+	float velocityY_;
+	bool isOnGround_;
 };
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include "Engine\\Fbx.h"
+#include <cmath>
+
+class Fbx;
 
 class Ally :
     public GameObject
@@ -16,7 +18,10 @@ public:
 private:
     Fbx* pFbx_;
     int hModel_;
-    float moveSpeed__;
+    float moveSpeed_;
+    float gravity_;
+    float velocityY_;
     GameObject* pTargetPlayer_;
+    bool isOnGround_;
 };
 

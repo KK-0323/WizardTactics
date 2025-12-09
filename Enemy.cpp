@@ -6,7 +6,8 @@
 const float DELTA_TIME = 1.0f / 60.0f;
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), pFbx_(nullptr), initialX_(0.0f)
+	:GameObject(parent, "Enemy"), pFbx_(nullptr), 
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
 {
 }
 
@@ -28,11 +29,22 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	//time_ += DELTA_TIME;
+	time_ += DELTA_TIME;
 
-	//float offsetX = amplitude_ * std::sin(speed_ * time_);
+	float offsetX = amplitude_ * std::sin(moveSpeed_ * time_);
 
-	//transform_.position_.x = initialX_ + offsetX;
+	transform_.position_.x = initialX_ + offsetX;
+
+	if (!isOnGround_)
+	{
+		velocityY_ -= gravity_ * DELTA_TIME;
+	}
+	else
+	{
+		velocityY_ = 0.0f;
+	}
+	// Y座標に速度を適用
+	transform_.position_.y += velocityY_ * DELTA_TIME;
 }
 
 void Enemy::Draw()
@@ -62,6 +74,28 @@ void Enemy::OnCollision(GameObject* pTarget)
 			{
 				sceneManager->ChangeScene(SCENE_ID_BUTTLE);
 			}
+		}
+	}
+
+	if (pTarget->GetName() == "Stage")
+	{
+		float stageY = pTarget->GetPosition().y;
+		float stageScaleY = pTarget->GetScale().y;
+		float stageHalfExtentY = 1.0f;
+
+		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
+
+		float playerRadius = 0.5f;
+
+		float playerBottomY = transform_.position_.y - playerRadius;
+
+		float overlap = stageTopY - playerBottomY;
+
+		if (overlap > 0.0f)
+		{
+			transform_.position_.y += overlap;
+			isOnGround_ = true;
+			velocityY_ = 0.0f;
 		}
 	}
 	

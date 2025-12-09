@@ -3,8 +3,11 @@
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 
+const float DELTA_TIME = 1.0f / 60.0f;
+
 Ally::Ally(GameObject* parent)
-	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed__(0.5f), pTargetPlayer_(nullptr)
+	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f),
+	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
 {
 }
 
@@ -16,7 +19,7 @@ void Ally::Initialize()
 {
 	hModel_ = Model::Load("Ally.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { -1.0f, 0.0f, 0.0f };
+	transform_.position_ = { 0.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	SphereCollider* col = new SphereCollider(0.5f);
@@ -25,19 +28,28 @@ void Ally::Initialize()
 
 void Ally::Update()
 {
-	//// ポインタ取得
-	//pTargetPlayer_ = FindObject("Player");
-	//// Playerの位置に合わせて追従
-	//if (pTargetPlayer_)
-	//{
-	//	const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
+	// ポインタ取得
+	pTargetPlayer_ = FindObject("Player");
+	// Playerの位置に合わせて追従
+	if (pTargetPlayer_)
+	{
+		const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
 
-	//	XMFLOAT3 targetPos = playerPos;
-	//	targetPos.x = -1.0f;
+		XMFLOAT3 targetPos = playerPos;
 
-	//	transform_.position_ = targetPos;
-	//}
+		transform_.position_.x = targetPos.x - 3.0f;
+	}
 
+	if (!isOnGround_)
+	{
+		velocityY_ -= gravity_ * DELTA_TIME;
+	}
+	else
+	{
+		velocityY_ = 0.0f;
+	}
+	// Y座標に速度を適用
+	transform_.position_.y += velocityY_ * DELTA_TIME;
 }
 
 void Ally::Draw()
@@ -56,4 +68,25 @@ void Ally::Release()
 
 void Ally::OnCollision(GameObject* pTarget)
 {
+	if (pTarget->GetName() == "Stage")
+	{
+		float stageY = pTarget->GetPosition().y;
+		float stageScaleY = pTarget->GetScale().y;
+		float stageHalfExtentY = 1.0f;
+
+		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
+
+		float allyRadius = 0.5f;
+
+		float allyBottomY = transform_.position_.y - allyRadius;
+
+		float overlap = stageTopY - allyBottomY;
+
+		if (overlap > 0.0f)
+		{
+			transform_.position_.y += overlap;
+			isOnGround_ = true;
+			velocityY_ = 0.0f;
+		}
+	}
 }
