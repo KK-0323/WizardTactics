@@ -85,11 +85,11 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
 
-		float playerRadius = 0.5f;
+		float enemyRadius = 0.5f;
 
-		float playerBottomY = transform_.position_.y - playerRadius;
+		float enemyBottomY = transform_.position_.y - enemyRadius;
 
-		float overlap = stageTopY - playerBottomY;
+		float overlap = stageTopY - enemyBottomY;
 
 		if (overlap > 0.0f)
 		{

@@ -7,7 +7,9 @@ const float DELTA_TIME = 1.0f / 60.0f;
 
 Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f),
-	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
+	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
+	maxHp_(50), currentHp_(50), attackPower_(20), defensePower_(10),
+	currentCommand_(CMD_NONE)
 {
 }
 
@@ -30,15 +32,33 @@ void Ally::Update()
 {
 	// ポインタ取得
 	pTargetPlayer_ = FindObject("Player");
-	// Playerの位置に合わせて追従
-	if (pTargetPlayer_)
+	switch (currentCommand_)
 	{
-		const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
+	case CMD_NONE:
+		// Playerの位置に合わせて追従
+		if (pTargetPlayer_)
+		{
+			const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
 
-		XMFLOAT3 targetPos = playerPos;
+			XMFLOAT3 targetPos = playerPos;
 
-		transform_.position_.x = targetPos.x - 3.0f;
+			transform_.position_.x = targetPos.x - 3.0f;
+		}
+		break;
+	case CMD_ATTACK:
+		break;
+	case CMD_DEFENSE:
+		break;
+	case CMD_SKILL:
+		break;
+	case CMD_ESCAPE:
+		break;
+	case CMD_MAX:
+		break;
+	default:
+		break;
 	}
+
 
 	if (!isOnGround_)
 	{
@@ -89,4 +109,9 @@ void Ally::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
+}
+
+void Ally::ReceiveCommand(AllyCommand command)
+{
+	currentCommand_ = command;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine\\GameObject.h"
+#include "Ally.h"
 #include <cmath>
 
 class Fbx; // 前方宣言
@@ -22,5 +23,12 @@ private:
     float moveSpeed_;
     float velocityY_;
     bool isOnGround_;
+
+    // ステータス用の変数
+    int maxMp_;
+    int currentMp_;
+
+    // 指示コマンド用の関数
+    void IssueCommand(AllyCommand command, int mpCost);
 };
 
