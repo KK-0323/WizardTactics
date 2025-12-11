@@ -8,7 +8,7 @@ enum PairCollsion
 {
 	SPHERES,
 	BOXES,
-	SPEREBOX
+	SPHEREBOX
 };
 
 GameObject::GameObject()
@@ -158,7 +158,7 @@ void GameObject::Collision(GameObject* pTarget)
 	else if ((thisType == BaseCollider::SPHERE && targetType == BaseCollider::BOX) ||
 		thisType == BaseCollider::BOX && targetType == BaseCollider::SPHERE)
 	{
-		pCollision = SPHERES;
+		pCollision = SPHEREBOX;
 	}
 
 	// switch_caseでそれぞれのペアの処理振り分け
@@ -217,7 +217,7 @@ void GameObject::Collision(GameObject* pTarget)
 		}
 	}
 	break;
-	case SPEREBOX:
+	case SPHEREBOX:
 	{
 		// 球と四角形の情報
 		SphereCollider* pSphere;

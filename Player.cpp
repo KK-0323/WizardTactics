@@ -63,6 +63,10 @@ void Player::Update()
 	{
 		transform_.position_.x += moveSpeed_ * DELTA_TIME;
 	}
+	if (Input::IsKeyDown(DIK_SPACE) && !isOnGround_)
+	{
+		velocityY_ = 3.0f;
+	}
 	
 	if (!isOnGround_)
 	{
