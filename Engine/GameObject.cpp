@@ -8,7 +8,8 @@ enum PairCollsion
 {
 	SPHERES,
 	BOXES,
-	SPHEREBOX
+	SPHEREBOX,
+	PAIR_MAX
 };
 
 GameObject::GameObject()
@@ -270,6 +271,8 @@ void GameObject::Collision(GameObject* pTarget)
 			OnCollision(pTarget);
 		}
 	}
+	break;
+	case PAIR_MAX:
 	break;
 	default:
 		break;

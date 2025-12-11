@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include "Engine\\Fbx.h"
+
+class Fbx;
 
 class Stage :
     public GameObject
