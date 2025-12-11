@@ -16,6 +16,10 @@ void ButtleStage::Initialize()
 	hModel_ = Model::Load("ButtleStage.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { 0.0f,0.0f,0.0f };
+	transform_.rotate_.y = 90.0f;
+
+	BoxCollider* col = new BoxCollider({ 14.0f, 1.0f, 14.0f });
+	AddCollider(col);
 }
 
 void ButtleStage::Update()

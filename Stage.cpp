@@ -18,9 +18,9 @@ void Stage::Initialize()
 	transform_.position_ = { 0.0f,-1.0f, 0.0f };
 	transform_.scale_ = { 50.0f, 1.0f, 4.0f };
 
-	float cX = transform_.scale_.x * 0.5f;
-	float cY = transform_.scale_.y * 0.5f;
-	float cZ = transform_.scale_.z * 0.5f;
+	float cX = transform_.scale_.x * 1.0f;
+	float cY = transform_.scale_.y * 1.0f;
+	float cZ = transform_.scale_.z * 1.0f;
 
 	BoxCollider* col = new BoxCollider({ cX, cY, cZ });
 	AddCollider(col);
