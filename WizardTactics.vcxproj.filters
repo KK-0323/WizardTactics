@@ -93,6 +93,9 @@
     <ClInclude Include="Engine\BaseCollider.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="ButtleStage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Direct3D.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="Engine\BoxCollider.cpp">
       <Filter>ソース ファイル\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtleStage.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

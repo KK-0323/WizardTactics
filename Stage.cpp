@@ -1,7 +1,4 @@
 #include "Stage.h"
-#include <fstream>
-#include <sstream>
-#include <string>
 #include "Engine\\Model.h"
 #include "Engine\\BoxCollider.h"
 

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Ally.h" />
     <ClInclude Include="ButtleScene.h" />
+    <ClInclude Include="ButtleStage.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\BaseCollider.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
@@ -175,6 +176,7 @@
   <ItemGroup>
     <ClCompile Include="Ally.cpp" />
     <ClCompile Include="ButtleScene.cpp" />
+    <ClCompile Include="ButtleStage.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
