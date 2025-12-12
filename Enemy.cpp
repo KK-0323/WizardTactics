@@ -119,5 +119,26 @@ void Enemy::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
+	else if (pTarget->GetName() == "ButtleStage")
+	{
+		float stageY = pTarget->GetPosition().y;
+		float stageScaleY = pTarget->GetScale().y;
+		float stageHalfExtentY = 1.0f;
+
+		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
+
+		float enemyRadius = 0.5f;
+
+		float enemyBottomY = transform_.position_.y - enemyRadius;
+
+		float overlap = stageTopY - enemyBottomY;
+
+		if (overlap > 0.0f)
+		{
+			transform_.position_.y += overlap;
+			isOnGround_ = true;
+			velocityY_ = 0.0f;
+		}
+	}
 	
 }

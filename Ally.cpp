@@ -109,6 +109,27 @@ void Ally::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
+	else if (pTarget->GetName() == "ButtleStage")
+	{
+		float stageY = pTarget->GetPosition().y;
+		float stageScaleY = pTarget->GetScale().y;
+		float stageHalfExtentY = 1.0f;
+
+		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
+
+		float allyRadius = 0.5f;
+
+		float allyBottomY = transform_.position_.y - allyRadius;
+
+		float overlap = stageTopY - allyBottomY;
+
+		if (overlap > 0.0f)
+		{
+			transform_.position_.y += overlap;
+			isOnGround_ = true;
+			velocityY_ = 0.0f;
+		}
+	}
 }
 
 void Ally::ReceiveCommand(AllyCommand command)

@@ -54,14 +54,20 @@ void Player::Update()
 		IssueCommand(CMD_NONE, NONE_COST);
 	}
 
+	float currentMoveSpeed_ = moveSpeed_;
+
 	// à⁄ìÆèàóù
+	if (Input::IsKey(DIK_LSHIFT))
+	{
+		currentMoveSpeed_ *= 2.0f;
+	}
 	if (Input::IsKey(DIK_A))
 	{
-		transform_.position_.x -= moveSpeed_ * DELTA_TIME;
+		transform_.position_.x -= currentMoveSpeed_ * DELTA_TIME;
 	}
 	if (Input::IsKey(DIK_D))
 	{
-		transform_.position_.x += moveSpeed_ * DELTA_TIME;
+		transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
 	}
 	if (Input::IsKeyDown(DIK_SPACE) && !isOnGround_)
 	{
