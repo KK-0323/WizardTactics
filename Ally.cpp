@@ -43,6 +43,7 @@ void Ally::Update()
 			XMFLOAT3 targetPos = playerPos;
 
 			transform_.position_.x = targetPos.x - 3.0f;
+			transform_.position_.y = targetPos.y;
 		}
 		break;
 	case CMD_ATTACK:

@@ -53,12 +53,16 @@ public:
 
 	string GetName() const { return objectName_; }
 
+	virtual int GetLevel() const { return currentLevel_; }
+	void SetLevel(int level) { currentLevel_ = level; }
+
 protected:
 	list<GameObject* > childList_;
 	Transform transform_;
 	GameObject* pParent_;
 	string objectName_;
 	BaseCollider* pCollider_;
+	int currentLevel_; 
 
 private:
 	bool isDead_;

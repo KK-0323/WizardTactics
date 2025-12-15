@@ -16,11 +16,11 @@ void Stage::Initialize()
 	hModel_ = Model::Load("Road.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { 0.0f,-1.0f, 0.0f };
-	transform_.scale_ = { 50.0f, 1.0f, 4.0f };
+	transform_.scale_ = { 20.0f, 1.0f, 4.0f };
 
-	float cX = transform_.scale_.x * 0.5f;
-	float cY = transform_.scale_.y * 1.0f;
-	float cZ = transform_.scale_.z * 1.0f;
+	float cX = 0.5f;
+	float cY = 1.0f;
+	float cZ = 0.5f;
 
 	BoxCollider* col = new BoxCollider({ cX, cY, cZ });
 	AddCollider(col);

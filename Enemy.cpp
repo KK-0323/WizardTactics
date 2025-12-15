@@ -50,11 +50,11 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	time_ += DELTA_TIME;
+	//time_ += DELTA_TIME;
 
-	float offsetX = amplitude_ * std::sin(moveSpeed_ * time_);
+	//float offsetX = amplitude_ * std::sin(moveSpeed_ * time_);
 
-	transform_.position_.x = initialX_ + offsetX;
+	//transform_.position_.x = initialX_ + offsetX;
 
 	if (!isOnGround_)
 	{

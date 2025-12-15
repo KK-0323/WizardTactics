@@ -18,9 +18,6 @@ ButtleScene::~ButtleScene()
 
 void ButtleScene::Initialize()
 {
-	Instantiate<Enemy>(this);
-	Instantiate<ButtleStage>(this);
-
 	Camera::Initialize();
 	Camera::Update();
 
@@ -35,10 +32,13 @@ void ButtleScene::Initialize()
 	GameObject* pAlly = FindObject("Ally");
 	if (pAlly != nullptr)
 	{
-		XMFLOAT3 allyPos = { 0.0f, 0.0f, 0.0f };
+		XMFLOAT3 allyPos = { -2.0f, 0.0f, 0.0f };
 		pAlly->SetPosition(allyPos);
 		Instantiate<Ally>(this);
 	}
+
+	Instantiate<Enemy>(this);
+	Instantiate<ButtleStage>(this);
 }
 
 void ButtleScene::Update()
