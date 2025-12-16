@@ -51,6 +51,14 @@ public:
 		childList_.push_back(obj);
 	}
 
+	template <typename T, typename Arg1>
+	void Instantiate(GameObject* parent, Arg1 arg1)
+	{
+		T* obj = new T(parent, arg1);
+		obj->Initialize();
+		childList_.push_back(obj);
+	}
+
 	string GetName() const { return objectName_; }
 
 	virtual int GetLevel() const { return currentLevel_; }

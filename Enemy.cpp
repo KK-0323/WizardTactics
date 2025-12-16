@@ -5,18 +5,16 @@
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
-enum ENEMY_ID
-{
-	ENEMY_ZAKO,
-	ENEMY_BOSS,
-	ENEMY_MAX
-};
-
-ENEMY_ID enemyID;
-
 Enemy::Enemy(GameObject* parent)
+	:GameObject(parent, "Enemy"), pFbx_(nullptr),
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
+{
+}
+
+Enemy::Enemy(GameObject* parent, ENEMY_ID id)
 	:GameObject(parent, "Enemy"), pFbx_(nullptr), 
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
+	enemyID_(id)
 {
 }
 
@@ -26,7 +24,7 @@ Enemy::~Enemy()
 
 void Enemy::Initialize()
 {
-	switch (enemyID)
+	switch (enemyID_)
 	{
 	case ENEMY_ZAKO:
 		hModel_ = Model::Load("Enemy.fbx");
@@ -34,15 +32,22 @@ void Enemy::Initialize()
 		transform_.position_ = { 10.0f, 0.0f, 0.0f };
 		transform_.rotate_.y = 90.0f;
 		initialX_ = transform_.position_.x;
+
+		level_ = 1;
 		break;
 	case ENEMY_BOSS:
+		hModel_ = Model::Load("BossEnemy.fbx");
+		assert(hModel_ >= 0);
+		transform_.position_ = { 20.0f, 0.0f, 0.0f };
+		transform_.rotate_.y = 90.0f;
+		level_ = 10;
 		break;
 	case ENEMY_MAX:
 		break;
 	default:
 		break;
 	}
-	
+	SetLevel(level_);
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);

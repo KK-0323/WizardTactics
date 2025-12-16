@@ -4,11 +4,19 @@
 
 class Fbx;
 
+enum ENEMY_ID
+{
+	ENEMY_ZAKO,
+	ENEMY_BOSS,
+	ENEMY_MAX
+};
+
 class Enemy :
     public GameObject
 {
 public:
 	Enemy(GameObject* parent);
+	Enemy(GameObject* parent, ENEMY_ID id);
 	~Enemy();
 	void Initialize() override;
 	void Update() override;
@@ -18,6 +26,8 @@ public:
 private:
 	Fbx* pFbx_;
 	int hModel_;
+	int level_;
+	ENEMY_ID enemyID_;
 
 	// âùïúâ^ìÆ(âº)
 	float initialX_ = 0.0f;

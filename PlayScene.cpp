@@ -19,7 +19,8 @@ PlayScene::~PlayScene()
 void PlayScene::Initialize()
 {
 	Instantiate<Player>(this);
-	Instantiate<Enemy>(this);
+	Instantiate<Enemy>(this, ENEMY_ZAKO);
+	Instantiate<Enemy>(this, ENEMY_BOSS);
 	Instantiate<Ally>(this);
 	Instantiate<Stage>(this);
 }
