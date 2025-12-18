@@ -2,6 +2,7 @@
 #include "Engine\\Model.h"
 #include "Engine\\Input.h"
 #include "Engine\\SphereCollider.h"
+#include "Magic.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -72,6 +73,16 @@ void Player::Update()
 	if (Input::IsKeyDown(DIK_SPACE) && !isOnGround_)
 	{
 		velocityY_ = 3.0f;
+	}
+	
+	// ñÇñ@(âº)ÇÃê∂ê¨
+	if (Input::IsMouseButtonDown(0))
+	{
+		Magic* pMagic = Instantiate<Magic>(GetRootJob(),MAGIC_FIRE);
+		if (pMagic != nullptr)
+		{
+			pMagic->SetPosition(transform_.position_);
+		}
 	}
 	
 	if (!isOnGround_)

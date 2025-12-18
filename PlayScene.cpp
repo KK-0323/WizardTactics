@@ -34,7 +34,7 @@ void PlayScene::Update()
 		XMFLOAT3 pPos = pPlayer->GetPosition();
 		XMVECTOR playerPos = XMLoadFloat3(&pPos);
 
-		XMVECTOR cameraOffset = XMVectorSet(0.0f, 15.0f, -20.0f, 0.0f);
+		XMVECTOR cameraOffset = XMVectorSet(0.0f, 15.0f, -40.0f, 0.0f);
 		XMVECTOR cameraPos = XMVectorAdd(playerPos, cameraOffset);
 
 		XMVECTOR targetOffset = XMVectorSet(0.0f, 3.0f, 0.0f, 0.0f);

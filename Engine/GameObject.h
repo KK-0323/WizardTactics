@@ -43,20 +43,23 @@ public:
 	const XMFLOAT3& GetPosition() const { return transform_.position_; }
 	const XMFLOAT3& GetScale() const { return transform_.scale_; }
 
+	// 生成したオブジェクトのポインタを返すようにした
 	template <typename T>
-	void Instantiate(GameObject* parent)
+	T* Instantiate(GameObject* parent)
 	{
 		T* obj = new T(parent);
 		obj->Initialize();
 		childList_.push_back(obj);
+		return obj;
 	}
 
 	template <typename T, typename Arg1>
-	void Instantiate(GameObject* parent, Arg1 arg1)
+	T* Instantiate(GameObject* parent, Arg1 arg1)
 	{
 		T* obj = new T(parent, arg1);
 		obj->Initialize();
 		childList_.push_back(obj);
+		return obj;
 	}
 
 	string GetName() const { return objectName_; }

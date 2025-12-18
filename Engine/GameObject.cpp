@@ -45,9 +45,13 @@ void GameObject::UpdateSub()
 	transform_.Calculation();
 	this->Update();
 	RoundRobin(GetRootJob());
-	for (auto child : this->childList_)
+	std::list<GameObject*> safeChildList = this->childList_;
+	for (auto child : safeChildList)
 	{
-		child->UpdateSub();
+		if (!child->isDead_)
+		{
+			child->UpdateSub();
+		}
 	}
 
 	for (auto itr = childList_.begin(); itr != childList_.end();)
@@ -282,14 +286,21 @@ void GameObject::Collision(GameObject* pTarget)
 void GameObject::RoundRobin(GameObject* pTarget)
 {
 	//①自分にコライダーがなかったらreturn
-		if (pCollider_ == nullptr)
+		if (pCollider_ == nullptr || pTarget == nullptr)
 			return;
 	//②自分とターゲット自体のコライダーの当たり判定
 	if (pTarget->pCollider_ != nullptr && pTarget->pCollider_ != pCollider_)
 		Collision(pTarget);
 	//③再帰的なやつで、ターゲットの子オブジェクトを当たり判定してく
-	for (auto itr : pTarget->childList_)
-		RoundRobin(itr);
+	std::list<GameObject*> safeChildList = pTarget->childList_;
+	for (auto itr : safeChildList)
+	{
+		if (itr != nullptr && !itr->isDead_)
+		{
+			RoundRobin(itr);
+		}
+	}
+		
 }
 
 void GameObject::OnCollision(GameObject* pTarget)

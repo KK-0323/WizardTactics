@@ -7,7 +7,7 @@ const float DELTA_TIME = 1.0f / 60.0f;
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), pFbx_(nullptr),
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
 {
 }
 
@@ -145,5 +145,19 @@ void Enemy::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
-	
+	if (pTarget->GetName() == "Magic")
+	{
+		KillMe();
+		//pTarget->KillMe();
+
+		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
+		if (sceneObj != nullptr)
+		{
+			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
+			if (sceneManager != nullptr)
+			{
+				sceneManager->ChangeScene(SCENE_ID_TITLE);
+			}
+		}
+	}
 }
