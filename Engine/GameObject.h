@@ -12,6 +12,31 @@ class BoxCollider;
 using std::string;
 using std::list;
 
+// “–‚½‚è”»’è‚ÌƒyƒA
+enum PairCollsion
+{
+	SPHERES,
+	BOXES,
+	SPHEREBOX,
+	PAIR_MAX
+};
+
+enum class AttackType
+{
+	NONE,	// –³
+	SLASH,	// aŒ‚
+	BLUNT,	// ‘ÅŒ‚
+	MAGIC	// –‚–@
+};
+
+enum class DefenseType
+{
+	NONE,	// •’Ê
+	SOFT,	// _‚ç‚©‚¢
+	HARD,	// d‚¢
+	SPIRIT	// —ì‘Ì
+};
+
 class GameObject
 {
 public:
@@ -74,6 +99,8 @@ protected:
 	string objectName_;
 	BaseCollider* pCollider_;
 	int currentLevel_; 
+	DefenseType defenseType_ = DefenseType::NONE;
+	AttackType attackType_ = AttackType::NONE;
 
 private:
 	bool isDead_;

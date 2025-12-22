@@ -3,15 +3,6 @@
 #include "BoxCollider.h"
 #include <Windows.h>
 
-// “–‚½‚è”»’è‚ÌƒyƒA
-enum PairCollsion
-{
-	SPHERES,
-	BOXES,
-	SPHEREBOX,
-	PAIR_MAX
-};
-
 GameObject::GameObject()
 	:pParent_(nullptr)
 {
@@ -305,4 +296,41 @@ void GameObject::RoundRobin(GameObject* pTarget)
 
 void GameObject::OnCollision(GameObject* pTarget)
 {
+	float damageMultiplier = 1.0f;
+
+	switch (this->attackType_)
+	{
+	case AttackType::NONE:
+		break;
+	case AttackType::SLASH:
+		if (pTarget->defenseType_ == DefenseType::SOFT)
+		{
+			damageMultiplier = 1.5f;
+		}
+		if (pTarget->defenseType_ == DefenseType::HARD)
+		{
+			damageMultiplier = 0.5f;
+		}
+		break;
+	case AttackType::BLUNT:
+		if (pTarget->defenseType_ == DefenseType::HARD)
+		{
+			damageMultiplier = 1.5f;
+		}
+		if (pTarget->defenseType_ == DefenseType::SPIRIT)
+		{
+			damageMultiplier = 0.5f;
+		}
+		break;
+	case AttackType::MAGIC:
+		if (pTarget->defenseType_ == DefenseType::SPIRIT)
+		{
+			damageMultiplier = 1.5f;
+		}
+		if (pTarget->defenseType_ == DefenseType::SOFT)
+		{
+			damageMultiplier = 0.8f;
+		}
+		break;
+	}
 }
