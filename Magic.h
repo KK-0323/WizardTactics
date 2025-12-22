@@ -28,8 +28,5 @@ private:
     int hModel_;
     float magicSpeed_;
     MAGIC_ID magicID_;
-
-    int activeTimer_ = 0;
-    const int MAX_TIME = 120;
 };
 

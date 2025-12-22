@@ -42,6 +42,8 @@ void Magic::Initialize()
 		break;
 	}
 
+	transform_.scale_ = { 0.5f,0.5f,0.5f };
+
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
 }
@@ -49,12 +51,6 @@ void Magic::Initialize()
 void Magic::Update()
 {
 	transform_.position_.x += magicSpeed_ * DELTA_TIME;
-
-	activeTimer_++;
-	if (activeTimer_ >= MAX_TIME)
-	{
-		KillMe();
-	}
 }
 
 void Magic::Draw()
@@ -70,8 +66,4 @@ void Magic::Release()
 
 void Magic::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Enemy")
-	{
-		KillMe();
-	}
 }

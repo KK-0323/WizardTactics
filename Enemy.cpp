@@ -148,7 +148,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 	if (pTarget->GetName() == "Magic")
 	{
 		KillMe();
-		//pTarget->KillMe();
+		pTarget->KillMe();
 
 		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
 		if (sceneObj != nullptr)
