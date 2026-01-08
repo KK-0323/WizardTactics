@@ -30,6 +30,9 @@ private:
 
     int jumpCount_;
     const int MAX_JUMP = 2;
+    bool isFloating_;
+    float floatTimer_;
+    const float MAX_FLOAT_TIME = 5.0f;
 
     // 指示コマンド用の関数
     void IssueCommand(AllyCommand command, int mpCost);

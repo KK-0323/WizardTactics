@@ -8,7 +8,8 @@ const float DELTA_TIME = 1.0f / 60.0f;
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f),
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false), maxMp_(100), currentMp_(100)
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false), maxMp_(100), currentMp_(100),
+	jumpCount_(0), isFloating_(false), floatTimer_(0.0f)
 {
 }
 
@@ -78,21 +79,36 @@ void Player::Update()
 	{
 		if (jumpCount_ < MAX_JUMP)
 		{
-			velocityY_ = 10.0f;
+			velocityY_ = 5.0f;
 			jumpCount_++;
 			isOnGround_ = false;
 		}
-		
-		if (!isOnGround_)
-		{
-			velocityY_ -= gravity_ * DELTA_TIME;
-		}
+	}
 
-		transform_.position_.y += velocityY_ * DELTA_TIME;
-
-		isOnGround_ = false;
+	if (!isOnGround_ && jumpCount_ >= 1 && Input::IsKeyDown(DIK_C))
+	{
+		isFloating_ = true;
+		floatTimer_ = MAX_FLOAT_TIME;
+		gravity_ = 0.0f;
 	}
 	
+	if (isFloating_)
+	{
+		floatTimer_ -= DELTA_TIME;
+		velocityY_ = 0.0f;
+
+		if (floatTimer_ <= 0.0f)
+		{
+			isFloating_ = false;
+		}
+	}
+	else if (!isOnGround_)
+	{
+		velocityY_ -= gravity_ * DELTA_TIME;
+	}
+
+	transform_.position_.y += velocityY_ * DELTA_TIME;
+		
 	// –‚–@(‰¼)‚Ì¶¬
 	if (Input::IsMouseButtonDown(0))
 	{
