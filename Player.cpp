@@ -29,8 +29,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	isOnGround_ = false;
-
 	// コマンドコスト
 	const int NONE_COST = 0;
 	const int ATTACK_COST = 0;
@@ -55,9 +53,15 @@ void Player::Update()
 		IssueCommand(CMD_NONE, NONE_COST);
 	}
 
+	// 移動処理
 	float currentMoveSpeed_ = moveSpeed_;
 
-	// 移動処理
+	// 地面にいるならジャンプ回数をリセット
+	if (isOnGround_)
+	{
+		jumpCount_ = 0;
+	}
+
 	if (Input::IsKey(DIK_LSHIFT))
 	{
 		currentMoveSpeed_ *= 2.0f;
@@ -70,9 +74,23 @@ void Player::Update()
 	{
 		transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
 	}
-	if (Input::IsKeyDown(DIK_SPACE) && !isOnGround_)
+	if (Input::IsKeyDown(DIK_SPACE))
 	{
-		velocityY_ = 3.0f;
+		if (jumpCount_ < MAX_JUMP)
+		{
+			velocityY_ = 10.0f;
+			jumpCount_++;
+			isOnGround_ = false;
+		}
+		
+		if (!isOnGround_)
+		{
+			velocityY_ -= gravity_ * DELTA_TIME;
+		}
+
+		transform_.position_.y += velocityY_ * DELTA_TIME;
+
+		isOnGround_ = false;
 	}
 	
 	// 魔法(仮)の生成
@@ -110,46 +128,20 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Stage")
+	if (pTarget->GetName() == "Stage" || pTarget->GetName() == "ButtleStage")
 	{
-		float stageY = pTarget->GetPosition().y;
-		float stageScaleY = pTarget->GetScale().y;
-		float stageHalfExtentY = 1.0f;
-
-		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
-
-		float playerRadius = 0.5f;
-
-		float playerBottomY = transform_.position_.y - playerRadius;
-
-		float overlap = stageTopY - playerBottomY;
-
-		if (overlap > 0.0f)
+		if (velocityY_ <= 0.0f)
 		{
-			transform_.position_.y += overlap;
-			isOnGround_ = true;
-			velocityY_ = 0.0f;
-		}
-	}
-	else if (pTarget->GetName() == "ButtleStage")
-	{
-		float stageY = pTarget->GetPosition().y;
-		float stageScaleY = pTarget->GetScale().y;
-		float stageHalfExtentY = 1.0f;
+			float stageTopY = pTarget->GetPosition().y + (1.0f * pTarget->GetScale().y);
+			float playerBottomY = transform_.position_.y - 0.5f;
+			float overlap = stageTopY - playerBottomY;
 
-		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
-
-		float playerRadius = 0.5f;
-
-		float playerBottomY = transform_.position_.y - playerRadius;
-
-		float overlap = stageTopY - playerBottomY;
-
-		if (overlap > 0.0f)
-		{
-			transform_.position_.y += overlap;
-			isOnGround_ = true;
-			velocityY_ = 0.0f;
+			if (overlap > 0.0f)
+			{
+				transform_.position_.y += overlap;
+				isOnGround_ = true;
+				velocityY_ = 0.0f;
+			}
 		}
 	}
 }

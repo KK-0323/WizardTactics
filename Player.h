@@ -28,6 +28,9 @@ private:
     int maxMp_;
     int currentMp_;
 
+    int jumpCount_;
+    const int MAX_JUMP = 2;
+
     // 指示コマンド用の関数
     void IssueCommand(AllyCommand command, int mpCost);
 };
