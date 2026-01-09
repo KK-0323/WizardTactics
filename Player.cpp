@@ -89,7 +89,6 @@ void Player::Update()
 	{
 		isFloating_ = true;
 		floatTimer_ = MAX_FLOAT_TIME;
-		gravity_ = 0.0f;
 	}
 	
 	if (isFloating_)
@@ -100,6 +99,15 @@ void Player::Update()
 		if (floatTimer_ <= 0.0f)
 		{
 			isFloating_ = false;
+		}
+		else if (Input::IsKeyDown(DIK_V))
+		{
+			isFloating_ = false;
+		}
+
+		if (Input::IsKey(DIK_SPACE))
+		{
+			velocityY_ = 2.0f;
 		}
 	}
 	else if (!isOnGround_)
