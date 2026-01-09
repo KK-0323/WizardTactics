@@ -12,7 +12,7 @@ Magic::Magic(GameObject* parent)
 
 Magic::Magic(GameObject* parent, MAGIC_ID id)
 	:GameObject(parent, "Magic"), pFbx_(nullptr),
-	magicSpeed_(5.0f), magicID_(MAGIC_FIRE)
+	magicSpeed_(5.0f), magicID_(MAGIC_FIRE), spawnTimer_(0.0f)
 {
 }
 
@@ -51,6 +51,12 @@ void Magic::Initialize()
 void Magic::Update()
 {
 	transform_.position_.x += magicSpeed_ * DELTA_TIME;
+	
+	//spawnTimer_ += DELTA_TIME;
+	//if (spawnTimer_ >= SPAWN_TIME)
+	//{
+	//	this->KillMe();
+	//}
 }
 
 void Magic::Draw()

@@ -95,14 +95,17 @@ void Player::Update()
 	{
 		floatTimer_ -= DELTA_TIME;
 		velocityY_ = 0.0f;
+		transform_.rotate_.y += 5.0f;
 
 		if (floatTimer_ <= 0.0f)
 		{
 			isFloating_ = false;
+			transform_.rotate_.y = 90.0f;
 		}
-		else if (Input::IsKeyDown(DIK_V))
+		else if (Input::IsKeyDown(DIK_S))
 		{
 			isFloating_ = false;
+			transform_.rotate_.y = 90.0f;
 		}
 
 		if (Input::IsKey(DIK_SPACE))

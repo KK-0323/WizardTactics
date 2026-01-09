@@ -28,5 +28,7 @@ private:
     int hModel_;
     float magicSpeed_;
     MAGIC_ID magicID_;
+    float spawnTimer_;
+    const float SPAWN_TIME = 3.0f;
 };
 
