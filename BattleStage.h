@@ -3,12 +3,12 @@
 
 class Fbx;
 
-class ButtleStage :
+class BattleStage :
     public GameObject
 {
 public:
-    ButtleStage(GameObject* parent);
-    ~ButtleStage();
+    BattleStage(GameObject* parent);
+    ~BattleStage();
     void Initialize() override;
     void Update() override;
     void Draw() override;

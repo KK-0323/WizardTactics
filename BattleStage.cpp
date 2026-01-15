@@ -1,19 +1,19 @@
-#include "ButtleStage.h"
+#include "BattleStage.h"
 #include "Engine\\Model.h"
 #include "Engine\\BoxCollider.h"
 
-ButtleStage::ButtleStage(GameObject* parent)
-	:GameObject(parent, "ButtleStage"), pFbx_(nullptr)
+BattleStage::BattleStage(GameObject* parent)
+	:GameObject(parent, "BattleStage"), pFbx_(nullptr)
 {
 }
 
-ButtleStage::~ButtleStage()
+BattleStage::~BattleStage()
 {
 }
 
-void ButtleStage::Initialize()
+void BattleStage::Initialize()
 {
-	hModel_ = Model::Load("ButtleStage.fbx");
+	hModel_ = Model::Load("BattleStage.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { 0.0f,0.0f,0.0f };
 	transform_.rotate_.y = 90.0f;
@@ -22,17 +22,17 @@ void ButtleStage::Initialize()
 	AddCollider(col);
 }
 
-void ButtleStage::Update()
+void BattleStage::Update()
 {
 }
 
-void ButtleStage::Draw()
+void BattleStage::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 }
 
-void ButtleStage::Release()
+void BattleStage::Release()
 {
 	if (pFbx_)
 	{
@@ -40,6 +40,6 @@ void ButtleStage::Release()
 	}
 }
 
-void ButtleStage::OnCollision(GameObject* pTarget)
+void BattleStage::OnCollision(GameObject* pTarget)
 {
 }

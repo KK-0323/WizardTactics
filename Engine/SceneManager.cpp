@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "..\\PlayScene.h"
 #include "..\\TitleScene.h"
-#include "..\\ButtleScene.h"
+#include "..\\BattleScene.h"
 #include "Direct3D.h"
 
 SceneManager::SceneManager(GameObject* parent)
@@ -36,8 +36,8 @@ void SceneManager::Update()
 		case SCENE_ID_PLAY:
 			Instantiate<PlayScene>(this);
 			break;
-		case SCENE_ID_BUTTLE:
-			Instantiate<ButtleScene>(this);
+		case SCENE_ID_BATTLE:
+			Instantiate<BattleScene>(this);
 			break;
 		case SCENE_ID_CLEAR:
 			break;

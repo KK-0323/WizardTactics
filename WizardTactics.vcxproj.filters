@@ -81,7 +81,7 @@
     <ClInclude Include="Engine\GameObject.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="ButtleScene.h">
+    <ClInclude Include="BattleScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Model.h">
@@ -93,7 +93,7 @@
     <ClInclude Include="Engine\BaseCollider.h">
       <Filter>ヘッダー ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="ButtleStage.h">
+    <ClInclude Include="BattleStage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="TestStage.h">
@@ -155,7 +155,7 @@
     <ClCompile Include="Engine\GameObject.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="ButtleScene.cpp">
+    <ClCompile Include="BattleScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Model.cpp">
@@ -164,7 +164,7 @@
     <ClCompile Include="Engine\BoxCollider.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="ButtleStage.cpp">
+    <ClCompile Include="BattleStage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="TestStage.cpp">

@@ -1,11 +1,11 @@
 #pragma once
 #include "Engine\\GameObject.h"
-class ButtleScene :
+class BattleScene :
     public GameObject
 {
 public:
-    ButtleScene(GameObject* parent);
-    ~ButtleScene();
+    BattleScene(GameObject* parent);
+    ~BattleScene();
     void Initialize() override;
     void Update() override;
     void Draw() override;

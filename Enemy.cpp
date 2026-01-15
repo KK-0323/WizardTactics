@@ -98,7 +98,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
 			if (sceneManager != nullptr)
 			{
-				sceneManager->ChangeScene(SCENE_ID_BUTTLE);
+				sceneManager->ChangeScene(SCENE_ID_BATTLE);
 			}
 		}
 	}
@@ -124,7 +124,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
-	else if (pTarget->GetName() == "ButtleStage")
+	else if (pTarget->GetName() == "BattleStage")
 	{
 		float stageY = pTarget->GetPosition().y;
 		float stageScaleY = pTarget->GetScale().y;
@@ -156,7 +156,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
 			if (sceneManager != nullptr)
 			{
-				sceneManager->ChangeScene(SCENE_ID_TITLE);
+				sceneManager->ChangeScene(SCENE_ID_PLAY);
 			}
 		}
 	}

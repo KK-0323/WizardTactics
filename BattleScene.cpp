@@ -1,22 +1,22 @@
-#include "ButtleScene.h"
+#include "BattleScene.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "ButtleStage.h"
+#include "BattleStage.h"
 #include "Ally.h"
 #include "Engine\\Camera.h"
 #include "Engine\\SceneManager.h"
 #include "Engine\\Input.h"
 
-ButtleScene::ButtleScene(GameObject* parent)
-	:GameObject(parent, "ButtleScene")
+BattleScene::BattleScene(GameObject* parent)
+	:GameObject(parent, "BattleScene")
 {
 }
 
-ButtleScene::~ButtleScene()
+BattleScene::~BattleScene()
 {
 }
 
-void ButtleScene::Initialize()
+void BattleScene::Initialize()
 {
 	Camera::Initialize();
 	Camera::Update();
@@ -38,10 +38,10 @@ void ButtleScene::Initialize()
 	}
 
 	Instantiate<Enemy>(this);
-	Instantiate<ButtleStage>(this);
+	Instantiate<BattleStage>(this);
 }
 
-void ButtleScene::Update()
+void BattleScene::Update()
 {
 	if (Input::IsKeyDown(DIK_P))
 	{
@@ -57,10 +57,10 @@ void ButtleScene::Update()
 	}
 }
 
-void ButtleScene::Draw()
+void BattleScene::Draw()
 {
 }
 
-void ButtleScene::Release()
+void BattleScene::Release()
 {
 }

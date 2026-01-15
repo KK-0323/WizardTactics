@@ -53,7 +53,7 @@ void PlayScene::Update()
 			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneManagerObj);
 			if (sceneManager != nullptr)
 			{
-				sceneManager->ChangeScene(SCENE_ID_BUTTLE);
+				sceneManager->ChangeScene(SCENE_ID_BATTLE);
 			}
 		}
 	}

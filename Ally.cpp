@@ -110,7 +110,7 @@ void Ally::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
-	else if (pTarget->GetName() == "ButtleStage")
+	else if (pTarget->GetName() == "BattleStage")
 	{
 		float stageY = pTarget->GetPosition().y;
 		float stageScaleY = pTarget->GetScale().y;
