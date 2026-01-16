@@ -26,109 +26,115 @@ void Player::Initialize()
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
+
+	pSM_ = (SceneManager*)FindObject("SceneManager");
 }
 
 void Player::Update()
 {
-	if (currentMode_ == PlayMode::EXPLORE)
+	if (pSM_ != nullptr)
 	{
-		// 移動処理
-		float currentMoveSpeed_ = moveSpeed_;
+		SCENE_ID currentScene = pSM_->GetCurrentSceneID();
 
-		// ジャンプ回数リセット
-		if (isOnGround_)
+		if (currentScene == SCENE_ID_BATTLE)
 		{
-			jumpCount_ = 0;
-		}
-
-		if (Input::IsKey(DIK_LSHIFT))
-		{
-			currentMoveSpeed_ *= 2.0f;
-		}
-		if (Input::IsKey(DIK_A))
-		{
-			transform_.position_.x -= currentMoveSpeed_ * DELTA_TIME;
-		}
-		if (Input::IsKey(DIK_D))
-		{
-			transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
-		}
-		if (Input::IsKeyDown(DIK_SPACE))
-		{
-			if (jumpCount_ < MAX_JUMP)
+			// コマンドの指示入力
+			if (Input::IsKeyDown(DIK_1))
 			{
-				velocityY_ = 5.0f;
-				jumpCount_++;
-				isOnGround_ = false;
+				IssueCommand(CMD_ATTACK, ATTACK_COST);
+			}
+			if (Input::IsKeyDown(DIK_2))
+			{
+				IssueCommand(CMD_DEFENSE, DEFENSE_COST);
+			}
+			if (Input::IsKeyDown(DIK_3))
+			{
+				IssueCommand(CMD_SKILL, SKILL_COST);
+			}
+			if (Input::IsKeyDown(DIK_0))
+			{
+				IssueCommand(CMD_NONE, NONE_COST);
+			}
+			// 魔法(仮)の生成
+			if (Input::IsMouseButtonDown(0))
+			{
+				Magic* pMagic = Instantiate<Magic>(GetRootJob(), MAGIC_FIRE);
+				if (pMagic != nullptr)
+				{
+					pMagic->SetPosition(transform_.position_);
+				}
 			}
 		}
-
-		// 浮遊処理
-		if (!isOnGround_ && jumpCount_ >= 1 && Input::IsKeyDown(DIK_C))
+		if (currentScene != SCENE_ID_BATTLE)
 		{
-			isFloating_ = true;
-			floatTimer_ = MAX_FLOAT_TIME;
-		}
+			// 移動処理
+			float currentMoveSpeed_ = moveSpeed_;
 
-		if (isFloating_)
-		{
-			floatTimer_ -= DELTA_TIME;
-			velocityY_ = 0.0f;
-			transform_.rotate_.y += 5.0f;
-
-			if (floatTimer_ <= 0.0f)
+			// ジャンプ回数リセット
+			if (isOnGround_)
 			{
-				isFloating_ = false;
-				transform_.rotate_.y = 90.0f;
-			}
-			else if (Input::IsKeyDown(DIK_S))
-			{
-				isFloating_ = false;
-				transform_.rotate_.y = 90.0f;
+				jumpCount_ = 0;
 			}
 
-			if (Input::IsKey(DIK_SPACE))
+			if (Input::IsKey(DIK_LSHIFT))
 			{
-				velocityY_ = 2.0f;
+				currentMoveSpeed_ *= 2.0f;
 			}
-		}
-		else if (!isOnGround_)
-		{
-			velocityY_ -= gravity_ * DELTA_TIME;
-		}
+			if (Input::IsKey(DIK_A))
+			{
+				transform_.position_.x -= currentMoveSpeed_ * DELTA_TIME;
+			}
+			if (Input::IsKey(DIK_D))
+			{
+				transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
+			}
+			if (Input::IsKeyDown(DIK_SPACE))
+			{
+				if (jumpCount_ < MAX_JUMP)
+				{
+					velocityY_ = 5.0f;
+					jumpCount_++;
+					isOnGround_ = false;
+				}
+			}
 
-		transform_.position_.y += velocityY_ * DELTA_TIME;
+			// 浮遊処理
+			if (!isOnGround_ && jumpCount_ >= 1 && Input::IsKeyDown(DIK_C))
+			{
+				isFloating_ = true;
+				floatTimer_ = MAX_FLOAT_TIME;
+			}
+
+			if (isFloating_)
+			{
+				floatTimer_ -= DELTA_TIME;
+				velocityY_ = 0.0f;
+				transform_.rotate_.y += 5.0f;
+
+				if (floatTimer_ <= 0.0f)
+				{
+					isFloating_ = false;
+					transform_.rotate_.y = 90.0f;
+				}
+				else if (Input::IsKeyDown(DIK_S))
+				{
+					isFloating_ = false;
+					transform_.rotate_.y = 90.0f;
+				}
+
+				if (Input::IsKey(DIK_SPACE))
+				{
+					velocityY_ = 2.0f;
+				}
+			}
+			else if (!isOnGround_)
+			{
+				velocityY_ -= gravity_ * DELTA_TIME;
+			}
+
+			transform_.position_.y += velocityY_ * DELTA_TIME;
+		}
 	}
-	else if (currentMode_ == PlayMode::BATTLE)
-	{
-		// コマンドの指示入力
-		if (Input::IsKeyDown(DIK_1))
-		{
-			IssueCommand(CMD_ATTACK, ATTACK_COST);
-		}
-		if (Input::IsKeyDown(DIK_2))
-		{
-			IssueCommand(CMD_DEFENSE, DEFENSE_COST);
-		}
-		if (Input::IsKeyDown(DIK_3))
-		{
-			IssueCommand(CMD_SKILL, SKILL_COST);
-		}
-		if (Input::IsKeyDown(DIK_0))
-		{
-			IssueCommand(CMD_NONE, NONE_COST);
-		}
-		// 魔法(仮)の生成
-		if (Input::IsMouseButtonDown(0))
-		{
-			Magic* pMagic = Instantiate<Magic>(GetRootJob(), MAGIC_FIRE);
-			if (pMagic != nullptr)
-			{
-				pMagic->SetPosition(transform_.position_);
-			}
-		}
-	}
-	
 	
 	// 重力処理
 	if (!isOnGround_)
@@ -171,11 +177,6 @@ void Player::OnCollision(GameObject* pTarget)
 				velocityY_ = 0.0f;
 			}
 		}
-	}
-
-	if (pTarget->GetName() == "Enemy")
-	{
-		currentMode_ = PlayMode::BATTLE;
 	}
 }
 

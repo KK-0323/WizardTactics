@@ -91,7 +91,6 @@ void Enemy::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetName() == "Player")
 	{
-		//MessageBoxA(0, "‚Ô‚Â‚©‚Á‚½", "Collider", MB_OK);
 		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
 		if (sceneObj != nullptr)
 		{

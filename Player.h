@@ -2,14 +2,9 @@
 #include "Engine\\GameObject.h"
 #include "Ally.h"
 #include <cmath>
+#include "Engine\\SceneManager.h"
 
 class Fbx; // 前方宣言
-
-enum class PlayMode
-{
-    EXPLORE,
-    BATTLE
-};
 
 class Player :
     public GameObject
@@ -22,7 +17,6 @@ public:
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
-    void SetMode(PlayMode mode) { currentMode_ = mode; }
 private:
     Fbx* pFbx_;
     int hModel_;
@@ -30,7 +24,6 @@ private:
     float moveSpeed_;
     float velocityY_;
     bool isOnGround_;
-    PlayMode currentMode_ = PlayMode::EXPLORE;
 
     // ステータス用の変数
     int maxMp_;
@@ -49,5 +42,7 @@ private:
     const int ATTACK_COST = 0;
     const int DEFENSE_COST = 0;
     const int SKILL_COST = 20;
+
+    SceneManager* pSM_;
 };
 

@@ -21,6 +21,8 @@ public:
     void Draw() override;
     void Release() override;
     void ChangeScene(SCENE_ID nextScene);
+    
+    SCENE_ID GetCurrentSceneID() const { return currentSceneID_; }
 private:
     SCENE_ID currentSceneID_;
     SCENE_ID nextSceneID_;
