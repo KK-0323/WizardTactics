@@ -44,5 +44,9 @@ private:
     const int SKILL_COST = 20;
 
     SceneManager* pSM_;
+    SCENE_ID currentScene_;
+
+    void UpdateMovement();
+    void UpdateBattle();
 };
 
