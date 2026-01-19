@@ -9,7 +9,7 @@ Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f),
 	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
 	maxHp_(50), currentHp_(50), attackPower_(20), defensePower_(10),
-	currentCommand_(CMD_NONE)
+	currentCommand_(CMD_NONE), pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY)
 {
 }
 
@@ -21,7 +21,7 @@ void Ally::Initialize()
 {
 	hModel_ = Model::Load("Ally.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { 0.0f, 0.0f, 0.0f };
+	transform_.position_ = { -3.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	SphereCollider* col = new SphereCollider(0.5f);
@@ -30,36 +30,27 @@ void Ally::Initialize()
 
 void Ally::Update()
 {
-	// ポインタ取得
-	pTargetPlayer_ = FindObject("Player");
-	switch (currentCommand_)
+	pSM_ = (SceneManager*)FindObject("SceneManager");
+	SCENE_ID lastScene = currentScene_;
+	currentScene_ = pSM_->GetCurrentSceneID();
+
+	// シーン切り替え時にクリア
+	if (lastScene != currentScene_)
 	{
-	case CMD_NONE:
-		// Playerの位置に合わせて追従
-		if (pTargetPlayer_)
-		{
-			const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
+		posHistory_.clear();
+	}
 
-			XMFLOAT3 targetPos = playerPos;
-
-			transform_.position_.x = targetPos.x - 3.0f;
-			transform_.position_.y = targetPos.y;
-		}
+	switch (currentScene_)
+	{
+	case SCENE_ID_PLAY:
+		UpdateMovement();
 		break;
-	case CMD_ATTACK:
-		break;
-	case CMD_DEFENSE:
-		break;
-	case CMD_SKILL:
-		break;
-	case CMD_ESCAPE:
-		break;
-	case CMD_MAX:
+	case SCENE_ID_BATTLE:
+		UpdateBattle();
 		break;
 	default:
 		break;
 	}
-
 
 	if (!isOnGround_)
 	{
@@ -136,4 +127,59 @@ void Ally::OnCollision(GameObject* pTarget)
 void Ally::ReceiveCommand(AllyCommand command)
 {
 	currentCommand_ = command;
+}
+
+void Ally::UpdateMovement()
+{
+	pTargetPlayer_ = FindObject("Player");
+	if (!pTargetPlayer_)
+	{
+		return;
+	}
+
+	posHistory_.push_front(pTargetPlayer_->GetPosition());
+
+	if (posHistory_.size() > FOLLOW_DELAY)
+	{
+		XMFLOAT3 targetPos = posHistory_.back();
+		posHistory_.pop_back();
+
+		transform_.position_.x = targetPos.x - 3.0f;
+	}
+}
+
+void Ally::UpdateBattle()
+{
+	pTargetPlayer_ = FindObject("Player");
+	pTargetEnemy_ = FindObject("Enemy");
+	
+	switch (currentCommand_)
+	{
+	case CMD_NONE:
+		if (pTargetPlayer_)
+		{
+			const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
+
+			transform_.position_.x = playerPos.x - 3.0f;
+		}
+		break;
+	case CMD_ATTACK:
+		if (pTargetEnemy_)
+		{
+			const XMFLOAT3& enemyPos = pTargetEnemy_->GetPosition();
+
+			transform_.position_.x = enemyPos.x - 2.0f;
+		}
+		break;
+	case CMD_DEFENSE:
+		break;
+	case CMD_SKILL:
+		break;
+	case CMD_ESCAPE:
+		break;
+	case CMD_MAX:
+		break;
+	default:
+		break;
+	}
 }

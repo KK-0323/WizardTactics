@@ -188,18 +188,22 @@ void Player::UpdateBattle()
 	if (Input::IsKeyDown(DIK_1))
 	{
 		IssueCommand(CMD_ATTACK, ATTACK_COST);
+		MessageBoxA(0, "çUåÇ", "MP Lost", MB_OK);
 	}
 	if (Input::IsKeyDown(DIK_2))
 	{
 		IssueCommand(CMD_DEFENSE, DEFENSE_COST);
+		MessageBoxA(0, "ñhå‰", "MP Lost", MB_OK);
 	}
 	if (Input::IsKeyDown(DIK_3))
 	{
 		IssueCommand(CMD_SKILL, SKILL_COST);
+		MessageBoxA(0, "ì¡ãZ", "MP Lost", MB_OK);
 	}
 	if (Input::IsKeyDown(DIK_0))
 	{
 		IssueCommand(CMD_NONE, NONE_COST);
+		MessageBoxA(0, "ë“ã@", "MP Lost", MB_OK);
 	}
 	// ñÇñ@(âº)ÇÃê∂ê¨
 	if (Input::IsMouseButtonDown(0))

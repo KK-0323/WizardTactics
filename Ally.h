@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine\\GameObject.h"
 #include <cmath>
+#include <deque>
+#include "Engine\\SceneManager.h"
 
 class Fbx;
 
@@ -34,6 +36,7 @@ private:
     float gravity_;
     float velocityY_;
     GameObject* pTargetPlayer_;
+    GameObject* pTargetEnemy_;
     bool isOnGround_;
 
 	// ステータス用の変数
@@ -42,7 +45,15 @@ private:
     int attackPower_;
     int defensePower_;
 
+    std::deque<XMFLOAT3> posHistory_; // プレイヤー座標履歴
+    const int FOLLOW_DELAY = 40;
+    SceneManager* pSM_;
+    SCENE_ID currentScene_;
+
     // コマンド処理
     AllyCommand currentCommand_;
+
+    void UpdateMovement();
+    void UpdateBattle();
 };
 
