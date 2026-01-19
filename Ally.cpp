@@ -9,7 +9,7 @@ Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f),
 	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
 	maxHp_(50), currentHp_(50), attackPower_(20), defensePower_(10),
-	currentCommand_(CMD_NONE), pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY)
+	pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY)
 {
 }
 
@@ -126,7 +126,29 @@ void Ally::OnCollision(GameObject* pTarget)
 
 void Ally::ReceiveCommand(AllyCommand command)
 {
-	currentCommand_ = command;
+	switch (command)
+	{
+	case CMD_NONE:
+		state_ = AllyState::IDLE;
+		break;
+	case CMD_ATTACK:
+		state_ = AllyState::ATTACK;
+		break;
+	case CMD_DEFENSE:
+		state_ = AllyState::DEFENSE;
+		break;
+	case CMD_SKILL:
+		state_ = AllyState::SKILL;
+		break;
+	case CMD_ESCAPE:
+		state_ = AllyState::ESCAPE;
+		break;
+	case CMD_MAX:
+		state_ = AllyState::MAX;
+		break;
+	default:
+		break;
+	}
 }
 
 void Ally::UpdateMovement()
@@ -153,31 +175,27 @@ void Ally::UpdateBattle()
 	pTargetPlayer_ = FindObject("Player");
 	pTargetEnemy_ = FindObject("Enemy");
 	
-	switch (currentCommand_)
+	switch (state_)
 	{
-	case CMD_NONE:
+	case AllyState::IDLE:
 		if (pTargetPlayer_)
 		{
-			const XMFLOAT3& playerPos = pTargetPlayer_->GetPosition();
-
-			transform_.position_.x = playerPos.x - 3.0f;
+			transform_.position_.x = pTargetPlayer_->GetPosition().x - 3.0f;
 		}
 		break;
-	case CMD_ATTACK:
-		if (pTargetEnemy_)
+	case AllyState::ATTACK:
+		if(transform_.position_.x < pTargetEnemy_->GetPosition().x - 1.0f)
 		{
-			const XMFLOAT3& enemyPos = pTargetEnemy_->GetPosition();
-
-			transform_.position_.x = enemyPos.x - 2.0f;
+			transform_.position_.x += moveSpeed_ * DELTA_TIME * 60.0f;
 		}
 		break;
-	case CMD_DEFENSE:
+	case AllyState::DEFENSE:
 		break;
-	case CMD_SKILL:
+	case AllyState::SKILL:
 		break;
-	case CMD_ESCAPE:
+	case AllyState::ESCAPE:
 		break;
-	case CMD_MAX:
+	case AllyState::MAX:
 		break;
 	default:
 		break;

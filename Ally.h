@@ -17,6 +17,16 @@ enum AllyCommand
     CMD_MAX
 };
 
+enum class AllyState
+{
+    IDLE,
+    ATTACK,
+    DEFENSE,
+    SKILL,
+    ESCAPE,
+    MAX
+};
+
 class Ally :
     public GameObject
 {
@@ -50,10 +60,9 @@ private:
     SceneManager* pSM_;
     SCENE_ID currentScene_;
 
-    // ÉRÉ}ÉìÉhèàóù
-    AllyCommand currentCommand_;
-
     void UpdateMovement();
     void UpdateBattle();
+
+    AllyState state_;
 };
 

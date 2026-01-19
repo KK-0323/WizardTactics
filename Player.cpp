@@ -26,6 +26,8 @@ void Player::Initialize()
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
+
+	pAlly_ = (Ally*)FindObject("Ally");
 }
 
 void Player::Update()
@@ -96,14 +98,9 @@ void Player::IssueCommand(AllyCommand command, int mpCost)
 	{
 		currentMp_ -= mpCost;
 
-		GameObject* pAllyObj = FindObject("Ally");
-		if (pAllyObj != nullptr)
+		if (pAlly_ != nullptr)
 		{
-			Ally* pAlly = dynamic_cast<Ally*>(pAllyObj);
-			if (pAlly != nullptr)
-			{
-				pAlly->ReceiveCommand(command);
-			}
+			pAlly_->ReceiveCommand(command);
 		}
 	}
 	else
@@ -188,22 +185,22 @@ void Player::UpdateBattle()
 	if (Input::IsKeyDown(DIK_1))
 	{
 		IssueCommand(CMD_ATTACK, ATTACK_COST);
-		MessageBoxA(0, "çUåÇ", "MP Lost", MB_OK);
+		MessageBoxA(0, "çUåÇ", "ATTACK", MB_OK);
 	}
 	if (Input::IsKeyDown(DIK_2))
 	{
 		IssueCommand(CMD_DEFENSE, DEFENSE_COST);
-		MessageBoxA(0, "ñhå‰", "MP Lost", MB_OK);
+		MessageBoxA(0, "ñhå‰", "DEFENSE", MB_OK);
 	}
 	if (Input::IsKeyDown(DIK_3))
 	{
 		IssueCommand(CMD_SKILL, SKILL_COST);
-		MessageBoxA(0, "ì¡ãZ", "MP Lost", MB_OK);
+		MessageBoxA(0, "ì¡ãZ", "SKILL", MB_OK);
 	}
-	if (Input::IsKeyDown(DIK_0))
+	if (Input::IsKeyDown(DIK_4))
 	{
 		IssueCommand(CMD_NONE, NONE_COST);
-		MessageBoxA(0, "ë“ã@", "MP Lost", MB_OK);
+		MessageBoxA(0, "ë“ã@", "NONE", MB_OK);
 	}
 	// ñÇñ@(âº)ÇÃê∂ê¨
 	if (Input::IsMouseButtonDown(0))
