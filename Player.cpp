@@ -28,6 +28,10 @@ void Player::Initialize()
 	AddCollider(col);
 
 	pAlly_ = (Ally*)FindObject("Ally");
+
+	SetAttackType(AttackType::MAGIC);
+	SetDefenseType(DefenseType::NONE);
+	SetElementType(ElementType::NONE);
 }
 
 void Player::Update()

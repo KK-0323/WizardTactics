@@ -3,6 +3,13 @@
 #include "BoxCollider.h"
 #include <Windows.h>
 
+namespace Compatibility
+{
+	const float EFFECTIVE = 1.5f;
+	const float NORMAL = 1.0f;
+	const float RESIST = 0.5f;
+}
+
 GameObject::GameObject()
 	:pParent_(nullptr)
 {
@@ -334,3 +341,83 @@ void GameObject::OnCollision(GameObject* pTarget)
 		break;
 	}
 }
+
+float GameObject::GetPhysicalCalculation(AttackType atk, DefenseType def)
+{
+	if (atk == AttackType::SLASH)
+	{
+		if (def == DefenseType::SOFT)
+		{
+			return Compatibility::EFFECTIVE;
+		}
+		else if (def == DefenseType::HARD)
+		{
+			return Compatibility::RESIST;
+		}
+		else
+		{
+			return Compatibility::NORMAL;
+		}
+	}
+	if (atk == AttackType::BLUNT)
+	{
+		if (def == DefenseType::HARD)
+		{
+			return Compatibility::EFFECTIVE;
+		}
+		else if(def == DefenseType::SPIRIT)
+		{
+			return Compatibility::RESIST;
+		}
+		else
+		{
+			return Compatibility::NORMAL;
+		}
+	}
+}
+
+float GameObject::GetElementalCalculation(ElementType atk, ElementType def)
+{
+	if (atk == ElementType::FIRE && def == ElementType::THUNDER)
+	{
+		return Compatibility::EFFECTIVE;
+	}
+	if (atk == ElementType::THUNDER && def == ElementType::WATER)
+	{
+		return Compatibility::EFFECTIVE;
+	}
+	if (atk == ElementType::WATER && def == ElementType::FIRE)
+	{
+		return Compatibility::EFFECTIVE;
+	}
+
+	if (atk == ElementType::FIRE && def == ElementType::WATER)
+	{
+		return Compatibility::RESIST;
+	}
+	if (atk == ElementType::THUNDER && def == ElementType::FIRE)
+	{
+		return Compatibility::RESIST;
+	}
+	if (atk == ElementType::WATER && def == ElementType::THUNDER)
+	{
+		return Compatibility::RESIST;
+	}
+
+	return Compatibility::NORMAL;
+}
+
+int GameObject::CalculateDamage(int baseAtk, GameObject* pTarget)
+{
+	// ï®óùëäê´ÇÃéÊìæ
+	float physCal = GetPhysicalCalculation(this->GetAttack(), pTarget->GetDefense());
+
+	// ëÆê´ëäê´ÇÃéÊìæ
+	float elemCal = GetElementalCalculation(this->GetElement(), pTarget->GetElement());
+
+	// ëççáåvéZ
+	float totalCal = (float)baseAtk * physCal * elemCal;
+	return (int)totalCal;
+}
+
+

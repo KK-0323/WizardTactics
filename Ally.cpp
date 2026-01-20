@@ -26,6 +26,10 @@ void Ally::Initialize()
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
+
+	SetAttackType(AttackType::BLUNT);
+	SetDefenseType(DefenseType::NONE);
+	SetElementType(ElementType::NONE);
 }
 
 void Ally::Update()

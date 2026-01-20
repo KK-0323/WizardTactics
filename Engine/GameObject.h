@@ -37,6 +37,14 @@ enum class DefenseType
 	SPIRIT	// —ì‘Ì
 };
 
+enum class ElementType
+{
+	NONE,
+	FIRE,
+	WATER,
+	THUNDER
+};
+
 class GameObject
 {
 public:
@@ -87,11 +95,20 @@ public:
 		return obj;
 	}
 
-	string GetName() const { return objectName_; }
-
-	virtual int GetLevel() const { return currentLevel_; }
 	void SetLevel(int level) { currentLevel_ = level; }
+	void SetAttackType(AttackType type) { attackType_ = type; }
+	void SetDefenseType(DefenseType type) { defenseType_ = type; }
+	void SetElementType(ElementType type) { elementType_ = type; }
 
+	string GetName() const { return objectName_; }
+	virtual int GetLevel() const { return currentLevel_; }
+	AttackType GetAttack() const { return attackType_; }
+	DefenseType GetDefense() const { return defenseType_; }
+	ElementType GetElement() const { return elementType_; }
+
+	float GetPhysicalCalculation(AttackType atk, DefenseType def);
+	float GetElementalCalculation(ElementType atk, ElementType def);
+	int CalculateDamage(int baseAtk, GameObject* pTarget);
 protected:
 	list<GameObject* > childList_;
 	Transform transform_;
@@ -101,6 +118,7 @@ protected:
 	int currentLevel_; 
 	DefenseType defenseType_ = DefenseType::NONE;
 	AttackType attackType_ = AttackType::NONE;
+	ElementType elementType_ = ElementType::NONE;
 
 private:
 	bool isDead_;
