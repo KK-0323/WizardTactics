@@ -81,7 +81,7 @@ void Magic::OnCollision(GameObject* pTarget)
 	{
 		int baseAtk = 20;
 		int damage = this->CalculateDamage(baseAtk, pTarget);
-
+		pTarget->ApplyDamage(damage);
 		//this->KillMe();
 	}
 }

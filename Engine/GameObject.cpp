@@ -420,4 +420,21 @@ int GameObject::CalculateDamage(int baseAtk, GameObject* pTarget)
 	return (int)totalCal;
 }
 
+void GameObject::ApplyDamage(int damage)
+{
+	if (isDead_)
+	{
+		return;
+	}
+
+	currentHp_ -= damage;
+	
+	if (currentHp_ <= 0)
+	{
+		currentHp_ = 0;
+		isDead_ = true;
+		KillMe();
+	}
+}
+
 

@@ -30,6 +30,9 @@ void Ally::Initialize()
 	SetAttackType(AttackType::BLUNT);
 	SetDefenseType(DefenseType::NONE);
 	SetElementType(ElementType::NONE);
+
+	maxHp_ = 50;
+	currentHp_ = maxHp_;
 }
 
 void Ally::Update()
@@ -105,7 +108,7 @@ void Ally::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
-	else if (pTarget->GetName() == "BattleStage")
+	if (pTarget->GetName() == "BattleStage")
 	{
 		float stageY = pTarget->GetPosition().y;
 		float stageScaleY = pTarget->GetScale().y;
@@ -125,6 +128,13 @@ void Ally::OnCollision(GameObject* pTarget)
 			isOnGround_ = true;
 			velocityY_ = 0.0f;
 		}
+	}
+
+	if (pTarget->GetName() == "Enemy")
+	{
+		int damage = this->CalculateDamage(this->attackPower_, pTarget);
+
+		pTarget->ApplyDamage(damage);
 	}
 }
 

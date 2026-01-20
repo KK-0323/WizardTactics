@@ -34,6 +34,8 @@ void Enemy::Initialize()
 		initialX_ = transform_.position_.x;
 
 		level_ = 1;
+		maxHp_ = 30;
+		currentHp_ = maxHp_;
 		break;
 	case ENEMY_BOSS:
 		hModel_ = Model::Load("BossEnemy.fbx");
@@ -41,6 +43,8 @@ void Enemy::Initialize()
 		transform_.position_ = { 20.0f, 0.0f, 0.0f };
 		transform_.rotate_.y = 90.0f;
 		level_ = 10;
+		maxHp_ = 200;
+		currentHp_ = maxHp_;
 		break;
 	case ENEMY_MAX:
 		break;
@@ -123,7 +127,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
-	else if (pTarget->GetName() == "BattleStage")
+	if (pTarget->GetName() == "BattleStage")
 	{
 		float stageY = pTarget->GetPosition().y;
 		float stageScaleY = pTarget->GetScale().y;
@@ -155,7 +159,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
 			if (sceneManager != nullptr)
 			{
-				sceneManager->ChangeScene(SCENE_ID_PLAY);
+				sceneManager->ChangeScene(SCENE_ID_TITLE);
 			}
 		}
 	}

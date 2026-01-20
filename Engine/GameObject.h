@@ -109,6 +109,9 @@ public:
 	float GetPhysicalCalculation(AttackType atk, DefenseType def);
 	float GetElementalCalculation(ElementType atk, ElementType def);
 	int CalculateDamage(int baseAtk, GameObject* pTarget);
+
+	void ApplyDamage(int damage);
+	bool IsDead() const { return isDead_; }
 protected:
 	list<GameObject* > childList_;
 	Transform transform_;
@@ -116,10 +119,13 @@ protected:
 	string objectName_;
 	BaseCollider* pCollider_;
 	int currentLevel_; 
+	int maxHp_;
+	int currentHp_;
+	bool isDead_ = false;
 	DefenseType defenseType_ = DefenseType::NONE;
 	AttackType attackType_ = AttackType::NONE;
 	ElementType elementType_ = ElementType::NONE;
 
 private:
-	bool isDead_;
+	
 };
