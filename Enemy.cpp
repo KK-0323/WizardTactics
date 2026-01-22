@@ -150,7 +150,12 @@ void Enemy::OnCollision(GameObject* pTarget)
 	}
 	if (pTarget->GetName() == "Magic")
 	{
-		KillMe();
+		if (currentHp_ <= 0)
+		{
+			KillMe();
+			pTarget->KillMe();
+		}
+		
 		pTarget->KillMe();
 
 		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
@@ -159,7 +164,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
 			if (sceneManager != nullptr)
 			{
-				sceneManager->ChangeScene(SCENE_ID_TITLE);
+				sceneManager->ChangeScene(SCENE_ID_CLEAR);
 			}
 		}
 	}

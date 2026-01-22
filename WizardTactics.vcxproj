@@ -150,6 +150,7 @@
     <ClInclude Include="Ally.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="BattleStage.h" />
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\BaseCollider.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Ally.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="BattleStage.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />

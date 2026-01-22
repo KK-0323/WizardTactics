@@ -17,13 +17,14 @@ enum AllyCommand
     CMD_MAX
 };
 
-enum class AllyState
+enum AllyState
 {
     IDLE,
     ATTACK,
     DEFENSE,
     SKILL,
     ESCAPE,
+    RANDOM,
     MAX
 };
 
@@ -59,6 +60,8 @@ private:
     const int FOLLOW_DELAY = 40;
     SceneManager* pSM_;
     SCENE_ID currentScene_;
+
+    AllyCommand currentCommand_;
 
     void UpdateMovement();
     void UpdateBattle();

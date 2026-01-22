@@ -77,11 +77,11 @@ void Magic::Release()
 
 void Magic::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Enemy")
-	{
-		int baseAtk = 20;
-		int damage = this->CalculateDamage(baseAtk, pTarget);
-		pTarget->ApplyDamage(damage);
-		//this->KillMe();
-	}
+	//if (pTarget->GetName() == "Enemy")
+	//{
+	//	int baseAtk = 20;
+	//	int damage = this->CalculateDamage(baseAtk, pTarget);
+	//	pTarget->ApplyDamage(damage);
+	//	//this->KillMe();
+	//}
 }

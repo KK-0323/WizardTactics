@@ -32,6 +32,7 @@ void Player::Initialize()
 	SetAttackType(AttackType::MAGIC);
 	SetDefenseType(DefenseType::NONE);
 	SetElementType(ElementType::NONE);
+	SetLevel(1);
 }
 
 void Player::Update()
@@ -113,6 +114,7 @@ void Player::IssueCommand(AllyCommand command, int mpCost)
 	}
 }
 
+// PlayScene‚Ìˆ—
 void Player::UpdateMovement()
 {
 	// ˆÚ“®ˆ—

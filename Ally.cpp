@@ -30,6 +30,7 @@ void Ally::Initialize()
 	SetAttackType(AttackType::BLUNT);
 	SetDefenseType(DefenseType::NONE);
 	SetElementType(ElementType::NONE);
+	SetLevel(1);
 
 	maxHp_ = 50;
 	currentHp_ = maxHp_;
@@ -140,28 +141,41 @@ void Ally::OnCollision(GameObject* pTarget)
 
 void Ally::ReceiveCommand(AllyCommand command)
 {
-	switch (command)
+	pTargetPlayer_ = FindObject("Player");
+	if (!pTargetPlayer_)
 	{
-	case CMD_NONE:
-		state_ = AllyState::IDLE;
-		break;
-	case CMD_ATTACK:
-		state_ = AllyState::ATTACK;
-		break;
-	case CMD_DEFENSE:
-		state_ = AllyState::DEFENSE;
-		break;
-	case CMD_SKILL:
-		state_ = AllyState::SKILL;
-		break;
-	case CMD_ESCAPE:
-		state_ = AllyState::ESCAPE;
-		break;
-	case CMD_MAX:
-		state_ = AllyState::MAX;
-		break;
-	default:
-		break;
+		return;
+	}
+
+	if (pTargetPlayer_->GetLevel() >= this->GetLevel())
+	{
+		switch (command)
+		{
+		case CMD_NONE:
+			state_ = AllyState::IDLE;
+			break;
+		case CMD_ATTACK:
+			state_ = AllyState::ATTACK;
+			break;
+		case CMD_DEFENSE:
+			state_ = AllyState::DEFENSE;
+			break;
+		case CMD_SKILL:
+			state_ = AllyState::SKILL;
+			break;
+		case CMD_ESCAPE:
+			state_ = AllyState::ESCAPE;
+			break;
+		case CMD_MAX:
+			state_ = AllyState::MAX;
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		state_ = AllyState::RANDOM;
 	}
 }
 
@@ -218,19 +232,38 @@ void Ally::UpdateBattle()
 {
 	pTargetPlayer_ = FindObject("Player");
 	pTargetEnemy_ = FindObject("Enemy");
+
+	AllyState executeState = state_;
+
+	if (executeState == AllyState::RANDOM)
+	{
+		int dice = rand() % 3;
+		if (dice == 0)
+		{
+			executeState = AllyState::ATTACK;
+		}
+		else if (dice == 1)
+		{
+			executeState = AllyState::DEFENSE;
+		}
+		else
+		{
+			executeState = AllyState::SKILL;
+		}
+		
+		MessageBoxA(NULL, "ƒ‰ƒ“ƒ_ƒ€s“®", "”½R", MB_OK);
+	}
 	
-	switch (state_)
+	switch (executeState)
 	{
 	case AllyState::IDLE:
-		if (pTargetPlayer_)
-		{
-			transform_.position_.x = pTargetPlayer_->GetPosition().x - 3.0f;
-		}
 		break;
 	case AllyState::ATTACK:
-		if(transform_.position_.x < pTargetEnemy_->GetPosition().x - 1.0f)
+		if (pTargetEnemy_->GetPosition().x - 1.0f < transform_.position_.x)
 		{
-			transform_.position_.x += moveSpeed_ * DELTA_TIME * 60.0f;
+			transform_.position_.x += moveSpeed_ * DELTA_TIME;
+			int damage = this->CalculateDamage(this->attackPower_, pTargetEnemy_);
+			pTargetEnemy_->ApplyDamage(damage);
 		}
 		break;
 	case AllyState::DEFENSE:
