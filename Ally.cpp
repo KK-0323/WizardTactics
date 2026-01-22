@@ -21,7 +21,7 @@ void Ally::Initialize()
 {
 	hModel_ = Model::Load("Ally.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { -3.0f, 0.0f, 0.0f };
+	transform_.position_ = { -5.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	SphereCollider* col = new SphereCollider(0.5f);
@@ -173,14 +173,44 @@ void Ally::UpdateMovement()
 		return;
 	}
 
-	posHistory_.push_front(pTargetPlayer_->GetPosition());
-
-	if (posHistory_.size() > FOLLOW_DELAY)
+	XMFLOAT3 playerPos = pTargetPlayer_->GetPosition();
+	if (posHistory_.empty())
 	{
-		XMFLOAT3 targetPos = posHistory_.back();
-		posHistory_.pop_back();
+		posHistory_.push_front(playerPos);
+	}
+	else
+	{
+		XMVECTOR p1 = XMLoadFloat3(&playerPos);
+		XMVECTOR p2 = XMLoadFloat3(&posHistory_.front());
+		float dist = XMVectorGetX(XMVector3Length(p1 - p2));
 
-		transform_.position_.x = targetPos.x - 3.0f;
+		if (dist > 0.1f)
+		{
+			posHistory_.push_front(playerPos);
+		}
+	}
+
+	XMVECTOR myPos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR pPos = XMLoadFloat3(&playerPos);
+	float distanceToPlayer = XMVectorGetX(XMVector3Length(pPos - myPos));
+	
+	const float STOP_DISTANCE = 2.0f;
+	if (distanceToPlayer > STOP_DISTANCE)
+	{
+		if (posHistory_.size() > FOLLOW_DELAY && !posHistory_.empty())
+		{
+			XMFLOAT3 targetPos = posHistory_.back();
+			transform_.position_.x = targetPos.x;
+			transform_.position_.z = targetPos.z;
+			posHistory_.pop_back();
+		}
+	}	
+	else
+	{
+		while (posHistory_.size() > FOLLOW_DELAY)
+		{
+			posHistory_.pop_back();
+		}
 	}
 }
 
