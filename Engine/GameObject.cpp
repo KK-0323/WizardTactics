@@ -16,7 +16,7 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(GameObject* parent, const std::string& name)
-	:pParent_(parent), objectName_(name), currentLevel_(1)
+	:pParent_(parent), objectName_(name), currentLevel_(1), isDead_(false)
 {
 	if (parent != nullptr)
 	{
@@ -433,7 +433,6 @@ void GameObject::ApplyDamage(int damage)
 	{
 		currentHp_ = 0;
 		isDead_ = true;
-		KillMe();
 	}
 }
 

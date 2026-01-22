@@ -121,11 +121,10 @@ protected:
 	int currentLevel_; 
 	int maxHp_;
 	int currentHp_;
-	bool isDead_ = false;
+	bool isDead_;
 	DefenseType defenseType_ = DefenseType::NONE;
 	AttackType attackType_ = AttackType::NONE;
 	ElementType elementType_ = ElementType::NONE;
 
 private:
-	
 };

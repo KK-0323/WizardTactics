@@ -48,6 +48,12 @@ void Ally::Update()
 		posHistory_.clear();
 	}
 
+	if (currentHp_ <= 0)
+	{
+		this->KillMe();
+		return;
+	}
+
 	switch (currentScene_)
 	{
 	case SCENE_ID_PLAY:

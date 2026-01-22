@@ -75,6 +75,12 @@ void Enemy::Update()
 	}
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;
+
+	if (currentHp_ <= 0)
+	{
+		//this->KillMe();
+		//return;
+	}
 }
 
 void Enemy::Draw()
@@ -148,24 +154,14 @@ void Enemy::OnCollision(GameObject* pTarget)
 			velocityY_ = 0.0f;
 		}
 	}
-	if (pTarget->GetName() == "Magic")
-	{
-		if (currentHp_ <= 0)
-		{
-			KillMe();
-			pTarget->KillMe();
-		}
-		
-		pTarget->KillMe();
 
-		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
-		if (sceneObj != nullptr)
-		{
-			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
-			if (sceneManager != nullptr)
-			{
-				sceneManager->ChangeScene(SCENE_ID_CLEAR);
-			}
-		}
-	}
+	//GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
+	//if (sceneObj != nullptr)
+	//{
+	//	SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
+	//	if (sceneManager != nullptr)
+	//	{
+	//		sceneManager->ChangeScene(SCENE_ID_CLEAR);
+	//	}
+	//}
 }
