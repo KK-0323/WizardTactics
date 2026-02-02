@@ -47,7 +47,8 @@ void Magic::Initialize()
 		break;
 	}
 
-	//transform_.scale_ = { 0.5f,0.5f,0.5f };
+	transform_.position_.x = 3.0f;
+	transform_.scale_ = { 0.5f,0.5f,0.5f };
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
@@ -79,9 +80,9 @@ void Magic::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetName() == "Enemy")
 	{
+		//this->KillMe();
 		int baseAtk = 20;
 		int damage = this->CalculateDamage(baseAtk, pTarget);
 		pTarget->ApplyDamage(damage);
-		this->KillMe();
 	}
 }

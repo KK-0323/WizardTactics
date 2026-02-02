@@ -19,7 +19,7 @@ Fbx::Fbx()
 HRESULT Fbx::Load(std::string fileName)
 {
 	using std::string;
-	string subDir("Assets");
+	string subDir("Assets\\Model");
 	fs::path currPath, basePath;
 	currPath = fs::current_path();
 	basePath = currPath;

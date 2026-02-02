@@ -20,7 +20,6 @@ void TitleScene::Initialize()
 {
 	//Instantiate<Player>(this);
 	//Instantiate<Ally>(this);
-	Instantiate<TestStage>(this);
 }
 
 void TitleScene::Update()
