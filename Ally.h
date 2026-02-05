@@ -28,6 +28,13 @@ enum AllyState
     MAX
 };
 
+struct Skill
+{
+    std::string name;
+    int mpCost;
+    int power;
+};
+
 class Ally :
     public GameObject
 {

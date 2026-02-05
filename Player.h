@@ -3,6 +3,7 @@
 #include "Ally.h"
 #include <cmath>
 #include "Engine\\SceneManager.h"
+//#include "Weapon.h"
 
 class Fbx; // ‘O•ûéŒ¾
 class Ally;
@@ -50,5 +51,6 @@ private:
 
     void UpdateMovement();
     void UpdateBattle();
-};
 
+    //Weapon::WeaponType currentWeapon_ = Weapon::STAFF;
+};

@@ -29,6 +29,24 @@ void Player::Initialize()
 
 	pAlly_ = (Ally*)FindObject("Ally");
 
+	//switch (currentWeapon_)
+	//{
+	//case Weapon::NONE:
+	//	break;
+	//case Weapon::SWORD:
+	//	break;
+	//case Weapon::FIST:
+	//	break;
+	//case Weapon::STAFF:
+	//	SetAttackType(AttackType::MAGIC);
+	//	SetDefenseType(DefenseType::NONE);
+	//	SetElementType(ElementType::NONE);
+	//	break;
+	//case Weapon::MAX:
+	//	break;
+	//default:
+	//	break;
+	//}
 	SetAttackType(AttackType::MAGIC);
 	SetDefenseType(DefenseType::NONE);
 	SetElementType(ElementType::NONE);

@@ -6,6 +6,7 @@
 #include "Engine\\SceneManager.h"
 #include "Engine\\Camera.h"
 #include "Engine\\Input.h"
+#include "StageManager.h"
 
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent, "PlayScene")
@@ -22,7 +23,7 @@ void PlayScene::Initialize()
 	Instantiate<Enemy>(this, ENEMY_ZAKO);
 	Instantiate<Enemy>(this, ENEMY_BOSS);
 	Instantiate<Ally>(this);
-	Instantiate<Stage>(this);
+	Instantiate<StageManager>(this);
 }
 
 void PlayScene::Update()
