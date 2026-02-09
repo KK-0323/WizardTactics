@@ -26,6 +26,11 @@ void StageManager::Initialize()
 		for (int x = 0; x < colCount; x++)
 		{
 			int type = csv.GetInt(y, x);
+
+			if (type == 0)
+			{
+				continue;
+			}
 			
 			std::string modelPath;
 			switch (type)
@@ -34,7 +39,7 @@ void StageManager::Initialize()
 				modelPath = "Grass.fbx";
 				break;
 			default:
-				break;
+				continue;
 			}
 
 			Stage* pModel = Instantiate<Stage>(this, modelPath);

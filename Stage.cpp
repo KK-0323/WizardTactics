@@ -37,10 +37,10 @@ void Stage::Draw()
 
 void Stage::Release()
 {
-	if (pFbx_)
-	{
-		Model::Release();
-	}
+	//if (pFbx_)
+	//{
+	//	Model::Release();
+	//}
 }
 
 void Stage::OnCollision(GameObject* pTarget)
