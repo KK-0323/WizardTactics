@@ -19,35 +19,14 @@ void StageManager::Initialize()
 	const float START_X = -4.0f;
 	int rowCount = csv.GetLines();
 
-	for (int y = 0; y < rowCount; y++)
+	int type = csv.GetInt(y, x);
+	if (type > 0 && type < (int)std::size(ModelType))
 	{
-		int colCount = csv.GetColumns(y);
-
-		for (int x = 0; x < colCount; x++)
+		const char* path = ModelType[type];
+		if (path && *path)
 		{
-			int type = csv.GetInt(y, x);
-
-			if (type == 0)
-			{
-				continue;
-			}
-			
-			std::string modelPath;
-			switch (type)
-			{
-			case 1:
-				modelPath = "Grass.fbx";
-				break;
-			default:
-				continue;
-			}
-
-			Stage* pModel = Instantiate<Stage>(this, modelPath);
-
-			float posX = x * BLOCK_SIZE;
-			float posY = (rowCount - 1 - y) * BLOCK_SIZE;
-
-			pModel->SetPosition({ posX, posY, 0.0f });
+			Stage* p = Instantiate<Stage>(this, std::string(path));
+			p->SetPosition({ x * BLOCK_SIZE, (rowCount - 1 - y) * BLOCK_SIZE, 0.0f });
 		}
 	}
 	

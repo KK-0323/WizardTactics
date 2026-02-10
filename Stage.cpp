@@ -17,9 +17,9 @@ void Stage::Initialize()
 	assert(hModel_ >= 0);
 
 
-	float cX = 1.0f;
-	float cY = 1.0f;
-	float cZ = 1.0f;
+	float cX = 0.5f;
+	float cY = 0.5f;
+	float cZ = 0.5f;
 
 	BoxCollider* col = new BoxCollider({ cX, cY, cZ });
 	AddCollider(col);
