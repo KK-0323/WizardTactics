@@ -3,7 +3,7 @@
 #include "Engine\\BoxCollider.h"
 
 Stage::Stage(GameObject* parent, std::string modelPath)
-	:GameObject(parent, "Stage"), pFbx_(nullptr), modelPath_(modelPath)
+	:GameObject(parent, "Stage"), hModel_(-1), modelPath_(modelPath)
 {
 }
 
@@ -15,7 +15,7 @@ void Stage::Initialize()
 {
 	hModel_ = Model::Load(modelPath_);
 	assert(hModel_ >= 0);
-
+	transform_.scale_.z = 3.0f;
 
 	float cX = 0.5f;
 	float cY = 0.5f;
@@ -37,10 +37,7 @@ void Stage::Draw()
 
 void Stage::Release()
 {
-	//if (pFbx_)
-	//{
-	//	Model::Release();
-	//}
+	Model::Release();
 }
 
 void Stage::OnCollision(GameObject* pTarget)

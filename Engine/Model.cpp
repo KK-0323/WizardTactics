@@ -8,26 +8,21 @@ namespace Model
 
 int Model::Load(std::string fileName)
 {
-    ModelData* pModelData = new ModelData;
-    pModelData->filename_ = fileName;
-    pModelData->pfbx_ = nullptr;
+	for (int i = 0; i < (int)modelList.size(); i++)
+	{
+		if (modelList[i]->filename_ == fileName)
+		{
+			return i;
+		}
+	}
 
-    for (auto& itr : modelList)
-    {
-        if (itr->filename_ == fileName)
-        {
-            pModelData->pfbx_ = itr->pfbx_;
-            break;
-        }
-    }
+	ModelData* pModelData = new ModelData;
+	pModelData->filename_ = fileName;
+	pModelData->pfbx_ = new Fbx;
+	pModelData->pfbx_->Load(fileName.c_str());
 
-    if (pModelData->pfbx_ == nullptr)
-    {
-        pModelData->pfbx_ = new Fbx;
-        pModelData->pfbx_->Load(fileName.c_str());
-    }
-    modelList.push_back(pModelData);
-    return((int)(modelList.size() - 1));
+	modelList.push_back(pModelData);
+	return((int)modelList.size() - 1);
 }
 
 void Model::SetTransform(int hModel, Transform transform)
