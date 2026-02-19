@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Engine\\Model.h"
 #include "Engine\\Input.h"
+#include "Engine\\Camera.h"
 #include "Engine\\SphereCollider.h"
 #include "Magic.h"
 #include "StageManager.h"
@@ -113,6 +114,22 @@ void Player::Update()
 	}
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;
+
+	// カメラ処理
+	XMFLOAT3 camPos = transform_.position_;
+
+	if (pParent_->GetName() == "PlayScene")
+	{
+		camPos.y += 10.0f;
+		camPos.z -= 30.0f;
+		Camera::SetPosition(XMLoadFloat3(&camPos));
+		Camera::SetTarget(XMLoadFloat3(&transform_.position_));
+	}
+	else
+	{
+		Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
+		Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
+	}
 }
 
 void Player::Draw()

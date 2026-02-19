@@ -29,24 +29,6 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
-	//プレイヤーに視点が追従
-	GameObject* pPlayer = FindObject("Player");
-	if (pPlayer != nullptr)
-	{
-		XMFLOAT3 pPos = pPlayer->GetPosition();
-		XMVECTOR playerPos = XMLoadFloat3(&pPos);
-
-		XMVECTOR cameraOffset = XMVectorSet(0.0f, 15.0f, -40.0f, 0.0f);
-		XMVECTOR cameraPos = XMVectorAdd(playerPos, cameraOffset);
-
-		XMVECTOR targetOffset = XMVectorSet(0.0f, 3.0f, 0.0f, 0.0f);
-		XMVECTOR targetPos = XMVectorAdd(playerPos, targetOffset);
-
-		Camera::SetPosition(cameraPos);
-		Camera::SetTarget(targetPos);
-
-		Camera::Update();
-	}
 	if (Input::IsKeyDown(DIK_B))
 	{
 		GameObject* sceneManagerObj = this->GetRootJob()->FindObject("SceneManager");
@@ -59,7 +41,6 @@ void PlayScene::Update()
 			}
 		}
 	}
-	
 }
 
 void PlayScene::Draw()

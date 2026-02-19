@@ -152,6 +152,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         pRootJob->DrawSub();
         pRootJob->UpdateSub();
 
+        Camera::Update();
+
         Direct3D::EndDraw();
     }
 
