@@ -114,6 +114,7 @@ public:
 	bool IsDead() const { return isDead_; }
 
 	bool CheckRayToStage(const XMFLOAT3& rayOrigin, GameObject* pStage);
+	bool CheckRayToCelling(const XMFLOAT3& rayOrigin, GameObject* pStage);
 protected:
 	list<GameObject* > childList_;
 	Transform transform_;

@@ -100,8 +100,27 @@ void Player::Update()
 				break;
 			}
 		}
+
+		//if (velocityY_ > 0.0f)
+		//{
+		//	for (auto stage : stages)
+		//	{
+		//		XMFLOAT3 headPos = transform_.position_;
+		//		headPos.y += 0.1;
+
+		//		if (CheckRayToCelling(headPos, stage))
+		//		{
+		//			velocityY_ = 0.0f;
+		//			
+		//			float halfY = stage->GetScale().y * 0.5f;
+		//			float bottomY = stage->GetPosition().y - halfY;
+		//			transform_.position_.y = bottomY - 0.5f;
+		//			break;
+		//		}
+		//	}
+		//}
 	}
-	
+
 	isOnGround_ = hit;
 	
 	// d—Íˆ—

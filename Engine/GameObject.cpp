@@ -458,4 +458,35 @@ bool GameObject::CheckRayToStage(const XMFLOAT3& rayOrigin, GameObject* pStage)
 	return false;
 }
 
+bool GameObject::CheckRayToCelling(const XMFLOAT3& rayOrigin, GameObject* pStage)
+{
+	if (pStage == nullptr)
+	{
+		return false;
+	}
+	
+	XMFLOAT3 sPos = pStage->GetPosition();
+	XMFLOAT3 sScale = pStage->GetScale();
+
+	float halfY = sScale.y * 0.5f;
+	float bottomY = sPos.y - halfY;
+
+	float rayLength = 1.0f;
+
+	if (rayOrigin.y <= bottomY && (rayOrigin.y + rayLength) >= bottomY)
+	{
+		float halfX = sScale.x * 0.5f;
+		float halfZ = sScale.z * 0.5f;
+
+		if (rayOrigin.x >= (sPos.x - halfX) && rayOrigin.x <= (sPos.x + halfX))
+		{
+			if (rayOrigin.z >= (sPos.z - halfZ) && rayOrigin.z <= (sPos.z + halfZ))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 
