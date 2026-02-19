@@ -80,21 +80,23 @@ void Player::Update()
 	{
 		const auto& stages = pStageManager->GetStageList();
 
-		XMFLOAT3 footPos = transform_.position_;
-		footPos.y -= 0.5f;
+		XMFLOAT3 rayOrigin = transform_.position_;
+		rayOrigin.y += 0.5f;
 
 		for (auto stage : stages)
 		{
-			if (stage == nullptr)
+			if (CheckRayToStage(rayOrigin, stage))
 			{
-				continue;
-			}
-
-			if (CheckRayToStage(footPos, stage))
-			{
-				hit = true;
 				float topY = stage->GetPosition().y + (stage->GetScale().y * 0.5f);
-				transform_.position_.y = topY + 0.5f;
+				float playerFeetY = transform_.position_.y - 0.5f;
+				
+				if (velocityY_ <= 0.0f)
+				{
+					hit = true;
+					transform_.position_.y = topY + 0.5f;
+					velocityY_ = 0.0f;
+					jumpCount_ = 0;
+				}
 				break;
 			}
 		}
@@ -103,15 +105,11 @@ void Player::Update()
 	isOnGround_ = hit;
 	
 	// 重力処理
-	if (isOnGround_)
-	{
-		velocityY_ = 0.0f;
-		jumpCount_ = 0;
-	}
-	else
+	if (!isOnGround_)
 	{
 		velocityY_ -= gravity_ * DELTA_TIME;
 	}
+	
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;
 
@@ -145,22 +143,6 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Stage" || pTarget->GetName() == "BattleStage")
-	{
-		if (velocityY_ <= 0.0f)
-		{
-			float stageTopY = pTarget->GetPosition().y + (1.0f * pTarget->GetScale().y);
-			float playerBottomY = transform_.position_.y - 0.5f;
-			float overlap = stageTopY - playerBottomY;
-
-			if (overlap > 0.0f)
-			{
-				transform_.position_.y += overlap;
-				isOnGround_ = true;
-				velocityY_ = 0.0f;
-			}
-		}
-	}
 }
 
 void Player::IssueCommand(AllyCommand command, int mpCost)

@@ -449,7 +449,8 @@ bool GameObject::CheckRayToStage(const XMFLOAT3& rayOrigin, GameObject* pStage)
 		rayOrigin.z >= sPos.z - halfD && rayOrigin.z <= sPos.z + halfD)
 	{
 		float topY = sPos.y + halfH;
-		if (rayOrigin.y >= topY - 0.1f && rayOrigin.y <= topY + 0.2f)
+		float rayLength = 1.0f;
+		if (rayOrigin.y >= topY && (rayOrigin.y - rayLength) <= topY)
 		{
 			return true;
 		}

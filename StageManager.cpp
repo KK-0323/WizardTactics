@@ -73,12 +73,15 @@ void StageManager::Initialize()
 			{
 				pModel = Instantiate<Stage>(this, modelPath);
 			}
-			stageList_.push_back(pModel);
+			if (pModel)
+			{
+				stageList_.push_back(pModel);
 
-			float posX = x * BLOCK_SIZE - START_X;
-			float posY = (rowCount - 1 - y) * BLOCK_SIZE;
+				float posX = x * BLOCK_SIZE - START_X;
+				float posY = (rowCount - 1 - y) * BLOCK_SIZE;
 
-			pModel->SetPosition({ posX, posY, 0.0f });
+				pModel->SetPosition({ posX, posY, 0.0f });
+			}
 		}
 	}
 }
