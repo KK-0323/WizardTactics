@@ -69,7 +69,8 @@ void Player::Update()
 	default:
 		break;
 	}
-	
+
+	isOnGround_ = false;
 	
 	// d—Íˆ—
 	if (!isOnGround_)

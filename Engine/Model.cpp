@@ -57,3 +57,20 @@ void Model::Release()
 	}
 	modelList.clear(); // ”z—ñ‚ð‹ó‚É‚·‚éi”O‚Ì‚½‚ßj
 }
+
+void Model::AllRelease()
+{
+	for (auto pData : modelList)
+	{
+		if (pData)
+		{
+			if (pData->pfbx_)
+			{
+				pData->pfbx_->Release();
+				delete pData->pfbx_;
+			}
+			delete pData;
+		}
+	}
+	modelList.clear();
+}

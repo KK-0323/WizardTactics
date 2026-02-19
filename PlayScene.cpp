@@ -6,6 +6,7 @@
 #include "Engine\\SceneManager.h"
 #include "Engine\\Camera.h"
 #include "Engine\\Input.h"
+#include "Engine\\Model.h"
 #include "StageManager.h"
 
 PlayScene::PlayScene(GameObject* parent)
@@ -67,4 +68,5 @@ void PlayScene::Draw()
 
 void PlayScene::Release()
 {
+	Model::AllRelease();
 }

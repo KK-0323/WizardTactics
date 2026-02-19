@@ -37,7 +37,7 @@ void Stage::Draw()
 
 void Stage::Release()
 {
-	Model::Release();
+	//Model::Release();
 }
 
 void Stage::OnCollision(GameObject* pTarget)
