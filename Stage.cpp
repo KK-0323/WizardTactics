@@ -15,7 +15,7 @@ void Stage::Initialize()
 {
 	hModel_ = Model::Load(modelPath_);
 	assert(hModel_ >= 0);
-	transform_.scale_.z = 3.0f;
+	transform_.scale_ = { 2.0f, 2.0f, 2.0f };
 
 	float cX = 0.5f;
 	float cY = 0.5f;

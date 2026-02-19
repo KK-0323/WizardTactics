@@ -19,7 +19,7 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hModel_ = Model::Load("Player2.fbx");
+	hModel_ = Model::Load("Player.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { 0.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;

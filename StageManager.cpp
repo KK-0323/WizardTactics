@@ -13,10 +13,10 @@ StageManager::~StageManager()
 
 void StageManager::Initialize()
 {
-	CsvReader csv("Assets\\Map\\Stage.csv");
+	CsvReader csv("Assets\\Map\\Tutorial.csv");
 
 	const float BLOCK_SIZE = 2.0f;
-	const float START_X = -4.0f;
+	const float START_X = 4.0f;
 	int rowCount = csv.GetLines();
 
 	for (int y = 0; y < rowCount; y++)
@@ -36,10 +36,16 @@ void StageManager::Initialize()
 			switch (type)
 			{
 			case 1:
-				modelPath = "Ground.fbx";
+				modelPath = "BoxGrass.fbx";
 				break;
 			case 2:
-				modelPath = "Earth.fbx";
+				modelPath = "BoxSand.fbx";
+				break;
+			case 3:
+				modelPath = "BoxWater.fbx";
+				break;
+			case 4:
+				modelPath = "BoxBrick.fbx";
 				break;
 			default:
 				continue;
@@ -47,7 +53,7 @@ void StageManager::Initialize()
 
 			Stage* pModel = Instantiate<Stage>(this, modelPath);
 
-			float posX = x * BLOCK_SIZE;
+			float posX = x * BLOCK_SIZE - START_X;
 			float posY = (rowCount - 1 - y) * BLOCK_SIZE;
 
 			pModel->SetPosition({ posX, posY, 0.0f });
