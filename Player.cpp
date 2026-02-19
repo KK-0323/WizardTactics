@@ -3,6 +3,7 @@
 #include "Engine\\Input.h"
 #include "Engine\\SphereCollider.h"
 #include "Magic.h"
+#include "StageManager.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -70,16 +71,45 @@ void Player::Update()
 		break;
 	}
 
-	isOnGround_ = false;
+	bool hit = false;
+
+	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+
+	if (pStageManager != nullptr)
+	{
+		const auto& stages = pStageManager->GetStageList();
+
+		XMFLOAT3 footPos = transform_.position_;
+		footPos.y -= 0.5f;
+
+		for (auto stage : stages)
+		{
+			if (stage == nullptr)
+			{
+				continue;
+			}
+
+			if (CheckRayToStage(footPos, stage))
+			{
+				hit = true;
+				float topY = stage->GetPosition().y + (stage->GetScale().y * 0.5f);
+				transform_.position_.y = topY + 0.5f;
+				break;
+			}
+		}
+	}
+	
+	isOnGround_ = hit;
 	
 	// 重力処理
-	if (!isOnGround_)
+	if (isOnGround_)
 	{
-		velocityY_ -= gravity_ * DELTA_TIME;
+		velocityY_ = 0.0f;
+		jumpCount_ = 0;
 	}
 	else
 	{
-		velocityY_ = 0.0f;
+		velocityY_ -= gravity_ * DELTA_TIME;
 	}
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;

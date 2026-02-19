@@ -1,5 +1,6 @@
 #include "StageManager.h"
 #include "Stage.h"
+#include "BattleStage.h"
 #include "Engine\\CsvReader.h"
 
 StageManager::StageManager(GameObject* parent)
@@ -13,12 +14,24 @@ StageManager::~StageManager()
 
 void StageManager::Initialize()
 {
-	CsvReader csv("Assets\\Map\\Tutorial.csv");
+	string parentName = pParent_->GetName();
+
+	string fileName;
+
+	if (parentName == "BattleScene")
+	{
+		fileName = "Assets\\Map\\Stage.csv";
+	}
+	else
+	{
+		fileName = "Assets\\Map\\Tutorial.csv";
+	}
+	CsvReader csv(fileName);
 
 	const float BLOCK_SIZE = 2.0f;
-	const float START_X = 4.0f;
+	const float START_X = 5.0f;
 	int rowCount = csv.GetLines();
-
+	
 	for (int y = 0; y < rowCount; y++)
 	{
 		int colCount = csv.GetColumns(y);
@@ -51,7 +64,16 @@ void StageManager::Initialize()
 				continue;
 			}
 
-			Stage* pModel = Instantiate<Stage>(this, modelPath);
+			GameObject* pModel = nullptr;
+			if (parentName == "BattleScene")
+			{
+				pModel = Instantiate<BattleStage>(this, modelPath);
+			}
+			else
+			{
+				pModel = Instantiate<Stage>(this, modelPath);
+			}
+			stageList_.push_back(pModel);
 
 			float posX = x * BLOCK_SIZE - START_X;
 			float posY = (rowCount - 1 - y) * BLOCK_SIZE;

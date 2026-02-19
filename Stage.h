@@ -1,8 +1,6 @@
 #pragma once
 #include "Engine\\GameObject.h"
 
-class Fbx;
-
 class Stage :
     public GameObject
 {
@@ -16,7 +14,6 @@ public:
     void OnCollision(GameObject* pTarget) override;
 private:
     std::string modelPath_;
-    Fbx* pFbx_;
     int hModel_;
 };
 

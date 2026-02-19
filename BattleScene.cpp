@@ -1,11 +1,13 @@
 #include "BattleScene.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "BattleStage.h"
 #include "Ally.h"
-#include "Engine\\Camera.h"
+#include "BattleStage.h"
 #include "Engine\\SceneManager.h"
+#include "Engine\\Camera.h"
 #include "Engine\\Input.h"
+#include "Engine\\Model.h"
+#include "StageManager.h"
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent, "BattleScene")
@@ -18,27 +20,10 @@ BattleScene::~BattleScene()
 
 void BattleScene::Initialize()
 {
-	Camera::Initialize();
-	Camera::Update();
-
-	GameObject* pPlayer = FindObject("Player");
-	if (pPlayer != nullptr)
-	{
-		XMFLOAT3 playerPos = { 0.0f, 0.0f,0.0f };
-		pPlayer->SetPosition(playerPos);
-		Instantiate<Player>(this);
-	}
-
-	GameObject* pAlly = FindObject("Ally");
-	if (pAlly != nullptr)
-	{
-		XMFLOAT3 allyPos = { -2.0f, 0.0f, 0.0f };
-		pAlly->SetPosition(allyPos);
-		Instantiate<Ally>(this);
-	}
-
+	Instantiate<StageManager>(this);
+	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	Instantiate<BattleStage>(this);
+	Instantiate<Ally>(this);
 }
 
 void BattleScene::Update()
@@ -63,4 +48,5 @@ void BattleScene::Draw()
 
 void BattleScene::Release()
 {
+	Model::AllRelease();
 }

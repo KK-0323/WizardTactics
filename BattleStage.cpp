@@ -2,8 +2,8 @@
 #include "Engine\\Model.h"
 #include "Engine\\BoxCollider.h"
 
-BattleStage::BattleStage(GameObject* parent)
-	:GameObject(parent, "BattleStage"), pFbx_(nullptr)
+BattleStage::BattleStage(GameObject* parent, std::string modelPath)
+	:GameObject(parent, "BattleStage"), hModel_(-1), modelPath_(modelPath)
 {
 }
 
@@ -13,12 +13,15 @@ BattleStage::~BattleStage()
 
 void BattleStage::Initialize()
 {
-	hModel_ = Model::Load("BattleStage.fbx");
+	hModel_ = Model::Load(modelPath_);
 	assert(hModel_ >= 0);
-	transform_.position_ = { 0.0f,0.0f,0.0f };
-	transform_.rotate_.y = 90.0f;
+	transform_.scale_ = { 2.0f, 2.0f, 2.0f };
 
-	BoxCollider* col = new BoxCollider({ 14.0f, 1.0f, 14.0f });
+	float cX = 0.5f;
+	float cY = 0.5f;
+	float cZ = 0.5f;
+
+	BoxCollider* col = new BoxCollider({ cX, cY, cZ });
 	AddCollider(col);
 }
 
@@ -34,10 +37,7 @@ void BattleStage::Draw()
 
 void BattleStage::Release()
 {
-	if (pFbx_)
-	{
-		Model::Release();
-	}
+	//Model::Release();
 }
 
 void BattleStage::OnCollision(GameObject* pTarget)

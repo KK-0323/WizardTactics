@@ -436,4 +436,25 @@ void GameObject::ApplyDamage(int damage)
 	}
 }
 
+bool GameObject::CheckRayToStage(const XMFLOAT3& rayOrigin, GameObject* pStage)
+{
+	XMFLOAT3 sPos = pStage->GetPosition();
+	XMFLOAT3 sScale = pStage->GetScale();
+
+	float halfW = sScale.x * 0.5f;
+	float halfH = sScale.y * 0.5f;
+	float halfD = sScale.z * 0.5f;
+
+	if (rayOrigin.x >= sPos.x - halfW && rayOrigin.x <= sPos.x + halfW &&
+		rayOrigin.z >= sPos.z - halfD && rayOrigin.z <= sPos.z + halfD)
+	{
+		float topY = sPos.y + halfH;
+		if (rayOrigin.y >= topY - 0.1f && rayOrigin.y <= topY + 0.2f)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 
