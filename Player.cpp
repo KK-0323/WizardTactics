@@ -83,6 +83,7 @@ void Player::Update()
 		XMFLOAT3 rayOrigin = transform_.position_;
 		rayOrigin.y += 0.5f;
 
+		// 床との当たり判定
 		for (auto stage : stages)
 		{
 			if (CheckRayToStage(rayOrigin, stage))
@@ -101,13 +102,13 @@ void Player::Update()
 			}
 		}
 
+		// 天井との当たり判定
 		//if (velocityY_ > 0.0f)
 		//{
 		//	for (auto stage : stages)
 		//	{
 		//		XMFLOAT3 headPos = transform_.position_;
 		//		headPos.y += 0.1;
-
 		//		if (CheckRayToCelling(headPos, stage))
 		//		{
 		//			velocityY_ = 0.0f;
@@ -252,6 +253,7 @@ void Player::UpdateMovement()
 	transform_.position_.y += velocityY_ * DELTA_TIME;
 }
 
+// BattleSceneの処理
 void Player::UpdateBattle()
 {
 	// コマンドの指示入力
