@@ -113,8 +113,10 @@ public:
 	void ApplyDamage(int damage);
 	bool IsDead() const { return isDead_; }
 
+	// ステージとの当たり判定用の関数
 	bool CheckRayToStage(const XMFLOAT3& rayOrigin, GameObject* pStage);
 	bool CheckRayToCelling(const XMFLOAT3& rayOrigin, GameObject* pStage);
+	bool CheckRayToWall(const XMFLOAT3& rayOrigin, GameObject* pStage, bool isRight);
 protected:
 	list<GameObject* > childList_;
 	Transform transform_;

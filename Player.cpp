@@ -10,7 +10,7 @@ const float DELTA_TIME = 1.0f / 60.0f;
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f),
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false), maxMp_(100), currentMp_(100),
+	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false), maxMp_(100), currentMp_(100), isMovingL_(false), isMovingR_(false),
 	jumpCount_(0), isFloating_(false), floatTimer_(0.0f), pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY)
 {
 }
@@ -21,7 +21,7 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hModel_ = Model::Load("Player.fbx");
+	hModel_ = Model::Load("Earth.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { 0.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
@@ -80,6 +80,31 @@ void Player::Update()
 	{
 		const auto& stages = pStageManager->GetStageList();
 
+		// •Ç‚Æ‚Ì“–‚½‚è”»’è
+
+		// À•W‚Ì•Û‘¶
+		XMFLOAT3 oldPos = transform_.position_;
+		isMovingL_ = false;
+		isMovingR_ = false;
+
+		if (isMovingL_ || isMovingR_)
+		{
+			StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+			if (pStageManager != nullptr)
+			{
+				const auto& stages = pStageManager->GetStageList();
+				for (auto stage : stages)
+				{
+					// ˆÚ“®•ûŒü‚É‘Î‚µ”»’è‚ðs‚¤
+					if (CheckRayToWall(transform_.position_, stage, isMovingR_))
+					{
+						transform_.position_.x = oldPos.x;
+						break;
+					}
+				}
+			}
+		}
+
 		XMFLOAT3 rayOrigin = transform_.position_;
 		rayOrigin.y += 0.5f;
 
@@ -103,23 +128,25 @@ void Player::Update()
 		}
 
 		// “Vˆä‚Æ‚Ì“–‚½‚è”»’è
-		//if (velocityY_ > 0.0f)
-		//{
-		//	for (auto stage : stages)
-		//	{
-		//		XMFLOAT3 headPos = transform_.position_;
-		//		headPos.y += 0.1;
-		//		if (CheckRayToCelling(headPos, stage))
-		//		{
-		//			velocityY_ = 0.0f;
-		//			
-		//			float halfY = stage->GetScale().y * 0.5f;
-		//			float bottomY = stage->GetPosition().y - halfY;
-		//			transform_.position_.y = bottomY - 0.5f;
-		//			break;
-		//		}
-		//	}
-		//}
+		if (velocityY_ > 0.0f)
+		{
+			for (auto stage : stages)
+			{
+				XMFLOAT3 headPos = transform_.position_;
+				headPos.y += 0.4f;
+				if (CheckRayToCelling(headPos, stage))
+				{
+					velocityY_ = 0.0f;
+					
+					float halfY = stage->GetScale().y * 0.5f;
+					float bottomY = stage->GetPosition().y - halfY;
+					transform_.position_.y = bottomY - 0.5f;
+					break;
+				}
+			}
+		}
+
+		
 	}
 
 	isOnGround_ = hit;
@@ -201,10 +228,12 @@ void Player::UpdateMovement()
 	if (Input::IsKey(DIK_A))
 	{
 		transform_.position_.x -= currentMoveSpeed_ * DELTA_TIME;
+		isMovingL_ = true;
 	}
 	if (Input::IsKey(DIK_D))
 	{
 		transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
+		isMovingR_ = true;
 	}
 	if (Input::IsKeyDown(DIK_SPACE))
 	{

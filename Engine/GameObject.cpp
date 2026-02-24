@@ -1,4 +1,4 @@
-#include "GameObject.h"
+ï»¿#include "GameObject.h"
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include <Windows.h>
@@ -30,7 +30,7 @@ GameObject::~GameObject()
 
 void GameObject::DrawSub()
 {
-	//©•ª‚ğ•`‰æ
+	//è‡ªåˆ†ã‚’æç”»
 	this->Draw();
 	for (auto child : this->childList_)
 	{
@@ -137,17 +137,17 @@ void GameObject::AddCollider(BaseCollider* pCollider)
 
 void GameObject::Collision(GameObject* pTarget)
 {
-	// “–‚½‚è”»’è‚ÌƒXƒLƒbƒvˆ—
+	// å½“ãŸã‚Šåˆ¤å®šã®ã‚¹ã‚­ãƒƒãƒ—å‡¦ç†
 	if (pCollider_ == nullptr || pTarget->pCollider_ == nullptr)
 	{
 		return;
 	}
 
-	// ƒRƒ‰ƒCƒ_[‚Ìƒ^ƒCƒvæ“¾
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚¿ã‚¤ãƒ—å–å¾—
 	BaseCollider::ColliderType thisType = pCollider_->GetType();
 	BaseCollider::ColliderType targetType = pTarget->pCollider_->GetType();
 
-	// ƒyƒA‚Ìƒ^ƒCƒv
+	// ãƒšã‚¢ã®ã‚¿ã‚¤ãƒ—
 	PairCollsion pCollision;
 
 	if (thisType == BaseCollider::SPHERE && targetType == BaseCollider::SPHERE)
@@ -164,7 +164,7 @@ void GameObject::Collision(GameObject* pTarget)
 		pCollision = SPHEREBOX;
 	}
 
-	// switch_case‚Å‚»‚ê‚¼‚ê‚ÌƒyƒA‚Ìˆ—U‚è•ª‚¯
+	// switch_caseã§ãã‚Œãã‚Œã®ãƒšã‚¢ã®å‡¦ç†æŒ¯ã‚Šåˆ†ã‘
 	switch (pCollision)
 	{
 	case SPHERES:
@@ -175,13 +175,13 @@ void GameObject::Collision(GameObject* pTarget)
 		float thisR = thisS->GetRadius();
 		float tgtR = tgtS->GetRadius();
 		float thre = (thisR + tgtR) * (thisR + tgtR);
-		//‡@‚Q‚Â‚ÌƒRƒ‰ƒCƒ_[‚Ì‹——£ŒvZ‚ğ‚·‚é
+		//â‘ ï¼’ã¤ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®è·é›¢è¨ˆç®—ã‚’ã™ã‚‹
 		XMFLOAT3 thisP = this->transform_.position_;
 		XMFLOAT3 tgtP = pTarget->transform_.position_;
 		float dist = (thisP.x - tgtP.x) * (thisP.x - tgtP.x) +
 			(thisP.y - tgtP.y) * (thisP.y - tgtP.y) +
 			(thisP.z - tgtP.z) * (thisP.z - tgtP.z);
-		//‡AƒRƒ‰ƒCƒ_[“¯m‚ªŒğ·‚µ‚Ä‚¢‚½‚ç
+		//â‘¡ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼åŒå£«ãŒäº¤å·®ã—ã¦ã„ãŸã‚‰
 		if (dist <= thre)
 		{
 			OnCollision(pTarget);
@@ -193,25 +193,25 @@ void GameObject::Collision(GameObject* pTarget)
 		BoxCollider* thisB = static_cast<BoxCollider*>(pCollider_);
 		BoxCollider* tgtB = static_cast<BoxCollider*>(pTarget->pCollider_);
 
-		// ©•ª‚Ì”»’èî•ñ
+		// è‡ªåˆ†ã®åˆ¤å®šæƒ…å ±
 		const DirectX::XMFLOAT3& thisHalf = thisB->GetHalfExtent();
 		const DirectX::XMFLOAT3& thisPos = transform_.position_;
 
-		// ‘Šè‚Ì”»’èî•ñ
+		// ç›¸æ‰‹ã®åˆ¤å®šæƒ…å ±
 		const DirectX::XMFLOAT3& tgtHalf = tgtB->GetHalfExtent();
 		const DirectX::XMFLOAT3& tgtPos = pTarget->GetPosition();
 
-		// ’†S‹——£‚ÌŒvZ
+		// ä¸­å¿ƒè·é›¢ã®è¨ˆç®—
 		float distX = abs(thisPos.x - tgtPos.x);
 		float distY = abs(thisPos.y - tgtPos.y);
 		float distZ = abs(thisPos.z - tgtPos.z);
 
-		// Õ“Ë‚Ìè‡’lŒvZ
+		// è¡çªã®é–¾å€¤è¨ˆç®—
 		float threX = thisHalf.x + tgtHalf.x;
 		float threY = thisHalf.y + tgtHalf.y;
 		float threZ = thisHalf.z + tgtHalf.z;
 
-		// ”»’è
+		// åˆ¤å®š
 		if (distX <= threX &&
 			distY <= threY &&
 			distZ <= threZ)
@@ -222,7 +222,7 @@ void GameObject::Collision(GameObject* pTarget)
 	break;
 	case SPHEREBOX:
 	{
-		// ‹…‚ÆlŠpŒ`‚Ìî•ñ
+		// çƒã¨å››è§’å½¢ã®æƒ…å ±
 		SphereCollider* pSphere;
 		BoxCollider* pBox;
 		const DirectX::XMFLOAT3* pSpherePos;
@@ -235,7 +235,7 @@ void GameObject::Collision(GameObject* pTarget)
 			pSpherePos = &transform_.position_;
 			pBoxPos = &pTarget->GetPosition();
 		}
-		else // ‘Šè‚ª‹…‚Ìê‡
+		else // ç›¸æ‰‹ãŒçƒã®å ´åˆ
 		{
 			pSphere = static_cast<SphereCollider*>(pTarget->pCollider_);
 			pBox = static_cast<BoxCollider*>(pCollider_);
@@ -283,13 +283,13 @@ void GameObject::Collision(GameObject* pTarget)
 
 void GameObject::RoundRobin(GameObject* pTarget)
 {
-	//‡@©•ª‚ÉƒRƒ‰ƒCƒ_[‚ª‚È‚©‚Á‚½‚çreturn
+	//â‘ è‡ªåˆ†ã«ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ãŒãªã‹ã£ãŸã‚‰return
 		if (pCollider_ == nullptr || pTarget == nullptr)
 			return;
-	//‡A©•ª‚Æƒ^[ƒQƒbƒg©‘Ì‚ÌƒRƒ‰ƒCƒ_[‚Ì“–‚½‚è”»’è
+	//â‘¡è‡ªåˆ†ã¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆè‡ªä½“ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®š
 	if (pTarget->pCollider_ != nullptr && pTarget->pCollider_ != pCollider_)
 		Collision(pTarget);
-	//‡BÄ‹A“I‚È‚â‚Â‚ÅAƒ^[ƒQƒbƒg‚ÌqƒIƒuƒWƒFƒNƒg‚ğ“–‚½‚è”»’è‚µ‚Ä‚­
+	//â‘¢å†å¸°çš„ãªã‚„ã¤ã§ã€ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å½“ãŸã‚Šåˆ¤å®šã—ã¦ã
 	std::list<GameObject*> safeChildList = pTarget->childList_;
 	for (auto itr : safeChildList)
 	{
@@ -409,13 +409,13 @@ float GameObject::GetElementalCalculation(ElementType atk, ElementType def)
 
 int GameObject::CalculateDamage(int baseAtk, GameObject* pTarget)
 {
-	// •¨—‘Š«‚Ìæ“¾
+	// ç‰©ç†ç›¸æ€§ã®å–å¾—
 	float physCal = GetPhysicalCalculation(this->GetAttack(), pTarget->GetDefense());
 
-	// ‘®«‘Š«‚Ìæ“¾
+	// å±æ€§ç›¸æ€§ã®å–å¾—
 	float elemCal = GetElementalCalculation(this->GetElement(), pTarget->GetElement());
 
-	// ‘‡ŒvZ
+	// ç·åˆè¨ˆç®—
 	float totalCal = (float)baseAtk * physCal * elemCal;
 	return (int)totalCal;
 }
@@ -468,11 +468,14 @@ bool GameObject::CheckRayToCelling(const XMFLOAT3& rayOrigin, GameObject* pStage
 	XMFLOAT3 sPos = pStage->GetPosition();
 	XMFLOAT3 sScale = pStage->GetScale();
 
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã®åº•é¢è¨ˆç®—
 	float halfY = sScale.y * 0.5f;
 	float bottomY = sPos.y - halfY;
 
-	float rayLength = 1.0f;
+	// ãƒ¬ã‚¤ã®é•·ã•
+	float rayLength = 0.6f;
 
+	// å¤©äº•åˆ¤å®š
 	if (rayOrigin.y <= bottomY && (rayOrigin.y + rayLength) >= bottomY)
 	{
 		float halfX = sScale.x * 0.5f;
@@ -483,6 +486,51 @@ bool GameObject::CheckRayToCelling(const XMFLOAT3& rayOrigin, GameObject* pStage
 			if (rayOrigin.z >= (sPos.z - halfZ) && rayOrigin.z <= (sPos.z + halfZ))
 			{
 				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool GameObject::CheckRayToWall(const XMFLOAT3& rayOrigin, GameObject* pStage, bool isRight)
+{
+	if (pStage == nullptr)
+	{
+		return false;
+	}
+
+	XMFLOAT3 sPos = pStage->GetPosition();
+	XMFLOAT3 sScale = pStage->GetScale();
+
+	float halfX = sScale.x * 0.5f;
+	float halfY = sScale.y * 0.5f;
+	float halfZ = sScale.z * 0.5f;
+
+	float radius = 0.5f;
+
+	// Yè»¸ã¨Zè»¸ã®ç¯„å›²ãƒã‚§ãƒƒã‚¯ï¼ˆã‚¹ãƒ†ãƒ¼ã‚¸ã®é«˜ã•ãƒ»å¥¥è¡Œãã®ä¸­ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ã‚‹ã‹ï¼‰
+	// â€»å£åˆ¤å®šã¯ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¶³å…ƒã€œé ­ã®ç¯„å›²ã«ã‚¹ãƒ†ãƒ¼ã‚¸ã®å£ãŒã‚ã‚‹æ™‚ã ã‘è¡Œã†
+	if (rayOrigin.y + 0.5f >= (sPos.y - halfY) && rayOrigin.y - 0.5f <= (sPos.y + halfY))
+	{
+		if (rayOrigin.z >= (sPos.z - halfZ-0.1f) && rayOrigin.z <= (sPos.z + halfZ+0.1f))
+		{
+			if (isRight) // å³ç§»å‹•ä¸­ï¼šè‡ªåˆ†ã®å³å´ã«å£ãŒã‚ã‚‹ã‹
+			{
+				float wallLeftX = sPos.x - halfX;
+				// ã€Œè‡ªåˆ†ã®ä¸­å¿ƒã‹ã‚‰å³ã«åŠå¾„åˆ†ã€ãŒã€Œå£ã®å·¦ç«¯ã€ã‚’è¶…ãˆã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã‹
+				if (rayOrigin.x < wallLeftX && (rayOrigin.x + radius) >= wallLeftX)
+				{
+					return true;
+				}
+			}
+			else // å·¦ç§»å‹•ä¸­ï¼šè‡ªåˆ†ã®å·¦å´ã«å£ãŒã‚ã‚‹ã‹
+			{
+				float wallRightX = sPos.x + halfX;
+				// ã€Œè‡ªåˆ†ã®ä¸­å¿ƒã‹ã‚‰å·¦ã«åŠå¾„åˆ†ã€ãŒã€Œå£ã®å³ç«¯ã€ã‚’è¶…ãˆã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã‹
+				if (rayOrigin.x > wallRightX && (rayOrigin.x - radius) <= wallRightX)
+				{
+					return true;
+				}
 			}
 		}
 	}

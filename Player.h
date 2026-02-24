@@ -31,6 +31,8 @@ private:
     int maxMp_;
     int currentMp_;
 
+    bool isMovingL_;
+    bool isMovingR_;
     int jumpCount_;
     const int MAX_JUMP = 2;
     bool isFloating_;
