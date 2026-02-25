@@ -24,7 +24,7 @@ void Player::Initialize()
 {
 	hModel_ = Model::Load("Earth.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { 0.0f, 0.0f, 0.0f };
+	transform_.position_ = { 0.0f, 5.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	//SphereCollider* col = new SphereCollider(0.5f);

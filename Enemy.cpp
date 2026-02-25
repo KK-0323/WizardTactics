@@ -2,6 +2,7 @@
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 #include "Engine\\SceneManager.h"
+#include "StageManager.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -29,7 +30,7 @@ void Enemy::Initialize()
 	case ENEMY_ZAKO:
 		hModel_ = Model::Load("Enemy.fbx");
 		assert(hModel_ >= 0);
-		transform_.position_ = { 10.0f, 0.0f, 0.0f };
+		transform_.position_ = { 10.0f, 5.0f, 0.0f };
 		transform_.rotate_.y = 90.0f;
 		initialX_ = transform_.position_.x;
 
@@ -40,7 +41,7 @@ void Enemy::Initialize()
 	case ENEMY_BOSS:
 		hModel_ = Model::Load("BossEnemy.fbx");
 		assert(hModel_ >= 0);
-		transform_.position_ = { 20.0f, 0.0f, 0.0f };
+		transform_.position_ = { 15.0f, 5.0f, 0.0f };
 		transform_.rotate_.y = 90.0f;
 		level_ = 10;
 		maxHp_ = 200;
@@ -59,11 +60,58 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	//time_ += DELTA_TIME;
+	bool hit = false;
 
-	//float offsetX = amplitude_ * std::sin(moveSpeed_ * time_);
+	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
 
-	//transform_.position_.x = initialX_ + offsetX;
+	if (pStageManager != nullptr)
+	{
+		const auto& stages = pStageManager->GetStageList();
+
+		XMFLOAT3 rayOrigin = transform_.position_;
+		rayOrigin.y += 0.5f;
+
+		// °‚Æ‚Ì“–‚½‚è”»’è
+		for (auto stage : stages)
+		{
+			if (CheckRayToStage(rayOrigin, stage))
+			{
+				float topY = stage->GetPosition().y + (stage->GetScale().y * 0.5f);
+				float playerFeetY = transform_.position_.y - 0.5f;
+
+				if (velocityY_ <= 0.0f)
+				{
+					hit = true;
+					transform_.position_.y = topY + 0.5f;
+					velocityY_ = 0.0f;
+				}
+				break;
+			}
+		}
+
+		//“Vˆä‚Æ‚Ì“–‚½‚è”»’è
+		if (velocityY_ > 0.0f)
+		{
+			for (auto stage : stages)
+			{
+				XMFLOAT3 headPos = transform_.position_;
+				headPos.y += 0.4f;
+				if (CheckRayToCelling(headPos, stage))
+				{
+					velocityY_ = 0.0f;
+
+					float halfY = stage->GetScale().y * 0.5f;
+					float bottomY = stage->GetPosition().y - halfY;
+					transform_.position_.y = bottomY - 0.5f;
+					break;
+				}
+			}
+		}
+
+
+	}
+
+	isOnGround_ = hit;
 
 	if (!isOnGround_)
 	{
@@ -109,49 +157,6 @@ void Enemy::OnCollision(GameObject* pTarget)
 			{
 				sceneManager->ChangeScene(SCENE_ID_BATTLE);
 			}
-		}
-	}
-
-	if (pTarget->GetName() == "Stage")
-	{
-		float stageY = pTarget->GetPosition().y;
-		float stageScaleY = pTarget->GetScale().y;
-		float stageHalfExtentY = 1.0f;
-
-		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
-
-		float enemyRadius = 0.5f;
-
-		float enemyBottomY = transform_.position_.y - enemyRadius;
-
-		float overlap = stageTopY - enemyBottomY;
-
-		if (overlap > 0.0f)
-		{
-			transform_.position_.y += overlap;
-			isOnGround_ = true;
-			velocityY_ = 0.0f;
-		}
-	}
-	if (pTarget->GetName() == "BattleStage")
-	{
-		float stageY = pTarget->GetPosition().y;
-		float stageScaleY = pTarget->GetScale().y;
-		float stageHalfExtentY = 1.0f;
-
-		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
-
-		float enemyRadius = 0.5f;
-
-		float enemyBottomY = transform_.position_.y - enemyRadius;
-
-		float overlap = stageTopY - enemyBottomY;
-
-		if (overlap > 0.0f)
-		{
-			transform_.position_.y += overlap;
-			isOnGround_ = true;
-			velocityY_ = 0.0f;
 		}
 	}
 

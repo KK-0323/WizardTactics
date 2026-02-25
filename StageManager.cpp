@@ -18,7 +18,7 @@ void StageManager::Initialize()
 
 	string fileName;
 
-	if (parentName == "BattleScene")
+	if (parentName == "PlayScene")
 	{
 		fileName = "Assets\\Map\\Stage.csv";
 	}

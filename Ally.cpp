@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
+#include "StageManager.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -21,7 +22,7 @@ void Ally::Initialize()
 {
 	hModel_ = Model::Load("Ally.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { -5.0f, 0.0f, 0.0f };
+	transform_.position_ = { -5.0f, 5.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	SphereCollider* col = new SphereCollider(0.5f);
@@ -66,6 +67,72 @@ void Ally::Update()
 		break;
 	}
 
+	bool hit = false;
+	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+
+	if (pStageManager != nullptr)
+	{
+		const auto& stages = pStageManager->GetStageList();
+
+		//for (auto stage : stages)
+		//{
+		//	if (CheckRayToWall({ nextX, transform_.position_.y, transform_.position_.z }, stage, true))
+		//	{
+		//		hit = true;
+		//		break;
+		//	}
+		//}
+
+		//if (!hit)
+		//{
+		//	transform_.position_.x = nextX;
+		//}
+
+		XMFLOAT3 rayOrigin = transform_.position_;
+		rayOrigin.y += 0.5f;
+
+		// °‚Æ‚Ì“–‚½‚è”»’è
+		for (auto stage : stages)
+		{
+			if (CheckRayToStage(rayOrigin, stage))
+			{
+				float topY = stage->GetPosition().y + (stage->GetScale().y * 0.5f);
+				float playerFeetY = transform_.position_.y - 0.5f;
+
+				if (velocityY_ <= 0.0f)
+				{
+					hit = true;
+					transform_.position_.y = topY + 0.5f;
+					velocityY_ = 0.0f;
+				}
+				break;
+			}
+		}
+
+		//“Vˆä‚Æ‚Ì“–‚½‚è”»’è
+		if (velocityY_ > 0.0f)
+		{
+			for (auto stage : stages)
+			{
+				XMFLOAT3 headPos = transform_.position_;
+				headPos.y += 0.4f;
+				if (CheckRayToCelling(headPos, stage))
+				{
+					velocityY_ = 0.0f;
+
+					float halfY = stage->GetScale().y * 0.5f;
+					float bottomY = stage->GetPosition().y - halfY;
+					transform_.position_.y = bottomY - 0.5f;
+					break;
+				}
+			}
+		}
+
+
+	}
+
+	isOnGround_ = hit;
+
 	if (!isOnGround_)
 	{
 		velocityY_ -= gravity_ * DELTA_TIME;
@@ -94,49 +161,6 @@ void Ally::Release()
 
 void Ally::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Stage")
-	{
-		float stageY = pTarget->GetPosition().y;
-		float stageScaleY = pTarget->GetScale().y;
-		float stageHalfExtentY = 1.0f;
-
-		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
-
-		float allyRadius = 0.5f;
-
-		float allyBottomY = transform_.position_.y - allyRadius;
-
-		float overlap = stageTopY - allyBottomY;
-
-		if (overlap > 0.0f)
-		{
-			transform_.position_.y += overlap;
-			isOnGround_ = true;
-			velocityY_ = 0.0f;
-		}
-	}
-	if (pTarget->GetName() == "BattleStage")
-	{
-		float stageY = pTarget->GetPosition().y;
-		float stageScaleY = pTarget->GetScale().y;
-		float stageHalfExtentY = 1.0f;
-
-		float stageTopY = stageY + (stageHalfExtentY * stageScaleY);
-
-		float allyRadius = 0.5f;
-
-		float allyBottomY = transform_.position_.y - allyRadius;
-
-		float overlap = stageTopY - allyBottomY;
-
-		if (overlap > 0.0f)
-		{
-			transform_.position_.y += overlap;
-			isOnGround_ = true;
-			velocityY_ = 0.0f;
-		}
-	}
-
 	if (pTarget->GetName() == "Enemy")
 	{
 		int damage = this->CalculateDamage(this->attackPower_, pTarget);
