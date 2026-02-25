@@ -3,6 +3,7 @@
 #include "Engine\\Input.h"
 #include "Engine\\Camera.h"
 #include "Engine\\SphereCollider.h"
+#include "Engine\\BoxCollider.h"
 #include "Magic.h"
 #include "StageManager.h"
 
@@ -26,8 +27,9 @@ void Player::Initialize()
 	transform_.position_ = { 0.0f, 0.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
-	SphereCollider* col = new SphereCollider(0.5f);
-	AddCollider(col);
+	//SphereCollider* col = new SphereCollider(0.5f);
+	BoxCollider* box = new BoxCollider({ 1.0f, 1.0f, 1.0f });
+	AddCollider(box);
 
 	pAlly_ = (Ally*)FindObject("Ally");
 
@@ -72,6 +74,10 @@ void Player::Update()
 		break;
 	}
 
+	//float nextX = transform_.position_.x;
+	//if (Input::IsKey(DIK_D)) nextX += moveSpeed_ * DELTA_TIME;
+	//if (Input::IsKey(DIK_A)) nextX -= moveSpeed_ * DELTA_TIME;
+
 	bool hit = false;
 
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
@@ -80,30 +86,19 @@ void Player::Update()
 	{
 		const auto& stages = pStageManager->GetStageList();
 
-		// 壁との当たり判定
+		//for (auto stage : stages)
+		//{
+		//	if (CheckRayToWall({ nextX, transform_.position_.y, transform_.position_.z }, stage, true))
+		//	{
+		//		hit = true;
+		//		break;
+		//	}
+		//}
 
-		// 座標の保存
-		XMFLOAT3 oldPos = transform_.position_;
-		isMovingL_ = false;
-		isMovingR_ = false;
-
-		if (isMovingL_ || isMovingR_)
-		{
-			StageManager* pStageManager = (StageManager*)FindObject("StageManager");
-			if (pStageManager != nullptr)
-			{
-				const auto& stages = pStageManager->GetStageList();
-				for (auto stage : stages)
-				{
-					// 移動方向に対し判定を行う
-					if (CheckRayToWall(transform_.position_, stage, isMovingR_))
-					{
-						transform_.position_.x = oldPos.x;
-						break;
-					}
-				}
-			}
-		}
+		//if (!hit)
+		//{
+		//	transform_.position_.x = nextX;
+		//}
 
 		XMFLOAT3 rayOrigin = transform_.position_;
 		rayOrigin.y += 0.5f;
@@ -127,7 +122,7 @@ void Player::Update()
 			}
 		}
 
-		// 天井との当たり判定
+		//天井との当たり判定
 		if (velocityY_ > 0.0f)
 		{
 			for (auto stage : stages)

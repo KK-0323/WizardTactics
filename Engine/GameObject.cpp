@@ -506,35 +506,35 @@ bool GameObject::CheckRayToWall(const XMFLOAT3& rayOrigin, GameObject* pStage, b
 	float halfY = sScale.y * 0.5f;
 	float halfZ = sScale.z * 0.5f;
 
-	float radius = 0.5f;
+	float sLeft = sPos.x - halfX;
+	float sRight = sPos.x + halfX;
+	float sTop = sPos.y - halfY;
+	float sBottom = sPos.y + halfY;
 
-	// Y軸とZ軸の範囲チェック（ステージの高さ・奥行きの中にプレイヤーがいるか）
-	// ※壁判定は、プレイヤーの足元〜頭の範囲にステージの壁がある時だけ行う
-	if (rayOrigin.y + 0.5f >= (sPos.y - halfY) && rayOrigin.y - 0.5f <= (sPos.y + halfY))
+	float pRadius = 0.5f;
+	float pHeight = 1.0f;
+
+	if (rayOrigin.y + pHeight > sBottom && rayOrigin.y < sTop)
 	{
-		if (rayOrigin.z >= (sPos.z - halfZ-0.1f) && rayOrigin.z <= (sPos.z + halfZ+0.1f))
+		if (rayOrigin.z >= (sPos.z - halfZ - 0.1f) && rayOrigin.z <= (sPos.z + halfZ + 0.1f))
 		{
-			if (isRight) // 右移動中：自分の右側に壁があるか
+			if (isRight)
 			{
-				float wallLeftX = sPos.x - halfX;
-				// 「自分の中心から右に半径分」が「壁の左端」を超えようとしているか
-				if (rayOrigin.x < wallLeftX && (rayOrigin.x + radius) >= wallLeftX)
+				if (rayOrigin.x + pRadius >= sLeft && rayOrigin.x < sLeft)
 				{
 					return true;
 				}
 			}
-			else // 左移動中：自分の左側に壁があるか
+			else
 			{
-				float wallRightX = sPos.x + halfX;
-				// 「自分の中心から左に半径分」が「壁の右端」を超えようとしているか
-				if (rayOrigin.x > wallRightX && (rayOrigin.x - radius) <= wallRightX)
+				if (rayOrigin.x - pRadius <= sRight && rayOrigin.x > sRight)
 				{
 					return true;
 				}
 			}
 		}
 	}
-	return false;
+	return false;	
 }
 
 
