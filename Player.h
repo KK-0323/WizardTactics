@@ -55,4 +55,12 @@ private:
     void UpdateBattle();
 
     //Weapon::WeaponType currentWeapon_ = Weapon::STAFF;
+
+    enum class BattleState
+    {
+        SELECT_COMMAND,
+        WAIT_ACTION,
+        STATE_MAX
+    };
+    BattleState bState_ = BattleState::SELECT_COMMAND;
 };

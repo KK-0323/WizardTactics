@@ -281,26 +281,54 @@ void Player::UpdateMovement()
 void Player::UpdateBattle()
 {
 	// ÉRÉ}ÉìÉhÇÃéwé¶ì¸óÕ
-	if (Input::IsKeyDown(DIK_1))
+	//if (Input::IsKeyDown(DIK_1))
+	//{
+	//	IssueCommand(CMD_ATTACK, ATTACK_COST);
+	//	MessageBoxA(0, "çUåÇ", "ATTACK", MB_OK);
+	//}
+	//if (Input::IsKeyDown(DIK_2))
+	//{
+	//	IssueCommand(CMD_DEFENSE, DEFENSE_COST);
+	//	MessageBoxA(0, "ñhå‰", "DEFENSE", MB_OK);
+	//}
+	//if (Input::IsKeyDown(DIK_3))
+	//{
+	//	IssueCommand(CMD_SKILL, SKILL_COST);
+	//	MessageBoxA(0, "ì¡ãZ", "SKILL", MB_OK);
+	//}
+	//if (Input::IsKeyDown(DIK_4))
+	//{
+	//	IssueCommand(CMD_NONE, NONE_COST);
+	//	MessageBoxA(0, "ë“ã@", "NONE", MB_OK);
+	//}
+	
+	if (bState_ == BattleState::SELECT_COMMAND)
 	{
-		IssueCommand(CMD_ATTACK, ATTACK_COST);
-		MessageBoxA(0, "çUåÇ", "ATTACK", MB_OK);
+		if (Input::IsKeyDown(DIK_1))
+		{
+			IssueCommand(AllyCommand::CMD_ATTACK, ATTACK_COST);
+			bState_ = BattleState::WAIT_ACTION;
+		}
+		else if (Input::IsKeyDown(DIK_2))
+		{
+			if (currentMp_ >= SKILL_COST)
+			{
+				IssueCommand(AllyCommand::CMD_SKILL, SKILL_COST);
+				bState_ = BattleState::WAIT_ACTION;
+			}
+		}
 	}
-	if (Input::IsKeyDown(DIK_2))
+
+	if (bState_ == BattleState::WAIT_ACTION)
 	{
-		IssueCommand(CMD_DEFENSE, DEFENSE_COST);
-		MessageBoxA(0, "ñhå‰", "DEFENSE", MB_OK);
+		if (pAlly_->ApplyDamage())
+		{
+			bState_ = BattleState::SELECT_COMMAND;
+		}
 	}
-	if (Input::IsKeyDown(DIK_3))
-	{
-		IssueCommand(CMD_SKILL, SKILL_COST);
-		MessageBoxA(0, "ì¡ãZ", "SKILL", MB_OK);
-	}
-	if (Input::IsKeyDown(DIK_4))
-	{
-		IssueCommand(CMD_NONE, NONE_COST);
-		MessageBoxA(0, "ë“ã@", "NONE", MB_OK);
-	}
+
+
+	// 
 	// ñÇñ@(âº)ÇÃê∂ê¨
 	if (Input::IsMouseButtonDown(0))
 	{
