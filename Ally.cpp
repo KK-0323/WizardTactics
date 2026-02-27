@@ -3,6 +3,7 @@
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 #include "StageManager.h"
+#include "Engine\\Command.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -10,7 +11,7 @@ Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f),
 	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
 	maxHp_(50), currentHp_(50), attackPower_(20), defensePower_(10),
-	pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY)
+	pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY), pCurrentCommand_(nullptr)
 {
 }
 
@@ -54,6 +55,8 @@ void Ally::Update()
 		this->KillMe();
 		return;
 	}
+
+	ExecuteCommand();
 
 	switch (currentScene_)
 	{
@@ -161,51 +164,41 @@ void Ally::Release()
 
 void Ally::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Enemy")
-	{
-		int damage = this->CalculateDamage(this->attackPower_, pTarget);
+	//if (pTarget->GetName() == "Enemy")
+	//{
+	//	int damage = this->CalculateDamage(this->attackPower_, pTarget);
 
-		pTarget->ApplyDamage(damage);
-	}
+	//	pTarget->ApplyDamage(damage);
+	//}
 }
 
-void Ally::ReceiveCommand(AllyCommand command)
+void Ally::ReceiveCommand(Command* pCommand)
 {
-	pTargetPlayer_ = FindObject("Player");
-	if (!pTargetPlayer_)
-	{
-		return;
-	}
+	//if (pCurrentCommand_ != nullptr)
+	//{
+	//	delete pCurrentCommand_;
+	//	pCurrentCommand_ = nullptr;
+	//}
+	pCurrentCommand_ = pCommand;
+}
 
-	if (pTargetPlayer_->GetLevel() >= this->GetLevel())
+void Ally::ExecuteCommand()
+{
+	if (pCurrentCommand_ == nullptr) return;
+
+	// 1. 対象（Enemy）を探す
+	GameObject* pEnemy = FindObject("Enemy");
+	if (pEnemy != nullptr)
 	{
-		switch (command)
-		{
-		case CMD_NONE:
-			state_ = AllyState::IDLE;
-			break;
-		case CMD_ATTACK:
-			state_ = AllyState::ATTACK;
-			break;
-		case CMD_DEFENSE:
-			state_ = AllyState::DEFENSE;
-			break;
-		case CMD_SKILL:
-			state_ = AllyState::SKILL;
-			break;
-		case CMD_ESCAPE:
-			state_ = AllyState::ESCAPE;
-			break;
-		case CMD_MAX:
-			state_ = AllyState::MAX;
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		state_ = AllyState::RANDOM;
+		// 2. コマンド実行（画像にある「行動」の部分）
+		pCurrentCommand_->Execute(this, pEnemy);
+
+		// 3. 実行が終わったので、自分を解放（画像にある「掃除」の部分）
+		delete pCurrentCommand_;
+		pCurrentCommand_ = nullptr;
+
+		// デバッグログを出しておくと流れが追いやすくなります
+		OutputDebugStringA("Command Executed and Deleted.\n");
 	}
 }
 
@@ -262,49 +255,4 @@ void Ally::UpdateBattle()
 {
 	pTargetPlayer_ = FindObject("Player");
 	pTargetEnemy_ = FindObject("Enemy");
-
-	AllyState executeState = state_;
-
-	if (executeState == AllyState::RANDOM)
-	{
-		int dice = rand() % 3;
-		if (dice == 0)
-		{
-			executeState = AllyState::ATTACK;
-		}
-		else if (dice == 1)
-		{
-			executeState = AllyState::DEFENSE;
-		}
-		else
-		{
-			executeState = AllyState::SKILL;
-		}
-		
-		MessageBoxA(NULL, "ランダム行動", "反抗", MB_OK);
-	}
-	
-	switch (executeState)
-	{
-	case AllyState::IDLE:
-		break;
-	case AllyState::ATTACK:
-		if (pTargetEnemy_->GetPosition().x - 1.0f < transform_.position_.x)
-		{
-			transform_.position_.x += moveSpeed_ * DELTA_TIME;
-			int damage = this->CalculateDamage(this->attackPower_, pTargetEnemy_);
-			pTargetEnemy_->ApplyDamage(damage);
-		}
-		break;
-	case AllyState::DEFENSE:
-		break;
-	case AllyState::SKILL:
-		break;
-	case AllyState::ESCAPE:
-		break;
-	case AllyState::MAX:
-		break;
-	default:
-		break;
-	}
 }

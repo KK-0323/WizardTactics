@@ -1,12 +1,10 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include "Ally.h"
 #include <cmath>
 #include "Engine\\SceneManager.h"
 //#include "Weapon.h"
 
 class Fbx; // 前方宣言
-class Ally;
 
 class Player :
     public GameObject
@@ -39,9 +37,6 @@ private:
     float floatTimer_;
     const float MAX_FLOAT_TIME = 5.0f;
 
-    Ally* pAlly_;
-    // 指示コマンド用の関数
-    void IssueCommand(AllyCommand command, int mpCost);
     // コマンドコスト
     const int NONE_COST = 0;
     const int ATTACK_COST = 0;

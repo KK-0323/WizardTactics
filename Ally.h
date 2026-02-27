@@ -2,38 +2,41 @@
 #include "Engine\\GameObject.h"
 #include <cmath>
 #include <deque>
+#include <memory>
 #include "Engine\\SceneManager.h"
 
+// ëOï˚êÈåæ
 class Fbx;
+class Command;
 
 // éÛÇØéÊÇÈéwé¶ÇÃéÌóﬁ
-enum AllyCommand
-{
-    CMD_NONE,
-    CMD_ATTACK,
-    CMD_DEFENSE,
-    CMD_SKILL,
-    CMD_ESCAPE,
-    CMD_MAX
-};
-
-enum AllyState
-{
-    IDLE,
-    ATTACK,
-    DEFENSE,
-    SKILL,
-    ESCAPE,
-    RANDOM,
-    MAX
-};
-
-struct Skill
-{
-    std::string name;
-    int mpCost;
-    int power;
-};
+//enum AllyCommand
+//{
+//    CMD_NONE,
+//    CMD_ATTACK,
+//    CMD_DEFENSE,
+//    CMD_SKILL,
+//    CMD_ESCAPE,
+//    CMD_MAX
+//};
+//
+//enum AllyState
+//{
+//    IDLE,
+//    ATTACK,
+//    DEFENSE,
+//    SKILL,
+//    ESCAPE,
+//    RANDOM,
+//    MAX
+//};
+//
+//struct Skill
+//{
+//    std::string name;
+//    int mpCost;
+//    int power;
+//};
 
 class Ally :
     public GameObject
@@ -46,7 +49,7 @@ public:
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
-    void ReceiveCommand(AllyCommand command);
+    void ReceiveCommand(Command* pCommand);
 private:
     Fbx* pFbx_;
     int hModel_;
@@ -68,11 +71,10 @@ private:
     SceneManager* pSM_;
     SCENE_ID currentScene_;
 
-    AllyCommand currentCommand_;
+    Command* pCurrentCommand_;
+    void ExecuteCommand();
 
     void UpdateMovement();
     void UpdateBattle();
-
-    AllyState state_;
 };
 

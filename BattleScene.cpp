@@ -21,9 +21,9 @@ BattleScene::~BattleScene()
 void BattleScene::Initialize()
 {
 	Instantiate<StageManager>(this);
+	Instantiate<Ally>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	Instantiate<Ally>(this);
 }
 
 void BattleScene::Update()

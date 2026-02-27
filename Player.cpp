@@ -5,7 +5,9 @@
 #include "Engine\\SphereCollider.h"
 #include "Engine\\BoxCollider.h"
 #include "Magic.h"
+#include "Ally.h"
 #include "StageManager.h"
+#include "AtkCmd.h"
 
 const float DELTA_TIME = 1.0f / 60.0f;
 
@@ -30,8 +32,6 @@ void Player::Initialize()
 	//SphereCollider* col = new SphereCollider(0.5f);
 	BoxCollider* box = new BoxCollider({ 1.0f, 1.0f, 1.0f });
 	AddCollider(box);
-
-	pAlly_ = (Ally*)FindObject("Ally");
 
 	//switch (currentWeapon_)
 	//{
@@ -187,23 +187,6 @@ void Player::OnCollision(GameObject* pTarget)
 {
 }
 
-void Player::IssueCommand(AllyCommand command, int mpCost)
-{
-	if (currentMp_ >= mpCost)
-	{
-		currentMp_ -= mpCost;
-
-		if (pAlly_ != nullptr)
-		{
-			pAlly_->ReceiveCommand(command);
-		}
-	}
-	else
-	{
-		MessageBoxA(0, "MPが足りません！", "MP Lost", MB_OK);
-	}
-}
-
 // PlaySceneの処理
 void Player::UpdateMovement()
 {
@@ -280,50 +263,21 @@ void Player::UpdateMovement()
 // BattleSceneの処理
 void Player::UpdateBattle()
 {
-	// コマンドの指示入力
-	//if (Input::IsKeyDown(DIK_1))
-	//{
-	//	IssueCommand(CMD_ATTACK, ATTACK_COST);
-	//	MessageBoxA(0, "攻撃", "ATTACK", MB_OK);
-	//}
-	//if (Input::IsKeyDown(DIK_2))
-	//{
-	//	IssueCommand(CMD_DEFENSE, DEFENSE_COST);
-	//	MessageBoxA(0, "防御", "DEFENSE", MB_OK);
-	//}
-	//if (Input::IsKeyDown(DIK_3))
-	//{
-	//	IssueCommand(CMD_SKILL, SKILL_COST);
-	//	MessageBoxA(0, "特技", "SKILL", MB_OK);
-	//}
-	//if (Input::IsKeyDown(DIK_4))
-	//{
-	//	IssueCommand(CMD_NONE, NONE_COST);
-	//	MessageBoxA(0, "待機", "NONE", MB_OK);
-	//}
-	
-	if (bState_ == BattleState::SELECT_COMMAND)
+	if (Input::IsKeyDown(DIK_1))
 	{
-		if (Input::IsKeyDown(DIK_1))
-		{
-			IssueCommand(AllyCommand::CMD_ATTACK, ATTACK_COST);
-			bState_ = BattleState::WAIT_ACTION;
-		}
-		else if (Input::IsKeyDown(DIK_2))
-		{
-			if (currentMp_ >= SKILL_COST)
-			{
-				IssueCommand(AllyCommand::CMD_SKILL, SKILL_COST);
-				bState_ = BattleState::WAIT_ACTION;
-			}
-		}
-	}
+		// 1. コマンドを生成
+		AtkCmd* pAtk = new AtkCmd();
 
-	if (bState_ == BattleState::WAIT_ACTION)
-	{
-		if (pAlly_->ApplyDamage())
+		// 2. その場でAllyを探して渡す（メンバ変数のpAlly_が壊れていても安全）
+		Ally* pTargetAlly = (Ally*)FindObject("Ally");
+		if (pTargetAlly != nullptr)
 		{
-			bState_ = BattleState::SELECT_COMMAND;
+			pTargetAlly->ReceiveCommand(pAtk);
+		}
+		else
+		{
+			// Allyがいないなら、作ったコマンドを自分で消してメモリリークを防ぐ
+			delete pAtk;
 		}
 	}
 
