@@ -18,17 +18,22 @@ public:
     Magic(GameObject* parent);
     Magic(GameObject* parent, MAGIC_ID id);
     ~Magic();
+
     void Initialize() override;
     void Update() override;
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
+
 private:
+    // ƒƒ“ƒo•Ï”
     Fbx* pFbx_;
     int hModel_;
     float magicSpeed_;
     MAGIC_ID magicID_;
     float spawnTimer_;
+
+    // ’è”
     const float SPAWN_TIME = 3.0f;
 };
 

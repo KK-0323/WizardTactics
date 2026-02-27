@@ -1,20 +1,17 @@
 #include "Player.h"
 #include "Engine\\Model.h"
 #include "Engine\\Input.h"
-#include "Engine\\Camera.h"
 #include "Engine\\SphereCollider.h"
-#include "Engine\\BoxCollider.h"
+#include "StageManager.h"
 #include "Magic.h"
 #include "Ally.h"
-#include "StageManager.h"
 #include "AtkCmd.h"
 
-const float DELTA_TIME = 1.0f / 60.0f;
-
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f),
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false), maxMp_(100), currentMp_(100), isMovingL_(false), isMovingR_(false),
-	velocityY_(0.0f), jumpCount_(0), isFloating_(false)
+	:GameObject(parent, "Player"), pFbx_(nullptr),isOnGround_(false),
+	maxHp_(100), currentHp_(100), maxMp_(100), currentMp_(100),
+	floatTimer_(0.0f), velocityY_(0.0f), jumpCount_(0), isFloating_(false),
+	isMovingL_(false), isMovingR_(false)
 {
 }
 
@@ -29,43 +26,21 @@ void Player::Initialize()
 	transform_.position_ = { 0.0f, 5.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
-	//SphereCollider* col = new SphereCollider(0.5f);
-	BoxCollider* box = new BoxCollider({ 1.0f, 1.0f, 1.0f });
-	AddCollider(box);
-
-	//switch (currentWeapon_)
-	//{
-	//case Weapon::NONE:
-	//	break;
-	//case Weapon::SWORD:
-	//	break;
-	//case Weapon::FIST:
-	//	break;
-	//case Weapon::STAFF:
-	//	SetAttackType(AttackType::MAGIC);
-	//	SetDefenseType(DefenseType::NONE);
-	//	SetElementType(ElementType::NONE);
-	//	break;
-	//case Weapon::MAX:
-	//	break;
-	//default:
-	//	break;
-	//}
-	SetAttackType(AttackType::MAGIC);
-	SetDefenseType(DefenseType::NONE);
-	SetElementType(ElementType::NONE);
-	SetLevel(1);
+	SphereCollider* col = new SphereCollider(0.5f);
+	AddCollider(col);
 }
 
 void Player::Update()
 {
 	pSM_ = (SceneManager*)FindObject("SceneManager");
+	SCENE_ID lastScene = currentScene_;
 	currentScene_ = pSM_->GetCurrentSceneID();
 
 	switch (currentScene_)
 	{
 	case SCENE_ID_PLAY:
 		UpdateMovement();
+		UpdateFloating();
 		break;
 	case SCENE_ID_BATTLE:
 		UpdateBattle();
@@ -74,10 +49,6 @@ void Player::Update()
 		break;
 	}
 
-	//float nextX = transform_.position_.x;
-	//if (Input::IsKey(DIK_D)) nextX += moveSpeed_ * DELTA_TIME;
-	//if (Input::IsKey(DIK_A)) nextX -= moveSpeed_ * DELTA_TIME;
-
 	bool hit = false;
 
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
@@ -85,20 +56,6 @@ void Player::Update()
 	if (pStageManager != nullptr)
 	{
 		const auto& stages = pStageManager->GetStageList();
-
-		//for (auto stage : stages)
-		//{
-		//	if (CheckRayToWall({ nextX, transform_.position_.y, transform_.position_.z }, stage, true))
-		//	{
-		//		hit = true;
-		//		break;
-		//	}
-		//}
-
-		//if (!hit)
-		//{
-		//	transform_.position_.x = nextX;
-		//}
 
 		XMFLOAT3 rayOrigin = transform_.position_;
 		rayOrigin.y += 0.5f;
@@ -149,49 +106,35 @@ void Player::Update()
 	// 重力処理
 	if (!isOnGround_)
 	{
-		velocityY_ -= gravity_ * DELTA_TIME;
+		velocityY_ -= GRAVITY * DELTA_TIME;
 	}
 	
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;
 
 	// カメラ処理
-	XMFLOAT3 camPos = transform_.position_;
-
-	if (pParent_->GetName() == "PlayScene")
-	{
-		camPos.y += 10.0f;
-		camPos.z -= 30.0f;
-		Camera::SetPosition(XMLoadFloat3(&camPos));
-		Camera::SetTarget(XMLoadFloat3(&transform_.position_));
-	}
-	else
-	{
-		Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
-		Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
-	}
-}
-
-void Player::Draw()
-{
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
-}
-
-void Player::Release()
-{
-	Model::Release();
-}
-
-void Player::OnCollision(GameObject* pTarget)
-{
+	//XMFLOAT3 camPos = transform_.position_;
+	//if (pParent_->GetName() == "PlayScene")
+	//{
+	//	camPos.y += 10.0f;
+	//	camPos.z -= 30.0f;
+	//	Camera::SetPosition(XMLoadFloat3(&camPos));
+	//	Camera::SetTarget(XMLoadFloat3(&transform_.position_));
+	//}
+	//else
+	//{
+	//	Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
+	//	Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
+	//}
 }
 
 // PlaySceneの処理
 void Player::UpdateMovement()
 {
 	// 移動処理
-	float currentMoveSpeed_ = moveSpeed_;
+	float currentMoveSpeed_ = MOVE_SPEED;
+	isMovingL_ = false;
+	isMovingR_ = false;
 
 	// ジャンプ回数リセット
 	if (isOnGround_)
@@ -213,16 +156,36 @@ void Player::UpdateMovement()
 		transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
 		isMovingR_ = true;
 	}
-	if (Input::IsKeyDown(DIK_SPACE))
+	if (Input::IsKeyDown(DIK_SPACE) && jumpCount_ < MAX_JUMP_COUNT)
 	{
-		if (jumpCount_ < MAX_JUMP)
-		{
-			velocityY_ = 5.0f;
-			jumpCount_++;
-			isOnGround_ = false;
-		}
+		velocityY_ = 5.0f;
+		jumpCount_++;
+		isOnGround_ = false;
+	}
+	
+	if (!isFloating_ && !isOnGround_)
+	{
+		velocityY_ -= GRAVITY * DELTA_TIME;
 	}
 
+	transform_.position_.y += velocityY_ * DELTA_TIME;
+}
+
+// BattleSceneの処理
+void Player::UpdateBattle()
+{
+	if (Input::IsKeyDown(DIK_1))
+	{
+		Ally* pAlly = (Ally*)FindObject("Ally");
+		if (pAlly)
+		{
+			pAlly->ReceiveCommand(new AtkCmd());
+		}
+	}
+}
+
+void Player::UpdateFloating()
+{
 	// 浮遊処理
 	if (!isOnGround_ && jumpCount_ >= 1 && Input::IsKeyDown(DIK_C))
 	{
@@ -236,12 +199,7 @@ void Player::UpdateMovement()
 		velocityY_ = 0.0f;
 		transform_.rotate_.y += 5.0f;
 
-		if (floatTimer_ <= 0.0f)
-		{
-			isFloating_ = false;
-			transform_.rotate_.y = 90.0f;
-		}
-		else if (Input::IsKeyDown(DIK_S))
+		if (floatTimer_ <= 0.0f || Input::IsKeyDown(DIK_S))
 		{
 			isFloating_ = false;
 			transform_.rotate_.y = 90.0f;
@@ -252,44 +210,19 @@ void Player::UpdateMovement()
 			velocityY_ = 2.0f;
 		}
 	}
-	else if (!isOnGround_)
-	{
-		velocityY_ -= gravity_ * DELTA_TIME;
-	}
-
-	transform_.position_.y += velocityY_ * DELTA_TIME;
 }
 
-// BattleSceneの処理
-void Player::UpdateBattle()
+void Player::Draw()
 {
-	if (Input::IsKeyDown(DIK_1))
-	{
-		// 1. コマンドを生成
-		AtkCmd* pAtk = new AtkCmd();
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
+}
 
-		// 2. その場でAllyを探して渡す（メンバ変数のpAlly_が壊れていても安全）
-		Ally* pTargetAlly = (Ally*)FindObject("Ally");
-		if (pTargetAlly != nullptr)
-		{
-			pTargetAlly->ReceiveCommand(pAtk);
-		}
-		else
-		{
-			// Allyがいないなら、作ったコマンドを自分で消してメモリリークを防ぐ
-			delete pAtk;
-		}
-	}
+void Player::Release()
+{
+	Model::Release();
+}
 
-
-	// 
-	// 魔法(仮)の生成
-	if (Input::IsMouseButtonDown(0))
-	{
-		Magic* pMagic = Instantiate<Magic>(GetRootJob(), MAGIC_FIRE);
-		if (pMagic != nullptr)
-		{
-			pMagic->SetPosition(transform_.position_);
-		}
-	}
+void Player::OnCollision(GameObject* pTarget)
+{
 }

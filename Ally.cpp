@@ -1,5 +1,4 @@
 #include "Ally.h"
-#include "Player.h"
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 #include "StageManager.h"
@@ -8,15 +7,18 @@
 const float DELTA_TIME = 1.0f / 60.0f;
 
 Ally::Ally(GameObject* parent)
-	:GameObject(parent, "Ally"), pFbx_(nullptr), moveSpeed_(0.5f),
-	pTargetPlayer_(nullptr), gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
-	maxHp_(50), currentHp_(50), attackPower_(20), defensePower_(10),
-	pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY), pCurrentCommand_(nullptr)
+	:GameObject(parent, "Ally"), pFbx_(nullptr),
+	maxHp_(50), curHp_(50), atkPower_(20), defPower_(20),
+	velocityY_(0.0f), isOnGround_(false)
 {
 }
 
 Ally::~Ally()
 {
+	if (pCurrentCommand_)
+	{
+		delete pCurrentCommand_;
+	}
 }
 
 void Ally::Initialize()
@@ -28,47 +30,18 @@ void Ally::Initialize()
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
-
-	SetAttackType(AttackType::BLUNT);
-	SetDefenseType(DefenseType::NONE);
-	SetElementType(ElementType::NONE);
-	SetLevel(1);
-
-	maxHp_ = 50;
-	currentHp_ = maxHp_;
 }
 
 void Ally::Update()
 {
-	pSM_ = (SceneManager*)FindObject("SceneManager");
-	SCENE_ID lastScene = currentScene_;
-	currentScene_ = pSM_->GetCurrentSceneID();
-
-	// シーン切り替え時にクリア
-	if (lastScene != currentScene_)
-	{
-		posHistory_.clear();
-	}
-
 	if (currentHp_ <= 0)
 	{
 		this->KillMe();
 		return;
 	}
 
+	UpdateMovement();
 	ExecuteCommand();
-
-	switch (currentScene_)
-	{
-	case SCENE_ID_PLAY:
-		UpdateMovement();
-		break;
-	case SCENE_ID_BATTLE:
-		UpdateBattle();
-		break;
-	default:
-		break;
-	}
 
 	bool hit = false;
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
@@ -76,20 +49,6 @@ void Ally::Update()
 	if (pStageManager != nullptr)
 	{
 		const auto& stages = pStageManager->GetStageList();
-
-		//for (auto stage : stages)
-		//{
-		//	if (CheckRayToWall({ nextX, transform_.position_.y, transform_.position_.z }, stage, true))
-		//	{
-		//		hit = true;
-		//		break;
-		//	}
-		//}
-
-		//if (!hit)
-		//{
-		//	transform_.position_.x = nextX;
-		//}
 
 		XMFLOAT3 rayOrigin = transform_.position_;
 		rayOrigin.y += 0.5f;
@@ -174,11 +133,11 @@ void Ally::OnCollision(GameObject* pTarget)
 
 void Ally::ReceiveCommand(Command* pCommand)
 {
-	//if (pCurrentCommand_ != nullptr)
-	//{
-	//	delete pCurrentCommand_;
-	//	pCurrentCommand_ = nullptr;
-	//}
+	if (pCurrentCommand_ != nullptr)
+	{
+		delete pCurrentCommand_;
+		pCurrentCommand_ = nullptr;
+	}
 	pCurrentCommand_ = pCommand;
 }
 
@@ -204,7 +163,7 @@ void Ally::ExecuteCommand()
 
 void Ally::UpdateMovement()
 {
-	pTargetPlayer_ = FindObject("Player");
+	GameObject* pTargetPlayer_ = FindObject("Player");
 	if (!pTargetPlayer_)
 	{
 		return;

@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include <cmath>
 
 class Fbx;
 
@@ -18,26 +17,27 @@ public:
 	Enemy(GameObject* parent);
 	Enemy(GameObject* parent, ENEMY_ID id);
 	~Enemy();
+
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
+
 private:
+	// メンバ変数
 	Fbx* pFbx_;
 	int hModel_;
-	int level_;
 	ENEMY_ID enemyID_;
-
-	// 往復運動(仮)
-	float initialX_ = 0.0f;
-	float amplitude_ = 5.0f;
-	float moveSpeed_ = 5.0f;
-	float time_ = 0.0f;
-
-	// ステージとの当たり判定用
-	float gravity_;
 	float velocityY_;
 	bool isOnGround_;
+
+	// 定数
+	const float GRAVITY;
+
+	// ステータス
+	int level_;
+	int maxHp_;
+	int currentHp_;
 };
 

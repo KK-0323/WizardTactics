@@ -1,42 +1,12 @@
 #pragma once
 #include "Engine\\GameObject.h"
-#include <cmath>
-#include <deque>
-#include <memory>
 #include "Engine\\SceneManager.h"
+#include <deque>
+#include <DirectXMath.h>
 
 // 前方宣言
 class Fbx;
 class Command;
-
-// 受け取る指示の種類
-//enum AllyCommand
-//{
-//    CMD_NONE,
-//    CMD_ATTACK,
-//    CMD_DEFENSE,
-//    CMD_SKILL,
-//    CMD_ESCAPE,
-//    CMD_MAX
-//};
-//
-//enum AllyState
-//{
-//    IDLE,
-//    ATTACK,
-//    DEFENSE,
-//    SKILL,
-//    ESCAPE,
-//    RANDOM,
-//    MAX
-//};
-//
-//struct Skill
-//{
-//    std::string name;
-//    int mpCost;
-//    int power;
-//};
 
 class Ally :
     public GameObject
@@ -44,37 +14,45 @@ class Ally :
 public:
     Ally(GameObject* parent);
     ~Ally();
+
     void Initialize() override;
     void Update() override;
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
     void ReceiveCommand(Command* pCommand);
+
 private:
+    void UpdateMovement(); // 移動
+    void ExecuteCommand(); // コマンド
+
+    // メンバ変数
     Fbx* pFbx_;
     int hModel_;
-    float moveSpeed_;
-    float gravity_;
+    
+    // 移動関連
     float velocityY_;
-    GameObject* pTargetPlayer_;
-    GameObject* pTargetEnemy_;
     bool isOnGround_;
 
-	// ステータス用の変数
+	// ステータス
     int maxHp_;
-    int currentHp_;
-    int attackPower_;
-    int defensePower_;
+    int curHp_;
+    int atkPower_;
+    int defPower_;
+    
+    // 定数
+    const float FOLOOW_SPEED = 0.5f;
+    const float MIN_FOLLOW_DIST = 0.1f;
+    const float GRAVITY = 5.0f;
 
-    std::deque<XMFLOAT3> posHistory_; // プレイヤー座標履歴
-    const int FOLLOW_DELAY = 40;
-    SceneManager* pSM_;
-    SCENE_ID currentScene_;
+    // 追従
+    std::deque<XMFLOAT3> posHistory_; // 座標履歴
 
-    Command* pCurrentCommand_;
-    void ExecuteCommand();
+    // コマンド
+    Command* pCurrentCommand_ = nullptr;
 
-    void UpdateMovement();
-    void UpdateBattle();
+    // 参照
+    StageManager* pSM_ = nullptr;
+    SCENE_ID currentScene_ = SCENE_ID_PLAY;
 };
 

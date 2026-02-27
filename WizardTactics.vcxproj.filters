@@ -197,9 +197,6 @@
     <ClCompile Include="AtkCmd.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Command.cpp">
-      <Filter>ソース ファイル\Engine</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
