@@ -14,7 +14,7 @@ const float DELTA_TIME = 1.0f / 60.0f;
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), pFbx_(nullptr), moveSpeed_(10.0f),
 	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false), maxMp_(100), currentMp_(100), isMovingL_(false), isMovingR_(false),
-	jumpCount_(0), isFloating_(false), floatTimer_(0.0f), pSM_(nullptr), currentScene_(SCENE_ID::SCENE_ID_PLAY)
+	velocityY_(0.0f), jumpCount_(0), isFloating_(false)
 {
 }
 
