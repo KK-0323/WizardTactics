@@ -8,14 +8,13 @@ const float DELTA_TIME = 1.0f / 60.0f;
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), pFbx_(nullptr),
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false)
+	velocityY_(0.0f), isOnGround_(false)
 {
 }
 
 Enemy::Enemy(GameObject* parent, ENEMY_ID id)
 	:GameObject(parent, "Enemy"), pFbx_(nullptr), 
-	gravity_(5.0f), velocityY_(0.0f), isOnGround_(false),
-	enemyID_(id)
+	velocityY_(0.0f), isOnGround_(false),enemyID_(id)
 {
 }
 
@@ -115,7 +114,7 @@ void Enemy::Update()
 
 	if (!isOnGround_)
 	{
-		velocityY_ -= gravity_ * DELTA_TIME;
+		velocityY_ -= GRAVITY * DELTA_TIME;
 	}
 	else
 	{

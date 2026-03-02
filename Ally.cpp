@@ -4,8 +4,6 @@
 #include "StageManager.h"
 #include "Engine\\Command.h"
 
-const float DELTA_TIME = 1.0f / 60.0f;
-
 Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr),
 	maxHp_(50), curHp_(50), atkPower_(20), defPower_(20),
@@ -25,7 +23,7 @@ void Ally::Initialize()
 {
 	hModel_ = Model::Load("Ally.fbx");
 	assert(hModel_ >= 0);
-	transform_.position_ = { -5.0f, 5.0f, 0.0f };
+	transform_.position_ = { -2.0f, 5.0f, 0.0f };
 	transform_.rotate_.y = 90.0f;
 
 	SphereCollider* col = new SphereCollider(0.5f);
@@ -34,7 +32,7 @@ void Ally::Initialize()
 
 void Ally::Update()
 {
-	if (currentHp_ <= 0)
+	if (curHp_ <= 0)
 	{
 		this->KillMe();
 		return;
@@ -97,7 +95,7 @@ void Ally::Update()
 
 	if (!isOnGround_)
 	{
-		velocityY_ -= gravity_ * DELTA_TIME;
+		velocityY_ -= GRAVITY * DELTA_TIME;
 	}
 	else
 	{
@@ -126,7 +124,6 @@ void Ally::OnCollision(GameObject* pTarget)
 	//if (pTarget->GetName() == "Enemy")
 	//{
 	//	int damage = this->CalculateDamage(this->attackPower_, pTarget);
-
 	//	pTarget->ApplyDamage(damage);
 	//}
 }
@@ -193,7 +190,7 @@ void Ally::UpdateMovement()
 	const float STOP_DISTANCE = 2.0f;
 	if (distanceToPlayer > STOP_DISTANCE)
 	{
-		if (posHistory_.size() > FOLLOW_DELAY && !posHistory_.empty())
+		if (posHistory_.size() > 20 && !posHistory_.empty())
 		{
 			XMFLOAT3 targetPos = posHistory_.back();
 			transform_.position_.x = targetPos.x;
@@ -201,17 +198,11 @@ void Ally::UpdateMovement()
 			posHistory_.pop_back();
 		}
 	}	
-	else
-	{
-		while (posHistory_.size() > FOLLOW_DELAY)
-		{
-			posHistory_.pop_back();
-		}
-	}
-}
-
-void Ally::UpdateBattle()
-{
-	pTargetPlayer_ = FindObject("Player");
-	pTargetEnemy_ = FindObject("Enemy");
+	//else
+	//{
+	//	while (posHistory_.size() > FOLLOW_DELAY)
+	//	{
+	//		posHistory_.pop_back();
+	//	}
+	//}
 }

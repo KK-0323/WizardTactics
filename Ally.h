@@ -7,6 +7,7 @@
 // ‘O•ûéŒ¾
 class Fbx;
 class Command;
+class StageManager;
 
 class Ally :
     public GameObject
@@ -44,6 +45,7 @@ private:
     const float FOLOOW_SPEED = 0.5f;
     const float MIN_FOLLOW_DIST = 0.1f;
     const float GRAVITY = 5.0f;
+    const float DELTA_TIME = 1.0f / 60.0f;
 
     // ’Ç]
     std::deque<XMFLOAT3> posHistory_; // À•W—š—ğ

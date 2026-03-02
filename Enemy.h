@@ -30,10 +30,11 @@ private:
 	int hModel_;
 	ENEMY_ID enemyID_;
 	float velocityY_;
+	float initialX_;
 	bool isOnGround_;
 
 	// 定数
-	const float GRAVITY;
+	const float GRAVITY = 5.0f;
 
 	// ステータス
 	int level_;
