@@ -40,6 +40,18 @@ void BattleScene::Update()
 			}
 		}
 	}
+	if (Input::IsKeyDown(DIK_C))
+	{
+		GameObject* sceneManagerObj = this->GetRootJob()->FindObject("SceneManager");
+		if (sceneManagerObj != nullptr)
+		{
+			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneManagerObj);
+			if (sceneManager != nullptr)
+			{
+				sceneManager->ChangeScene(SCENE_ID_CLEAR);
+			}
+		}
+	}
 }
 
 void BattleScene::Draw()

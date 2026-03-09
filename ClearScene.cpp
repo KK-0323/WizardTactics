@@ -1,6 +1,8 @@
 #include "ClearScene.h"
 #include "Engine\\Input.h"
 #include "Engine\\SceneManager.h"
+#include "Engine\\Model.h"
+#include "StageManager.h"
 
 ClearScene::ClearScene(GameObject* parent)
 	:GameObject(parent, "ClearScene")
@@ -13,6 +15,7 @@ ClearScene::~ClearScene()
 
 void ClearScene::Initialize()
 {
+	Instantiate<StageManager>(this);
 }
 
 void ClearScene::Update()
@@ -37,4 +40,5 @@ void ClearScene::Draw()
 
 void ClearScene::Release()
 {
+	Model::AllRelease();
 }
