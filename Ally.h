@@ -6,7 +6,6 @@
 
 // 前方宣言
 class Fbx;
-class Command;
 class StageManager;
 
 class Ally :
@@ -21,11 +20,9 @@ public:
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
-    void ReceiveCommand(Command* pCommand);
 
 private:
     void UpdateMovement(); // 移動
-    void ExecuteCommand(); // コマンド
 
     // メンバ変数
     Fbx* pFbx_;
@@ -49,9 +46,6 @@ private:
 
     // 追従
     std::deque<XMFLOAT3> posHistory_; // 座標履歴
-
-    // コマンド
-    Command* pCurrentCommand_ = nullptr;
 
     // 参照
     StageManager* pSM_ = nullptr;

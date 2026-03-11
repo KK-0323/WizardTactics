@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine\\GameObject.h"
 #include "Engine\\SceneManager.h"
+#include "CommandTypes.h"
 
 // 前方宣言
 class Fbx;
@@ -18,6 +19,9 @@ public:
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
+
+    const OrderData& GetOrder() const { return currentOrder_; }
+    void SetOrder(CommandType type);
 
 private:
     void UpdateMovement();  // 移動
@@ -56,4 +60,6 @@ private:
     // 参照
     SceneManager* pSM_ = nullptr;
     SCENE_ID currentScene_ = SCENE_ID_PLAY;
+    OrderData currentOrder_; // コマンド参照用
+    Ally* pAlly_ = nullptr;
 };

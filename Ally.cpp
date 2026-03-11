@@ -2,6 +2,7 @@
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 #include "StageManager.h"
+#include "Player.h"
 #include "Engine\\Command.h"
 
 Ally::Ally(GameObject* parent)
@@ -13,10 +14,6 @@ Ally::Ally(GameObject* parent)
 
 Ally::~Ally()
 {
-	if (pCurrentCommand_)
-	{
-		delete pCurrentCommand_;
-	}
 }
 
 void Ally::Initialize()
@@ -32,14 +29,13 @@ void Ally::Initialize()
 
 void Ally::Update()
 {
-	if (curHp_ <= 0)
-	{
-		this->KillMe();
-		return;
-	}
+	//if (curHp_ <= 0)
+	//{
+	//	this->KillMe();
+	//	return;
+	//}
 
 	UpdateMovement();
-	ExecuteCommand();
 
 	bool hit = false;
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
@@ -87,9 +83,19 @@ void Ally::Update()
 				}
 			}
 		}
-
-
 	}
+
+	GameObject* pObj = FindObject("Player");
+	char buf[128];
+	sprintf_s(buf, "Ally Sees : %p, ActualPlayerX: %f\n", pObj, pObj->GetPosition().x);
+	OutputDebugStringA(buf);
+
+	Player* pPlayer = static_cast<Player*>(pObj);
+	OrderData data = pPlayer->GetOrder();
+	//if (data.type_ == CommandType::ATTACK)
+	//{
+	//	OutputDebugStringA("攻撃指示を受信しましたよ！\n");
+	//}
 
 	isOnGround_ = hit;
 
@@ -126,36 +132,6 @@ void Ally::OnCollision(GameObject* pTarget)
 	//	int damage = this->CalculateDamage(this->attackPower_, pTarget);
 	//	pTarget->ApplyDamage(damage);
 	//}
-}
-
-void Ally::ReceiveCommand(Command* pCommand)
-{
-	if (pCurrentCommand_ != nullptr)
-	{
-		delete pCurrentCommand_;
-		pCurrentCommand_ = nullptr;
-	}
-	pCurrentCommand_ = pCommand;
-}
-
-void Ally::ExecuteCommand()
-{
-	if (pCurrentCommand_ == nullptr) return;
-
-	// 1. 対象（Enemy）を探す
-	GameObject* pEnemy = FindObject("Enemy");
-	if (pEnemy != nullptr)
-	{
-		// 2. コマンド実行（画像にある「行動」の部分）
-		pCurrentCommand_->Execute(this, pEnemy);
-
-		// 3. 実行が終わったので、自分を解放（画像にある「掃除」の部分）
-		delete pCurrentCommand_;
-		pCurrentCommand_ = nullptr;
-
-		// デバッグログを出しておくと流れが追いやすくなります
-		OutputDebugStringA("Command Executed and Deleted.\n");
-	}
 }
 
 void Ally::UpdateMovement()

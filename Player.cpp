@@ -5,7 +5,7 @@
 #include "StageManager.h"
 #include "Magic.h"
 #include "Ally.h"
-#include "AtkCmd.h"
+
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), pFbx_(nullptr),isOnGround_(false),
@@ -28,26 +28,37 @@ void Player::Initialize()
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
+
+	pAlly_ = (Ally*)Instantiate<Ally>(this);
+	pAlly_->SetTargetPlayer(this);
 }
 
 void Player::Update()
 {
-	pSM_ = (SceneManager*)FindObject("SceneManager");
-	SCENE_ID lastScene = currentScene_;
-	currentScene_ = pSM_->GetCurrentSceneID();
+	//pSM_ = (SceneManager*)FindObject("SceneManager");
+	//SCENE_ID lastScene = currentScene_;
+	//currentScene_ = pSM_->GetCurrentSceneID();
 
-	switch (currentScene_)
-	{
-	case SCENE_ID_PLAY:
-		UpdateMovement();
-		UpdateFloating();
-		break;
-	case SCENE_ID_BATTLE:
-		UpdateBattle();
-		break;
-	default:
-		break;
-	}
+	//switch (currentScene_)
+	//{
+	//case SCENE_ID_PLAY:
+	//	UpdateMovement();
+	//	UpdateFloating();
+	//	break;
+	//case SCENE_ID_BATTLE:
+	//	UpdateBattle();
+	//	break;
+	//default:
+	//	break;
+	//}
+	
+	//char buf[64];
+	//sprintf_s(buf, "Player Found: %f, %f\n", transform_.position_.x, transform_.position_.y);
+	//OutputDebugStringA(buf);
+
+	UpdateMovement();
+	UpdateFloating();
+	UpdateBattle();
 
 	bool hit = false;
 
@@ -149,12 +160,10 @@ void Player::UpdateMovement()
 	if (Input::IsKey(DIK_A))
 	{
 		transform_.position_.x -= currentMoveSpeed_ * DELTA_TIME;
-		isMovingL_ = true;
 	}
 	if (Input::IsKey(DIK_D))
 	{
 		transform_.position_.x += currentMoveSpeed_ * DELTA_TIME;
-		isMovingR_ = true;
 	}
 	if (Input::IsKeyDown(DIK_SPACE) && jumpCount_ < MAX_JUMP_COUNT)
 	{
@@ -176,11 +185,8 @@ void Player::UpdateBattle()
 {
 	if (Input::IsKeyDown(DIK_1))
 	{
-		Ally* pAlly = (Ally*)FindObject("Ally");
-		if (pAlly)
-		{
-			pAlly->ReceiveCommand(new AtkCmd());
-		}
+		SetOrder(CommandType::ATTACK);
+		MessageBox(nullptr, L"çUåÇÇéwé¶", L"çUåÇ", MB_OK);
 	}
 }
 
@@ -225,4 +231,10 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
+}
+
+void Player::SetOrder(CommandType type)
+{
+		currentOrder_.type_ = type;
+		OutputDebugStringA("--- Player::SetOrder Called! ---\n");
 }
