@@ -21,11 +21,11 @@ public:
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
-    void ReceiveCommand(Command* pCommand);
+    //void ReceiveCommand(Command* pCommand);
 
 private:
     void UpdateMovement(); // 移動
-    void ExecuteCommand(); // コマンド
+    //void ExecuteCommand(); // コマンド
 
     // メンバ変数
     Fbx* pFbx_;

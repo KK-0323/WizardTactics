@@ -19,6 +19,8 @@ public:
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
 
+    OrderData* GetOrderData() override { return &currentOrder_; }
+
 private:
     void UpdateMovement();  // ˆÚ“®
     void UpdateBattle();    // í“¬
@@ -56,4 +58,5 @@ private:
     // QÆ
     SceneManager* pSM_ = nullptr;
     SCENE_ID currentScene_ = SCENE_ID_PLAY;
+    OrderData currentOrder_;
 };

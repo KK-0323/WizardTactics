@@ -148,7 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ally.h" />
-    <ClInclude Include="AtkCmd.h" />
+    <ClInclude Include="CommandType.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="BattleStage.h" />
     <ClInclude Include="ClearScene.h" />
@@ -156,7 +156,6 @@
     <ClInclude Include="Engine\BaseCollider.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
     <ClInclude Include="Engine\Camera.h" />
-    <ClInclude Include="Engine\Command.h" />
     <ClInclude Include="Engine\CsvReader.h" />
     <ClInclude Include="Engine\Direct3D.h" />
     <ClInclude Include="Engine\Fbx.h" />
@@ -182,7 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ally.cpp" />
-    <ClCompile Include="AtkCmd.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="BattleStage.cpp" />
     <ClCompile Include="ClearScene.cpp" />

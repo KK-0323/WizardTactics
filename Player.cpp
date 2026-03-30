@@ -5,7 +5,6 @@
 #include "StageManager.h"
 #include "Magic.h"
 #include "Ally.h"
-#include "AtkCmd.h"
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), pFbx_(nullptr),isOnGround_(false),
@@ -32,22 +31,25 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	pSM_ = (SceneManager*)FindObject("SceneManager");
-	SCENE_ID lastScene = currentScene_;
-	currentScene_ = pSM_->GetCurrentSceneID();
+	//pSM_ = (SceneManager*)FindObject("SceneManager");
+	//SCENE_ID lastScene = currentScene_;
+	//currentScene_ = pSM_->GetCurrentSceneID();
 
-	switch (currentScene_)
-	{
-	case SCENE_ID_PLAY:
-		UpdateMovement();
-		UpdateFloating();
-		break;
-	case SCENE_ID_BATTLE:
-		UpdateBattle();
-		break;
-	default:
-		break;
-	}
+	//switch (currentScene_)
+	//{
+	//case SCENE_ID_PLAY:
+	//	UpdateMovement();
+	//	UpdateFloating();
+	//	break;
+	//case SCENE_ID_BATTLE:
+	//	UpdateBattle();
+	//	break;
+	//default:
+	//	break;
+	//}
+	UpdateMovement();
+	UpdateFloating();
+	UpdateBattle();
 
 	bool hit = false;
 
@@ -176,11 +178,7 @@ void Player::UpdateBattle()
 {
 	if (Input::IsKeyDown(DIK_1))
 	{
-		Ally* pAlly = (Ally*)FindObject("Ally");
-		if (pAlly)
-		{
-			pAlly->ReceiveCommand(new AtkCmd());
-		}
+		currentOrder_.type_ = CommandType::ATTACK;
 	}
 }
 

@@ -2,7 +2,6 @@
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 #include "StageManager.h"
-#include "Engine\\Command.h"
 
 Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr),
@@ -32,14 +31,34 @@ void Ally::Initialize()
 
 void Ally::Update()
 {
-	if (curHp_ <= 0)
+	//if (curHp_ <= 0)
+	//{
+	//	this->KillMe();
+	//	return;
+	//}
+
+	//UpdateMovement();
+
+	GameObject* pPlayer = FindObject("Player");
+	if (pPlayer == nullptr)
 	{
-		this->KillMe();
 		return;
 	}
 
-	UpdateMovement();
-	ExecuteCommand();
+	OrderData* pData = pPlayer->GetOrderData();
+
+	if (pData != nullptr)
+	{
+		if (pData->type_ == CommandType::ATTACK)
+		{
+			MessageBox(nullptr, L"攻撃指示を受信！", L"Success", MB_OK);
+			if (transform_.position_.x < 5.0f)
+			{
+				transform_.position_.x += 0.5f;
+			}
+			pData->type_ = CommandType::NONE;
+		}
+	}
 
 	bool hit = false;
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
@@ -128,81 +147,52 @@ void Ally::OnCollision(GameObject* pTarget)
 	//}
 }
 
-void Ally::ReceiveCommand(Command* pCommand)
-{
-	if (pCurrentCommand_ != nullptr)
-	{
-		delete pCurrentCommand_;
-		pCurrentCommand_ = nullptr;
-	}
-	pCurrentCommand_ = pCommand;
-}
-
-void Ally::ExecuteCommand()
-{
-	if (pCurrentCommand_ == nullptr) return;
-
-	// 1. 対象（Enemy）を探す
-	GameObject* pEnemy = FindObject("Enemy");
-	if (pEnemy != nullptr)
-	{
-		// 2. コマンド実行（画像にある「行動」の部分）
-		pCurrentCommand_->Execute(this, pEnemy);
-
-		// 3. 実行が終わったので、自分を解放（画像にある「掃除」の部分）
-		delete pCurrentCommand_;
-		pCurrentCommand_ = nullptr;
-
-		// デバッグログを出しておくと流れが追いやすくなります
-		OutputDebugStringA("Command Executed and Deleted.\n");
-	}
-}
-
-void Ally::UpdateMovement()
-{
-	GameObject* pTargetPlayer_ = FindObject("Player");
-	if (!pTargetPlayer_)
-	{
-		return;
-	}
-
-	XMFLOAT3 playerPos = pTargetPlayer_->GetPosition();
-	if (posHistory_.empty())
-	{
-		posHistory_.push_front(playerPos);
-	}
-	else
-	{
-		XMVECTOR p1 = XMLoadFloat3(&playerPos);
-		XMVECTOR p2 = XMLoadFloat3(&posHistory_.front());
-		float dist = XMVectorGetX(XMVector3Length(p1 - p2));
-
-		if (dist > 0.1f)
-		{
-			posHistory_.push_front(playerPos);
-		}
-	}
-
-	XMVECTOR myPos = XMLoadFloat3(&transform_.position_);
-	XMVECTOR pPos = XMLoadFloat3(&playerPos);
-	float distanceToPlayer = XMVectorGetX(XMVector3Length(pPos - myPos));
-	
-	const float STOP_DISTANCE = 2.0f;
-	if (distanceToPlayer > STOP_DISTANCE)
-	{
-		if (posHistory_.size() > 20 && !posHistory_.empty())
-		{
-			XMFLOAT3 targetPos = posHistory_.back();
-			transform_.position_.x = targetPos.x;
-			transform_.position_.z = targetPos.z;
-			posHistory_.pop_back();
-		}
-	}	
-	//else
-	//{
-	//	while (posHistory_.size() > FOLLOW_DELAY)
-	//	{
-	//		posHistory_.pop_back();
-	//	}
-	//}
-}
+//void Ally::UpdateMovement()
+//{
+//	GameObject* pTargetPlayer_ = FindObject("Player");
+//	if (!pTargetPlayer_)
+//	{
+//		return;
+//	}
+//
+//	XMFLOAT3 playerPos = pTargetPlayer_->GetPosition();
+//	if (posHistory_.empty())
+//	{
+//		posHistory_.push_front(playerPos);
+//	}
+//	else
+//	{
+//		XMVECTOR p1 = XMLoadFloat3(&playerPos);
+//		XMVECTOR p2 = XMLoadFloat3(&posHistory_.front());
+//		float dist = XMVectorGetX(XMVector3Length(p1 - p2));
+//
+//		if (dist > 0.1f)
+//		{
+//			posHistory_.push_front(playerPos);
+//		}
+//	}
+//
+//	XMVECTOR myPos = XMLoadFloat3(&transform_.position_);
+//	XMVECTOR pPos = XMLoadFloat3(&playerPos);
+//	float distanceToPlayer = XMVectorGetX(XMVector3Length(pPos - myPos));
+//	
+//	const float STOP_DISTANCE = 2.0f;
+//	if (distanceToPlayer > STOP_DISTANCE)
+//	{
+//		if (posHistory_.size() > 20 && !posHistory_.empty())
+//		{
+//			XMFLOAT3 targetPos = posHistory_.back();
+//			transform_.position_.x = targetPos.x;
+//			transform_.position_.z = targetPos.z;
+//			posHistory_.pop_back();
+//		}
+//	}	
+//	//else
+//	//{
+//	//	while (posHistory_.size() > FOLLOW_DELAY)
+//	//	{
+//	//		posHistory_.pop_back();
+//	//	}
+//	//}
+//}
+//

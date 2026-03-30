@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "Transform.h"
 #include "BaseCollider.h"
+#include "..\CommandType.h"
 
 class SphereCollider;
 class BoxCollider;
@@ -95,6 +96,9 @@ public:
 		return obj;
 	}
 
+	//Ç±Ç±Ç©ÇÁì∆é©ä÷êî
+
+	virtual OrderData* GetOrderData() { return nullptr; }
 	void SetLevel(int level) { currentLevel_ = level; }
 	void SetAttackType(AttackType type) { attackType_ = type; }
 	void SetDefenseType(DefenseType type) { defenseType_ = type; }
@@ -123,6 +127,7 @@ protected:
 	GameObject* pParent_;
 	string objectName_;
 	BaseCollider* pCollider_;
+
 	int currentLevel_; 
 	int maxHp_;
 	int currentHp_;
