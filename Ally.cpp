@@ -2,6 +2,7 @@
 #include "Engine\\Model.h"
 #include "Engine\\SphereCollider.h"
 #include "StageManager.h"
+#include "Engine\\Input.h"
 
 Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr),
@@ -12,10 +13,6 @@ Ally::Ally(GameObject* parent)
 
 Ally::~Ally()
 {
-	if (pCurrentCommand_)
-	{
-		delete pCurrentCommand_;
-	}
 }
 
 void Ally::Initialize()
@@ -31,33 +28,22 @@ void Ally::Initialize()
 
 void Ally::Update()
 {
-	//if (curHp_ <= 0)
-	//{
-	//	this->KillMe();
-	//	return;
-	//}
+	pSM_ = (SceneManager*)FindObject("SceneManager");
+	SCENE_ID lastScene = currentScene_;
+	currentScene_ = pSM_->GetCurrentSceneID();
 
-	//UpdateMovement();
-
-	GameObject* pPlayer = FindObject("Player");
-	if (pPlayer == nullptr)
+	
+		
+	switch (currentScene_)
 	{
-		return;
-	}
-
-	OrderData* pData = pPlayer->GetOrderData();
-
-	if (pData != nullptr)
-	{
-		if (pData->type_ == CommandType::ATTACK)
-		{
-			MessageBox(nullptr, L"çUåÇéwé¶ÇéÛêMÅI", L"Success", MB_OK);
-			if (transform_.position_.x < 5.0f)
-			{
-				transform_.position_.x += 0.5f;
-			}
-			pData->type_ = CommandType::NONE;
-		}
+	case SCENE_ID_PLAY:
+		UpdateMovement();
+		break;
+	case SCENE_ID_BATTLE:
+		UpdateBattle();
+		break;
+	default:
+		break;
 	}
 
 	bool hit = false;
@@ -140,59 +126,82 @@ void Ally::Release()
 
 void Ally::OnCollision(GameObject* pTarget)
 {
-	//if (pTarget->GetName() == "Enemy")
-	//{
-	//	int damage = this->CalculateDamage(this->attackPower_, pTarget);
-	//	pTarget->ApplyDamage(damage);
-	//}
+	if (pTarget->GetName() == "Enemy")
+	{
+		int damage = this->CalculateDamage(this->atkPower_, pTarget);
+		pTarget->ApplyDamage(damage);
+	}
 }
 
-//void Ally::UpdateMovement()
-//{
-//	GameObject* pTargetPlayer_ = FindObject("Player");
-//	if (!pTargetPlayer_)
-//	{
-//		return;
-//	}
-//
-//	XMFLOAT3 playerPos = pTargetPlayer_->GetPosition();
-//	if (posHistory_.empty())
-//	{
-//		posHistory_.push_front(playerPos);
-//	}
-//	else
-//	{
-//		XMVECTOR p1 = XMLoadFloat3(&playerPos);
-//		XMVECTOR p2 = XMLoadFloat3(&posHistory_.front());
-//		float dist = XMVectorGetX(XMVector3Length(p1 - p2));
-//
-//		if (dist > 0.1f)
-//		{
-//			posHistory_.push_front(playerPos);
-//		}
-//	}
-//
-//	XMVECTOR myPos = XMLoadFloat3(&transform_.position_);
-//	XMVECTOR pPos = XMLoadFloat3(&playerPos);
-//	float distanceToPlayer = XMVectorGetX(XMVector3Length(pPos - myPos));
-//	
-//	const float STOP_DISTANCE = 2.0f;
-//	if (distanceToPlayer > STOP_DISTANCE)
-//	{
-//		if (posHistory_.size() > 20 && !posHistory_.empty())
-//		{
-//			XMFLOAT3 targetPos = posHistory_.back();
-//			transform_.position_.x = targetPos.x;
-//			transform_.position_.z = targetPos.z;
-//			posHistory_.pop_back();
-//		}
-//	}	
-//	//else
-//	//{
-//	//	while (posHistory_.size() > FOLLOW_DELAY)
-//	//	{
-//	//		posHistory_.pop_back();
-//	//	}
-//	//}
-//}
-//
+void Ally::UpdateMovement()
+{
+	GameObject* pTargetPlayer_ = FindObject("Player");
+	if (!pTargetPlayer_)
+	{
+		return;
+	}
+
+	XMFLOAT3 playerPos = pTargetPlayer_->GetPosition();
+	if (posHistory_.empty())
+	{
+		posHistory_.push_front(playerPos);
+	}
+	else
+	{
+		XMVECTOR p1 = XMLoadFloat3(&playerPos);
+		XMVECTOR p2 = XMLoadFloat3(&posHistory_.front());
+		float dist = XMVectorGetX(XMVector3Length(p1 - p2));
+
+		if (dist > 0.1f)
+		{
+			posHistory_.push_front(playerPos);
+		}
+	}
+
+	XMVECTOR myPos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR pPos = XMLoadFloat3(&playerPos);
+	float distanceToPlayer = XMVectorGetX(XMVector3Length(pPos - myPos));
+	
+	const float STOP_DISTANCE = 2.0f;
+	if (distanceToPlayer > STOP_DISTANCE)
+	{
+		if (posHistory_.size() > FOLOOW_SPEED && !posHistory_.empty())
+		{
+			XMFLOAT3 targetPos = posHistory_.back();
+			transform_.position_.x = targetPos.x;
+			transform_.position_.z = targetPos.z;
+			posHistory_.pop_back();
+		}
+	}	
+	else
+	{
+		while (posHistory_.size() > FOLOOW_SPEED)
+		{
+			posHistory_.pop_back();
+		}
+	}
+}
+
+void Ally::UpdateBattle()
+{
+	if (Input::IsKeyDown(DIK_1))
+	{
+		cType_ = CommandType::ATTACK;
+	}
+	else if (Input::IsKeyDown(DIK_0))
+	{
+		cType_ = CommandType::NONE;
+	}
+
+
+	if (cType_ == CommandType::ATTACK && transform_.position_.x <= ATTACK_POSITION)
+	{
+		transform_.position_.x += 0.5f;
+		transform_.rotate_.y += 10.0f;
+	}
+	if (cType_ == CommandType::NONE)
+	{
+		transform_.position_.x = START_POSTION;
+		transform_.rotate_.y = 90.0f;
+	}
+}

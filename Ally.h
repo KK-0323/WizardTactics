@@ -1,12 +1,12 @@
 #pragma once
 #include "Engine\\GameObject.h"
 #include "Engine\\SceneManager.h"
+#include "CommandType.h"
 #include <deque>
 #include <DirectXMath.h>
 
 // 前方宣言
 class Fbx;
-class Command;
 class StageManager;
 
 class Ally :
@@ -21,11 +21,10 @@ public:
     void Draw() override;
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
-    //void ReceiveCommand(Command* pCommand);
 
 private:
     void UpdateMovement(); // 移動
-    //void ExecuteCommand(); // コマンド
+    void UpdateBattle();   // 戦闘
 
     // メンバ変数
     Fbx* pFbx_;
@@ -46,15 +45,15 @@ private:
     const float MIN_FOLLOW_DIST = 0.1f;
     const float GRAVITY = 5.0f;
     const float DELTA_TIME = 1.0f / 60.0f;
+    const float START_POSTION = -2.0f;
+    const float ATTACK_POSITION = 10.0f;
 
     // 追従
     std::deque<XMFLOAT3> posHistory_; // 座標履歴
 
-    // コマンド
-    Command* pCurrentCommand_ = nullptr;
-
     // 参照
-    StageManager* pSM_ = nullptr;
+    SceneManager* pSM_ = nullptr;
     SCENE_ID currentScene_ = SCENE_ID_PLAY;
+    CommandType cType_ = CommandType::NONE;
 };
 

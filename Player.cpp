@@ -5,6 +5,7 @@
 #include "StageManager.h"
 #include "Magic.h"
 #include "Ally.h"
+#include "Engine\\Camera.h"
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), pFbx_(nullptr),isOnGround_(false),
@@ -31,25 +32,22 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	//pSM_ = (SceneManager*)FindObject("SceneManager");
-	//SCENE_ID lastScene = currentScene_;
-	//currentScene_ = pSM_->GetCurrentSceneID();
+	pSM_ = (SceneManager*)FindObject("SceneManager");
+	SCENE_ID lastScene = currentScene_;
+	currentScene_ = pSM_->GetCurrentSceneID();
 
-	//switch (currentScene_)
-	//{
-	//case SCENE_ID_PLAY:
-	//	UpdateMovement();
-	//	UpdateFloating();
-	//	break;
-	//case SCENE_ID_BATTLE:
-	//	UpdateBattle();
-	//	break;
-	//default:
-	//	break;
-	//}
-	UpdateMovement();
-	UpdateFloating();
-	UpdateBattle();
+	switch (currentScene_)
+	{
+	case SCENE_ID_PLAY:
+		UpdateMovement();
+		UpdateFloating();
+		break;
+	case SCENE_ID_BATTLE:
+		UpdateBattle();
+		break;
+	default:
+		break;
+	}
 
 	bool hit = false;
 
@@ -99,8 +97,6 @@ void Player::Update()
 				}
 			}
 		}
-
-		
 	}
 
 	isOnGround_ = hit;
@@ -115,19 +111,19 @@ void Player::Update()
 	transform_.position_.y += velocityY_ * DELTA_TIME;
 
 	// ƒJƒƒ‰ˆ—
-	//XMFLOAT3 camPos = transform_.position_;
-	//if (pParent_->GetName() == "PlayScene")
-	//{
-	//	camPos.y += 10.0f;
-	//	camPos.z -= 30.0f;
-	//	Camera::SetPosition(XMLoadFloat3(&camPos));
-	//	Camera::SetTarget(XMLoadFloat3(&transform_.position_));
-	//}
-	//else
-	//{
-	//	Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
-	//	Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
-	//}
+	XMFLOAT3 camPos = transform_.position_;
+	if (pParent_->GetName() == "PlayScene")
+	{
+		camPos.y += 10.0f;
+		camPos.z -= 30.0f;
+		Camera::SetPosition(XMLoadFloat3(&camPos));
+		Camera::SetTarget(XMLoadFloat3(&transform_.position_));
+	}
+	else
+	{
+		Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
+		Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
+	}
 }
 
 // PlayScene‚Ìˆ—
@@ -179,6 +175,7 @@ void Player::UpdateBattle()
 	if (Input::IsKeyDown(DIK_1))
 	{
 		currentOrder_.type_ = CommandType::ATTACK;
+		MessageBox(nullptr, L"UŒ‚‚ğw¦", L"attack", MB_OK);
 	}
 }
 

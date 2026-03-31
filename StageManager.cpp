@@ -24,7 +24,7 @@ void StageManager::Initialize()
 	}
 	else
 	{
-		fileName = "Assets\\Map\\Tutorial.csv";
+		fileName = "Assets\\Map\\Battle.csv";
 	}
 	CsvReader csv(fileName);
 

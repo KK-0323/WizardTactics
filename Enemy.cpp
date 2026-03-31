@@ -126,7 +126,15 @@ void Enemy::Update()
 	if (currentHp_ <= 0)
 	{
 		//this->KillMe();
-		//return;
+		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
+		if (sceneObj != nullptr)
+		{
+			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
+			if (sceneManager != nullptr)
+			{
+				sceneManager->ChangeScene(SCENE_ID_CLEAR);
+			}
+		}
 	}
 }
 
@@ -158,14 +166,4 @@ void Enemy::OnCollision(GameObject* pTarget)
 			}
 		}
 	}
-
-	//GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
-	//if (sceneObj != nullptr)
-	//{
-	//	SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
-	//	if (sceneManager != nullptr)
-	//	{
-	//		sceneManager->ChangeScene(SCENE_ID_CLEAR);
-	//	}
-	//}
 }
