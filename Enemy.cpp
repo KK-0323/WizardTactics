@@ -122,20 +122,6 @@ void Enemy::Update()
 	}
 	// Y座標に速度を適用
 	transform_.position_.y += velocityY_ * DELTA_TIME;
-
-	if (currentHp_ <= 0)
-	{
-		//this->KillMe();
-		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
-		if (sceneObj != nullptr)
-		{
-			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
-			if (sceneManager != nullptr)
-			{
-				sceneManager->ChangeScene(SCENE_ID_CLEAR);
-			}
-		}
-	}
 }
 
 void Enemy::Draw()
@@ -164,6 +150,26 @@ void Enemy::OnCollision(GameObject* pTarget)
 			{
 				sceneManager->ChangeScene(SCENE_ID_BATTLE);
 			}
+		}
+	}
+
+	if (pTarget->GetName() == "Ally")
+	{
+		int damage = pTarget->CalculateDamage(20, this);
+
+		this->currentHp_ -= damage;
+
+		if (this->currentHp_ <= 0)
+		{
+			this->currentHp_ = 0;
+
+			GameObject* sceneObj = FindObject("SceneManager");
+			if (sceneObj)
+			{
+				SceneManager* pSM = (SceneManager*)sceneObj;
+				pSM->ChangeScene(SCENE_ID_CLEAR);
+			}
+			this->KillMe();
 		}
 	}
 }
