@@ -23,7 +23,6 @@ HRESULT Texture::Load(std::string fileName)
 
 	HRESULT hr;
 
-	//実際に読んでゆくぅ　　　　　 
 	std::wstring wfileName(fileName.begin(), fileName.end());
 	hr = LoadFromWICFile(wfileName.c_str(), WIC_FLAGS::WIC_FLAGS_NONE,
 		&metadata, image);

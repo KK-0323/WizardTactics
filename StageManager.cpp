@@ -45,6 +45,7 @@ void StageManager::Initialize()
 				continue;
 			}
 
+			// csv‚Ì”’l‚É‡‚í‚¹‚Äƒ‚ƒfƒ‹‚ğ•Ï‚¦‚é
 			std::string modelPath;
 			switch (type)
 			{

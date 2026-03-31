@@ -95,7 +95,7 @@ GameObject* GameObject::GetRootJob()
 {
 	if (pParent_ == nullptr)
 	{
-		return this; // RootJob
+		return this;
 	}
 	else
 	{
@@ -284,12 +284,16 @@ void GameObject::Collision(GameObject* pTarget)
 void GameObject::RoundRobin(GameObject* pTarget)
 {
 	//①自分にコライダーがなかったらreturn
-		if (pCollider_ == nullptr || pTarget == nullptr)
-			return;
+	if (pCollider_ == nullptr || pTarget == nullptr)
+	{
+		return;
+	}	
 	//②自分とターゲット自体のコライダーの当たり判定
 	if (pTarget->pCollider_ != nullptr && pTarget->pCollider_ != pCollider_)
+	{
 		Collision(pTarget);
-	//③再帰的なやつで、ターゲットの子オブジェクトを当たり判定してく
+	}		
+	//③ターゲットの子オブジェクトを当たり判定する
 	std::list<GameObject*> safeChildList = pTarget->childList_;
 	for (auto itr : safeChildList)
 	{

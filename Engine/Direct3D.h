@@ -19,7 +19,6 @@ enum SHADER_TYPE
 
 namespace Direct3D
 {
-	//externはどこかに実際の定義（宣言）文がある宣言
 	extern ID3D11Device* pDevice;
 	extern ID3D11DeviceContext* pContext;
 
@@ -29,7 +28,6 @@ namespace Direct3D
 	//シェーダー準備
 	HRESULT InitShader();
 	HRESULT InitShader3D(); //3D用シェーダー初期化
-	HRESULT InitShader2D(); //2D用シェーダー初期化
 
 	void SetShader(SHADER_TYPE type); //シェーダーをセット
 
