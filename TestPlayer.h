@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine\\GameObject.h"
+
+class Fbx;
+
 class TestPlayer :
     public GameObject
 {
@@ -16,6 +19,8 @@ public:
     CommandType GetCurrentCommand() const { return currentCommand_; }
 
 private:
+    Fbx* pFbx_;
+    int hModel_;
     CommandType currentCommand_ = CommandType::NONE;
 };
 

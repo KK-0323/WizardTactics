@@ -14,7 +14,7 @@ TestAlly::~TestAlly()
 
 void TestAlly::Initialize()
 {
-	hModel_ = Model::Load("BoxSand.fbx");
+	hModel_ = Model::Load("TestAlly.fbx");
 	assert(hModel_ >= 0);
 	transform_.position_ = { -2.0f, 3.0f, 0.0f };
 
@@ -42,10 +42,13 @@ void TestAlly::Update()
 
 void TestAlly::Draw()
 {
+	Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);
 }
 
 void TestAlly::Release()
 {
+	Model::Release();
 }
 
 void TestAlly::OnCollision(GameObject* pTarget)

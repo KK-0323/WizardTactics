@@ -3,6 +3,7 @@
 #include "..\\TitleScene.h"
 #include "..\\BattleScene.h"
 #include "..\\ClearScene.h"
+#include "..\\TestScene.h"
 #include "Direct3D.h"
 
 SceneManager::SceneManager(GameObject* parent)
@@ -16,9 +17,9 @@ SceneManager::~SceneManager()
 
 void SceneManager::Initialize()
 {
-	currentSceneID_ = SCENE_ID_TITLE;
+	currentSceneID_ = SCENE_ID_TEST;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);
+	Instantiate<TestScene>(this);
 }
 
 void SceneManager::Update()
@@ -31,6 +32,9 @@ void SceneManager::Update()
 		childList_.clear();
 		switch (nextSceneID_)
 		{
+		case SCENE_ID_TEST:
+			Instantiate<TestScene>(this);
+			break;
 		case SCENE_ID_TITLE:
 			Instantiate<TitleScene>(this);
 			break;
