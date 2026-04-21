@@ -2,6 +2,7 @@
 #include "TestStage.h"
 #include "TestPlayer.h"
 #include "TestAlly.h"
+#include "TestEnemy.h"
 
 TestScene::TestScene(GameObject* parent)
 	:GameObject(parent, "TestScene")
@@ -16,6 +17,7 @@ void TestScene::Initialize()
 {
 	Instantiate<TestStage>(this);
 	Instantiate<TestPlayer>(this);
+	Instantiate<TestEnemy>(this);
 	Instantiate<TestAlly>(this);
 }
 

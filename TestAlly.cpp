@@ -26,17 +26,46 @@ void TestAlly::Initialize()
 void TestAlly::Update()
 {
 	TestPlayer* pPlayer = (TestPlayer*)FindObject("TestPlayer");
-	if (!pPlayer)return;
+	if (!pPlayer) return;
 
 	CommandType command = pPlayer->GetCurrentCommand();
 
 	if (command == CommandType::ATTACK)
 	{
-		transform_.position_.x = 8.0f;
+		GameObject* pEnemy = FindObject("TestEnemy");
+		if (pEnemy)
+		{
+			XMFLOAT3 enemyPos = pEnemy->GetPosition();
+			XMFLOAT3 myPos = transform_.position_;
+
+			// 敵への方向ベクトル計算
+			float speed = 0.1f;
+			if (myPos.x < enemyPos.x)
+			{
+				myPos.x += speed;
+			}
+			else if (myPos.x > enemyPos.x)
+			{
+				myPos.x -= speed;
+			}
+
+			transform_.position_ = myPos;
+		}
 	}
 	else
 	{
-		transform_.position_.x = pPlayer->GetPosition().x - 2.0f;
+		float followSpeed = 0.05f;
+		XMFLOAT3 targetPos = pPlayer->GetPosition();
+		targetPos.x -= 2.0f;
+
+		if (transform_.position_.x < targetPos.x)
+		{
+			transform_.position_.x += followSpeed;
+		}
+		if (transform_.position_.x > targetPos.x)
+		{
+			transform_.position_.x -= followSpeed;
+		}
 	}
 }
 
@@ -53,4 +82,9 @@ void TestAlly::Release()
 
 void TestAlly::OnCollision(GameObject* pTarget)
 {
+	if (pTarget->GetName() == "TestEnemy")
+	{
+		int damage = CalculateDamage(10, pTarget);
+		pTarget->ApplyDamage(damage);
+	}
 }

@@ -26,11 +26,11 @@ void TestPlayer::Update()
 {
 	if (Input::IsKey(DIK_A))
 	{
-		transform_.position_.x -= 2.0f;
+		transform_.position_.x -= 1.0f;
 	}
 	if (Input::IsKey(DIK_D))
 	{
-		transform_.position_.x += 2.0f;
+		transform_.position_.x += 1.0f;
 	}
 	if (Input::IsKeyDown(DIK_1))
 	{
