@@ -4,7 +4,8 @@
 #include "Engine\\SphereCollider.h"
 
 TestAlly::TestAlly(GameObject* parent)
-	:GameObject(parent, "TestAlly"), pFbx_(nullptr)
+	:GameObject(parent, "TestAlly"), pFbx_(nullptr),
+	pPlayer_(nullptr), pEnemy_(nullptr)
 {
 }
 
@@ -18,8 +19,6 @@ void TestAlly::Initialize()
 	assert(hModel_ >= 0);
 	transform_.position_ = { -2.0f, 3.0f, 0.0f };
 
-	pEnemy_ = FindObject("TestEnemy");
-
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
 	
@@ -27,7 +26,18 @@ void TestAlly::Initialize()
 
 void TestAlly::Update()
 {
-	CommandPattern();
+	if (pEnemy_ == nullptr)
+	{
+		pEnemy_ = FindObject("TestEnemy");
+	}
+	if (pEnemy_)
+	{
+		char buf[256];
+		sprintf_s(buf, "Found Object Name: %s, Address: %p\n", pEnemy_->GetName().c_str(), pEnemy_);
+		OutputDebugStringA(buf);
+		//XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+	}
+	//CommandPattern();
 	if (Input::IsKeyDown(DIK_1))
 	{
 		currentCommand_ = CommandType::ATTACK;
@@ -58,30 +68,30 @@ void TestAlly::OnCollision(GameObject* pTarget)
 	}
 }
 
-void TestAlly::CommandPattern()
-{
-	if (currentCommand_ == CommandType::ATTACK)
-	{
-		
-		if (pEnemy_)
-		{
-			XMFLOAT3 enemyPos = pEnemy_->GetPosition();
-			XMFLOAT3 myPos = transform_.position_;
-
-			// 敵への方向ベクトル計算
-			float speed = 0.1f;
-			if (transform_.position_.x < enemyPos.x)
-			{
-				transform_.position_.x += speed;
-			}
-			else if (transform_.position_.x > enemyPos.x)
-			{
-				transform_.position_.x -= speed;
-			}
-		}
-	}
-	else if (currentCommand_ == CommandType::NONE)
-	{
-		transform_.position_.x = -2.0f;
-	}
-}
+//void TestAlly::CommandPattern()
+//{
+//	if (currentCommand_ == CommandType::ATTACK)
+//	{
+//		pEnemy_ = FindObject("TestEnemy");
+//		if (pEnemy_)
+//		{
+//			XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+//			XMFLOAT3 myPos = transform_.position_;
+//
+//			// 敵への方向ベクトル計算
+//			float speed = 0.1f;
+//			if (transform_.position_.x < enemyPos.x)
+//			{
+//				transform_.position_.x += speed;
+//			}
+//			//else if (transform_.position_.x > enemyPos.x)
+//			//{
+//			//	transform_.position_.x -= speed;
+//			//}
+//		}
+//	}
+//	else if (currentCommand_ == CommandType::NONE)
+//	{
+//		transform_.position_.x = -2.0f;
+//	}
+//}

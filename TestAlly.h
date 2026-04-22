@@ -18,6 +18,7 @@ public:
 private:
     Fbx* pFbx_;
     int hModel_;
+    GameObject* pPlayer_;
     GameObject* pEnemy_;
     CommandType currentCommand_ = CommandType::NONE;
 
