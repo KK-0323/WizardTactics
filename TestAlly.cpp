@@ -1,6 +1,6 @@
 #include "TestAlly.h"
-#include "TestPlayer.h"
 #include "Engine\\Model.h"
+#include "Engine\\Input.h"
 #include "Engine\\SphereCollider.h"
 
 TestAlly::TestAlly(GameObject* parent)
@@ -18,6 +18,8 @@ void TestAlly::Initialize()
 	assert(hModel_ >= 0);
 	transform_.position_ = { -2.0f, 3.0f, 0.0f };
 
+	pEnemy_ = FindObject("TestEnemy");
+
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
 	
@@ -25,47 +27,14 @@ void TestAlly::Initialize()
 
 void TestAlly::Update()
 {
-	TestPlayer* pPlayer = (TestPlayer*)FindObject("TestPlayer");
-	if (!pPlayer) return;
-
-	CommandType command = pPlayer->GetCurrentCommand();
-
-	if (command == CommandType::ATTACK)
+	CommandPattern();
+	if (Input::IsKeyDown(DIK_1))
 	{
-		GameObject* pEnemy = FindObject("TestEnemy");
-		if (pEnemy)
-		{
-			XMFLOAT3 enemyPos = pEnemy->GetPosition();
-			XMFLOAT3 myPos = transform_.position_;
-
-			// 敵への方向ベクトル計算
-			float speed = 0.1f;
-			if (myPos.x < enemyPos.x)
-			{
-				myPos.x += speed;
-			}
-			else if (myPos.x > enemyPos.x)
-			{
-				myPos.x -= speed;
-			}
-
-			transform_.position_ = myPos;
-		}
+		currentCommand_ = CommandType::ATTACK;
 	}
-	else
+	if (Input::IsKeyDown(DIK_0))
 	{
-		float followSpeed = 0.05f;
-		XMFLOAT3 targetPos = pPlayer->GetPosition();
-		targetPos.x -= 2.0f;
-
-		if (transform_.position_.x < targetPos.x)
-		{
-			transform_.position_.x += followSpeed;
-		}
-		if (transform_.position_.x > targetPos.x)
-		{
-			transform_.position_.x -= followSpeed;
-		}
+		currentCommand_ = CommandType::NONE;
 	}
 }
 
@@ -86,5 +55,33 @@ void TestAlly::OnCollision(GameObject* pTarget)
 	{
 		int damage = CalculateDamage(10, pTarget);
 		pTarget->ApplyDamage(damage);
+	}
+}
+
+void TestAlly::CommandPattern()
+{
+	if (currentCommand_ == CommandType::ATTACK)
+	{
+		
+		if (pEnemy_)
+		{
+			XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+			XMFLOAT3 myPos = transform_.position_;
+
+			// 敵への方向ベクトル計算
+			float speed = 0.1f;
+			if (transform_.position_.x < enemyPos.x)
+			{
+				transform_.position_.x += speed;
+			}
+			else if (transform_.position_.x > enemyPos.x)
+			{
+				transform_.position_.x -= speed;
+			}
+		}
+	}
+	else if (currentCommand_ == CommandType::NONE)
+	{
+		transform_.position_.x = -2.0f;
 	}
 }

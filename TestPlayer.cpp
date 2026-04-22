@@ -26,19 +26,21 @@ void TestPlayer::Update()
 {
 	if (Input::IsKey(DIK_A))
 	{
-		transform_.position_.x -= 1.0f;
+		transform_.position_.x -= 0.1f;
 	}
 	if (Input::IsKey(DIK_D))
 	{
-		transform_.position_.x += 1.0f;
+		transform_.position_.x += 0.1f;
 	}
 	if (Input::IsKeyDown(DIK_1))
 	{
 		currentCommand_ = CommandType::ATTACK;
+		//OutputDebugStringA("Player: Input 1 -> Attack\n");
 	}
 	if (Input::IsKeyDown(DIK_0))
 	{
 		currentCommand_ = CommandType::NONE;
+		//OutputDebugStringA("Player: Input 0 -> None\n");
 	}
 }
 

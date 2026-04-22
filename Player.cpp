@@ -39,11 +39,11 @@ void Player::Update()
 	switch (currentScene_)
 	{
 	case SCENE_ID_PLAY:
-		UpdateMovement();
-		UpdateFloating();
+		//UpdateMovement();
+		//UpdateFloating();
 		break;
 	case SCENE_ID_BATTLE:
-		UpdateBattle();
+		//UpdateBattle();
 		break;
 	default:
 		break;
@@ -172,11 +172,11 @@ void Player::UpdateMovement()
 // BattleScene‚Ìˆ—
 void Player::UpdateBattle()
 {
-	if (Input::IsKeyDown(DIK_1))
-	{
-		currentOrder_.type_ = CommandType::ATTACK;
-		MessageBox(nullptr, L"UŒ‚‚ğw¦", L"attack", MB_OK);
-	}
+	//if (Input::IsKeyDown(DIK_1))
+	//{
+	//	currentOrder_.type_ = CommandType::ATTACK;
+	//	MessageBox(nullptr, L"UŒ‚‚ğw¦", L"attack", MB_OK);
+	//}
 }
 
 void Player::UpdateFloating()
