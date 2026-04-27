@@ -3,13 +3,6 @@
 #include "BoxCollider.h"
 #include <Windows.h>
 
-namespace Compatibility
-{
-	const float EFFECTIVE = 1.5f;
-	const float NORMAL = 1.0f;
-	const float RESIST = 0.5f;
-}
-
 GameObject::GameObject()
 	:pParent_(nullptr)
 {
@@ -307,138 +300,138 @@ void GameObject::RoundRobin(GameObject* pTarget)
 
 void GameObject::OnCollision(GameObject* pTarget)
 {
-	float damageMultiplier = 1.0f;
+	//float damageMultiplier = 1.0f;
 
-	switch (this->attackType_)
-	{
-	case AttackType::NONE:
-		break;
-	case AttackType::SLASH:
-		if (pTarget->defenseType_ == DefenseType::SOFT)
-		{
-			damageMultiplier = 1.5f;
-		}
-		if (pTarget->defenseType_ == DefenseType::HARD)
-		{
-			damageMultiplier = 0.5f;
-		}
-		break;
-	case AttackType::BLUNT:
-		if (pTarget->defenseType_ == DefenseType::HARD)
-		{
-			damageMultiplier = 1.5f;
-		}
-		if (pTarget->defenseType_ == DefenseType::SPIRIT)
-		{
-			damageMultiplier = 0.5f;
-		}
-		break;
-	case AttackType::MAGIC:
-		if (pTarget->defenseType_ == DefenseType::SPIRIT)
-		{
-			damageMultiplier = 1.5f;
-		}
-		if (pTarget->defenseType_ == DefenseType::SOFT)
-		{
-			damageMultiplier = 0.8f;
-		}
-		break;
-	}
+	//switch (this->attackType_)
+	//{
+	//case AttackType::NONE:
+	//	break;
+	//case AttackType::SLASH:
+	//	if (pTarget->defenseType_ == DefenseType::SOFT)
+	//	{
+	//		damageMultiplier = 1.5f;
+	//	}
+	//	if (pTarget->defenseType_ == DefenseType::HARD)
+	//	{
+	//		damageMultiplier = 0.5f;
+	//	}
+	//	break;
+	//case AttackType::BLUNT:
+	//	if (pTarget->defenseType_ == DefenseType::HARD)
+	//	{
+	//		damageMultiplier = 1.5f;
+	//	}
+	//	if (pTarget->defenseType_ == DefenseType::SPIRIT)
+	//	{
+	//		damageMultiplier = 0.5f;
+	//	}
+	//	break;
+	//case AttackType::MAGIC:
+	//	if (pTarget->defenseType_ == DefenseType::SPIRIT)
+	//	{
+	//		damageMultiplier = 1.5f;
+	//	}
+	//	if (pTarget->defenseType_ == DefenseType::SOFT)
+	//	{
+	//		damageMultiplier = 0.8f;
+	//	}
+	//	break;
+	//}
 }
 
-float GameObject::GetPhysicalCalculation(AttackType atk, DefenseType def)
-{
-	if (atk == AttackType::SLASH)
-	{
-		if (def == DefenseType::SOFT)
-		{
-			return Compatibility::EFFECTIVE;
-		}
-		else if (def == DefenseType::HARD)
-		{
-			return Compatibility::RESIST;
-		}
-		else
-		{
-			return Compatibility::NORMAL;
-		}
-	}
-	if (atk == AttackType::BLUNT)
-	{
-		if (def == DefenseType::HARD)
-		{
-			return Compatibility::EFFECTIVE;
-		}
-		else if(def == DefenseType::SPIRIT)
-		{
-			return Compatibility::RESIST;
-		}
-		else
-		{
-			return Compatibility::NORMAL;
-		}
-	}
-}
-
-float GameObject::GetElementalCalculation(ElementType atk, ElementType def)
-{
-	if (atk == ElementType::FIRE && def == ElementType::THUNDER)
-	{
-		return Compatibility::EFFECTIVE;
-	}
-	if (atk == ElementType::THUNDER && def == ElementType::WATER)
-	{
-		return Compatibility::EFFECTIVE;
-	}
-	if (atk == ElementType::WATER && def == ElementType::FIRE)
-	{
-		return Compatibility::EFFECTIVE;
-	}
-
-	if (atk == ElementType::FIRE && def == ElementType::WATER)
-	{
-		return Compatibility::RESIST;
-	}
-	if (atk == ElementType::THUNDER && def == ElementType::FIRE)
-	{
-		return Compatibility::RESIST;
-	}
-	if (atk == ElementType::WATER && def == ElementType::THUNDER)
-	{
-		return Compatibility::RESIST;
-	}
-
-	return Compatibility::NORMAL;
-}
-
-int GameObject::CalculateDamage(int baseAtk, GameObject* pTarget)
-{
-	// 物理相性の取得
-	float physCal = GetPhysicalCalculation(this->GetAttack(), pTarget->GetDefense());
-
-	// 属性相性の取得
-	float elemCal = GetElementalCalculation(this->GetElement(), pTarget->GetElement());
-
-	// 総合計算
-	float totalCal = (float)baseAtk * physCal * elemCal;
-	return (int)totalCal;
-}
-
-void GameObject::ApplyDamage(int damage)
-{
-	if (isDead_)
-	{
-		return;
-	}
-
-	currentHp_ -= damage;
-	
-	if (currentHp_ <= 0)
-	{
-		currentHp_ = 0;
-		isDead_ = true;
-	}
-}
+//float GameObject::GetPhysicalCalculation(AttackType atk, DefenseType def)
+//{
+//	if (atk == AttackType::SLASH)
+//	{
+//		if (def == DefenseType::SOFT)
+//		{
+//			return Compatibility::EFFECTIVE;
+//		}
+//		else if (def == DefenseType::HARD)
+//		{
+//			return Compatibility::RESIST;
+//		}
+//		else
+//		{
+//			return Compatibility::NORMAL;
+//		}
+//	}
+//	if (atk == AttackType::BLUNT)
+//	{
+//		if (def == DefenseType::HARD)
+//		{
+//			return Compatibility::EFFECTIVE;
+//		}
+//		else if(def == DefenseType::SPIRIT)
+//		{
+//			return Compatibility::RESIST;
+//		}
+//		else
+//		{
+//			return Compatibility::NORMAL;
+//		}
+//	}
+//}
+//
+//float GameObject::GetElementalCalculation(ElementType atk, ElementType def)
+//{
+//	if (atk == ElementType::FIRE && def == ElementType::THUNDER)
+//	{
+//		return Compatibility::EFFECTIVE;
+//	}
+//	if (atk == ElementType::THUNDER && def == ElementType::WATER)
+//	{
+//		return Compatibility::EFFECTIVE;
+//	}
+//	if (atk == ElementType::WATER && def == ElementType::FIRE)
+//	{
+//		return Compatibility::EFFECTIVE;
+//	}
+//
+//	if (atk == ElementType::FIRE && def == ElementType::WATER)
+//	{
+//		return Compatibility::RESIST;
+//	}
+//	if (atk == ElementType::THUNDER && def == ElementType::FIRE)
+//	{
+//		return Compatibility::RESIST;
+//	}
+//	if (atk == ElementType::WATER && def == ElementType::THUNDER)
+//	{
+//		return Compatibility::RESIST;
+//	}
+//
+//	return Compatibility::NORMAL;
+//}
+//
+//int GameObject::CalculateDamage(int baseAtk, GameObject* pTarget)
+//{
+//	// 物理相性の取得
+//	float physCal = GetPhysicalCalculation(this->GetAttack(), pTarget->GetDefense());
+//
+//	// 属性相性の取得
+//	float elemCal = GetElementalCalculation(this->GetElement(), pTarget->GetElement());
+//
+//	// 総合計算
+//	float totalCal = (float)baseAtk * physCal * elemCal;
+//	return (int)totalCal;
+//}
+//
+//void GameObject::ApplyDamage(int damage)
+//{
+//	if (isDead_)
+//	{
+//		return;
+//	}
+//
+//	currentHp_ -= damage;
+//	
+//	if (currentHp_ <= 0)
+//	{
+//		currentHp_ = 0;
+//		isDead_ = true;
+//	}
+//}
 
 bool GameObject::CheckRayToStage(const XMFLOAT3& rayOrigin, GameObject* pStage)
 {

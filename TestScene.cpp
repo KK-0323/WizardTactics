@@ -15,10 +15,12 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
-	Instantiate<TestStage>(this);
-	Instantiate<TestPlayer>(this);
-	Instantiate<TestEnemy>(this);
-	Instantiate<TestAlly>(this);
+	auto stage = Instantiate<TestStage>(this);
+	auto player = Instantiate<TestPlayer>(this);
+	auto enemy = Instantiate<TestEnemy>(this);
+	auto ally = Instantiate<TestAlly>(this);
+
+	ally->SetTargetEnemy(enemy);
 }
 
 void TestScene::Update()

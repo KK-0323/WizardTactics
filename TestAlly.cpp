@@ -21,12 +21,12 @@ void TestAlly::Initialize()
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
-	
+
 }
 
 void TestAlly::Update()
 {
-	XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+	CommandPattern();
 
 	if (Input::IsKeyDown(DIK_1))
 	{
@@ -51,37 +51,32 @@ void TestAlly::Release()
 
 void TestAlly::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "TestEnemy")
-	{
-		int damage = CalculateDamage(10, pTarget);
-		pTarget->ApplyDamage(damage);
-	}
+	//if (pTarget->GetName() == "TestEnemy")
+	//{
+	//	int damage = CalculateDamage(10, pTarget);
+	//	pTarget->ApplyDamage(damage);
+	//}
 }
 
-//void TestAlly::CommandPattern()
-//{
-//	if (currentCommand_ == CommandType::ATTACK)
-//	{
-//		pEnemy_ = FindObject("TestEnemy");
-//		if (pEnemy_)
-//		{
-//			XMFLOAT3 enemyPos = pEnemy_->GetPosition();
-//			XMFLOAT3 myPos = transform_.position_;
-//
-//			// 敵への方向ベクトル計算
-//			float speed = 0.1f;
-//			if (transform_.position_.x < enemyPos.x)
-//			{
-//				transform_.position_.x += speed;
-//			}
-//			//else if (transform_.position_.x > enemyPos.x)
-//			//{
-//			//	transform_.position_.x -= speed;
-//			//}
-//		}
-//	}
-//	else if (currentCommand_ == CommandType::NONE)
-//	{
-//		transform_.position_.x = -2.0f;
-//	}
-//}
+void TestAlly::CommandPattern()
+{
+	if (currentCommand_ == CommandType::ATTACK)
+	{
+		if (pEnemy_)
+		{
+			XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+			XMFLOAT3 myPos = transform_.position_;
+
+			// 敵への方向ベクトル計算
+			float speed = 0.1f;
+			if (transform_.position_.x < enemyPos.x - 2.0f)
+			{
+				transform_.position_.x += speed;
+			}
+		}
+	}
+	else if (currentCommand_ == CommandType::NONE)
+	{
+		transform_.position_.x = -2.0f;
+	}
+}

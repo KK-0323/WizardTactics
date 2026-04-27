@@ -19,7 +19,7 @@ public:
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
 
-    OrderData* GetOrderData() override { return &currentOrder_; }
+    //OrderData* GetOrderData() override { return &currentOrder_; }
 
 private:
     void UpdateMovement();  // ˆÚ“®

@@ -15,6 +15,8 @@ public:
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
 
+    void SetTargetEnemy(GameObject* pEnemy) { pEnemy_ = pEnemy; }
+
 private:
     Fbx* pFbx_;
     int hModel_;

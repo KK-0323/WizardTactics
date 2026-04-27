@@ -51,7 +51,7 @@ void Enemy::Initialize()
 	default:
 		break;
 	}
-	SetLevel(level_);
+	//SetLevel(level_);
 
 	SphereCollider* col = new SphereCollider(0.5f);
 	AddCollider(col);
@@ -140,36 +140,35 @@ void Enemy::Release()
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Player")
-	{
-		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
-		if (sceneObj != nullptr)
-		{
-			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
-			if (sceneManager != nullptr)
-			{
-				sceneManager->ChangeScene(SCENE_ID_BATTLE);
-			}
-		}
-	}
+	//if (pTarget->GetName() == "Player")
+	//{
+	//	GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
+	//	if (sceneObj != nullptr)
+	//	{
+	//		SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
+	//		if (sceneManager != nullptr)
+	//		{
+	//			sceneManager->ChangeScene(SCENE_ID_BATTLE);
+	//		}
+	//	}
+	//}
 
-	if (pTarget->GetName() == "Ally")
-	{
-		int damage = pTarget->CalculateDamage(20, this);
+	//if (pTarget->GetName() == "Ally")
+	//{
+	//	int damage = pTarget->CalculateDamage(20, this);
+	//	this->currentHp_ -= damage;
 
-		this->currentHp_ -= damage;
+	//	if (this->currentHp_ <= 0)
+	//	{
+	//		this->currentHp_ = 0;
 
-		if (this->currentHp_ <= 0)
-		{
-			this->currentHp_ = 0;
-
-			GameObject* sceneObj = FindObject("SceneManager");
-			if (sceneObj)
-			{
-				SceneManager* pSM = (SceneManager*)sceneObj;
-				pSM->ChangeScene(SCENE_ID_CLEAR);
-			}
-			this->KillMe();
-		}
-	}
+	//		GameObject* sceneObj = FindObject("SceneManager");
+	//		if (sceneObj)
+	//		{
+	//			SceneManager* pSM = (SceneManager*)sceneObj;
+	//			pSM->ChangeScene(SCENE_ID_CLEAR);
+	//		}
+	//		this->KillMe();
+	//	}
+	//}
 }

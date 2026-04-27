@@ -22,29 +22,29 @@ enum PairCollsion
 	PAIR_MAX
 };
 
-enum class AttackType
-{
-	NONE,	// ñ≥
-	SLASH,	// éaåÇ
-	BLUNT,	// ë≈åÇ
-	MAGIC	// ñÇñ@
-};
-
-enum class DefenseType
-{
-	NONE,	// ïÅí 
-	SOFT,	// è_ÇÁÇ©Ç¢
-	HARD,	// çdÇ¢
-	SPIRIT	// óÏëÃ
-};
-
-enum class ElementType
-{
-	NONE,
-	FIRE,
-	WATER,
-	THUNDER
-};
+//enum class AttackType
+//{
+//	NONE,	// ñ≥
+//	SLASH,	// éaåÇ
+//	BLUNT,	// ë≈åÇ
+//	MAGIC	// ñÇñ@
+//};
+//
+//enum class DefenseType
+//{
+//	NONE,	// ïÅí 
+//	SOFT,	// è_ÇÁÇ©Ç¢
+//	HARD,	// çdÇ¢
+//	SPIRIT	// óÏëÃ
+//};
+//
+//enum class ElementType
+//{
+//	NONE,
+//	FIRE,
+//	WATER,
+//	THUNDER
+//};
 
 class GameObject
 {
@@ -96,23 +96,23 @@ public:
 		return obj;
 	}
 
-	//Ç±Ç±Ç©ÇÁì∆é©ä÷êî
+	//Ç±Ç±Ç©ÇÁé©çÏä÷êî
 
-	virtual OrderData* GetOrderData() { return nullptr; }
-	void SetLevel(int level) { currentLevel_ = level; }
-	void SetAttackType(AttackType type) { attackType_ = type; }
-	void SetDefenseType(DefenseType type) { defenseType_ = type; }
-	void SetElementType(ElementType type) { elementType_ = type; }
+	//virtual OrderData* GetOrderData() { return nullptr; }
+	//void SetLevel(int level) { currentLevel_ = level; }
+	//void SetAttackType(AttackType type) { attackType_ = type; }
+	//void SetDefenseType(DefenseType type) { defenseType_ = type; }
+	//void SetElementType(ElementType type) { elementType_ = type; }
 
 	string GetName() const { return objectName_; }
-	virtual int GetLevel() const { return currentLevel_; }
-	AttackType GetAttack() const { return attackType_; }
-	DefenseType GetDefense() const { return defenseType_; }
-	ElementType GetElement() const { return elementType_; }
+	//virtual int GetLevel() const { return currentLevel_; }
+	//AttackType GetAttack() const { return attackType_; }
+	//DefenseType GetDefense() const { return defenseType_; }
+	//ElementType GetElement() const { return elementType_; }
 
-	float GetPhysicalCalculation(AttackType atk, DefenseType def);
-	float GetElementalCalculation(ElementType atk, ElementType def);
-	int CalculateDamage(int baseAtk, GameObject* pTarget);
+	//float GetPhysicalCalculation(AttackType atk, DefenseType def);
+	//float GetElementalCalculation(ElementType atk, ElementType def);
+	//int CalculateDamage(int baseAtk, GameObject* pTarget);
 
 	void ApplyDamage(int damage);
 	bool IsDead() const { return isDead_; }
@@ -132,9 +132,9 @@ protected:
 	int maxHp_;
 	int currentHp_;
 	bool isDead_;
-	DefenseType defenseType_ = DefenseType::NONE;
-	AttackType attackType_ = AttackType::NONE;
-	ElementType elementType_ = ElementType::NONE;
+	//DefenseType defenseType_ = DefenseType::NONE;
+	//AttackType attackType_ = AttackType::NONE;
+	//ElementType elementType_ = ElementType::NONE;
 
 private:
 };

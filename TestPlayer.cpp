@@ -35,12 +35,10 @@ void TestPlayer::Update()
 	if (Input::IsKeyDown(DIK_1))
 	{
 		currentCommand_ = CommandType::ATTACK;
-		//OutputDebugStringA("Player: Input 1 -> Attack\n");
 	}
 	if (Input::IsKeyDown(DIK_0))
 	{
 		currentCommand_ = CommandType::NONE;
-		//OutputDebugStringA("Player: Input 0 -> None\n");
 	}
 }
 

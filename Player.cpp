@@ -112,18 +112,18 @@ void Player::Update()
 
 	// ÉJÉÅÉâèàóù
 	XMFLOAT3 camPos = transform_.position_;
-	if (pParent_->GetName() == "PlayScene")
-	{
-		camPos.y += 10.0f;
-		camPos.z -= 30.0f;
-		Camera::SetPosition(XMLoadFloat3(&camPos));
-		Camera::SetTarget(XMLoadFloat3(&transform_.position_));
-	}
-	else
-	{
-		Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
-		Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
-	}
+	//if (pParent_->GetName() == "PlayScene")
+	//{
+	//	camPos.y += 10.0f;
+	//	camPos.z -= 30.0f;
+	//	Camera::SetPosition(XMLoadFloat3(&camPos));
+	//	Camera::SetTarget(XMLoadFloat3(&transform_.position_));
+	//}
+	//else
+	//{
+	//	Camera::SetPosition(XMVectorSet(0, 20.0f, -50.0f, 0));
+	//	Camera::SetTarget(XMVectorSet(0, 0, 0, 0));
+	//}
 }
 
 // PlaySceneÇÃèàóù

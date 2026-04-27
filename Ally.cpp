@@ -126,11 +126,11 @@ void Ally::Release()
 
 void Ally::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetName() == "Enemy")
-	{
-		int damage = this->CalculateDamage(this->atkPower_, pTarget);
-		pTarget->ApplyDamage(damage);
-	}
+	//if (pTarget->GetName() == "Enemy")
+	//{
+	//	int damage = this->CalculateDamage(this->atkPower_, pTarget);
+	//	pTarget->ApplyDamage(damage);
+	//}
 }
 
 void Ally::UpdateMovement()
