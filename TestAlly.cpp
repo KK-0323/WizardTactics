@@ -26,18 +26,8 @@ void TestAlly::Initialize()
 
 void TestAlly::Update()
 {
-	if (pEnemy_ == nullptr)
-	{
-		pEnemy_ = FindObject("TestEnemy");
-	}
-	if (pEnemy_)
-	{
-		char buf[256];
-		sprintf_s(buf, "Found Object Name: %s, Address: %p\n", pEnemy_->GetName().c_str(), pEnemy_);
-		OutputDebugStringA(buf);
-		//XMFLOAT3 enemyPos = pEnemy_->GetPosition();
-	}
-	//CommandPattern();
+	XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+
 	if (Input::IsKeyDown(DIK_1))
 	{
 		currentCommand_ = CommandType::ATTACK;
