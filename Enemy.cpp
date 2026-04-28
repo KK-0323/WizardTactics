@@ -140,18 +140,18 @@ void Enemy::Release()
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	//if (pTarget->GetName() == "Player")
-	//{
-	//	GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
-	//	if (sceneObj != nullptr)
-	//	{
-	//		SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
-	//		if (sceneManager != nullptr)
-	//		{
-	//			sceneManager->ChangeScene(SCENE_ID_BATTLE);
-	//		}
-	//	}
-	//}
+	if (pTarget->GetName() == "Player")
+	{
+		GameObject* sceneObj = this->GetRootJob()->FindObject("SceneManager");
+		if (sceneObj != nullptr)
+		{
+			SceneManager* sceneManager = dynamic_cast<SceneManager*>(sceneObj);
+			if (sceneManager != nullptr)
+			{
+				sceneManager->ChangeScene(SCENE_ID_BATTLE);
+			}
+		}
+	}
 
 	//if (pTarget->GetName() == "Ally")
 	//{

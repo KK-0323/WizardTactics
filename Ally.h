@@ -22,6 +22,8 @@ public:
     void Release() override;
     void OnCollision(GameObject* pTarget) override;
 
+    void SetTargetEnemy(GameObject* pEnemy) { pEnemy_ = pEnemy; }
+
 private:
     void UpdateMovement(); // à⁄ìÆ
     void UpdateBattle();   // êÌì¨
@@ -55,5 +57,8 @@ private:
     SceneManager* pSM_ = nullptr;
     SCENE_ID currentScene_ = SCENE_ID_PLAY;
     CommandType cType_ = CommandType::NONE;
+    GameObject* pEnemy_;
+
+    void CommandPattern();
 };
 

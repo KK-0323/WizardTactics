@@ -7,7 +7,7 @@
 Ally::Ally(GameObject* parent)
 	:GameObject(parent, "Ally"), pFbx_(nullptr),
 	maxHp_(50), curHp_(50), atkPower_(20), defPower_(20),
-	velocityY_(0.0f), isOnGround_(false)
+	velocityY_(0.0f), isOnGround_(false), pEnemy_(nullptr)
 {
 }
 
@@ -40,6 +40,7 @@ void Ally::Update()
 		UpdateMovement();
 		break;
 	case SCENE_ID_BATTLE:
+		CommandPattern();
 		UpdateBattle();
 		break;
 	default:
@@ -192,16 +193,27 @@ void Ally::UpdateBattle()
 	{
 		cType_ = CommandType::NONE;
 	}
+}
 
-
-	if (cType_ == CommandType::ATTACK && transform_.position_.x <= ATTACK_POSITION)
+void Ally::CommandPattern()
+{
+	if (cType_ == CommandType::ATTACK)
 	{
-		transform_.position_.x += 0.5f;
-		transform_.rotate_.y += 10.0f;
+		if (pEnemy_)
+		{
+			XMFLOAT3 enemyPos = pEnemy_->GetPosition();
+			XMFLOAT3 myPos = transform_.position_;
+
+			// 敵への方向ベクトル計算
+			float speed = 0.1f;
+			if (transform_.position_.x < enemyPos.x - 2.0f)
+			{
+				transform_.position_.x += speed;
+			}
+		}
 	}
-	if (cType_ == CommandType::NONE)
+	else if (cType_ == CommandType::NONE)
 	{
-		transform_.position_.x = START_POSTION;
-		transform_.rotate_.y = 90.0f;
+		transform_.position_.x = -2.0f;
 	}
 }

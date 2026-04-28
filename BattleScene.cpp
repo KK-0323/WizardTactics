@@ -21,9 +21,12 @@ BattleScene::~BattleScene()
 void BattleScene::Initialize()
 {
 	Instantiate<StageManager>(this);
-	Instantiate<Ally>(this);
-	Instantiate<Player>(this);
-	Instantiate<Enemy>(this);
+	auto player = Instantiate<Player>(this);
+	auto zEnemy = Instantiate<Enemy>(this, ENEMY_ZAKO);
+	auto bEnemy = Instantiate<Enemy>(this, ENEMY_BOSS);
+	auto ally = Instantiate<Ally>(this);
+
+	ally->SetTargetEnemy(zEnemy);
 }
 
 void BattleScene::Update()

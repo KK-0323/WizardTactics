@@ -39,11 +39,11 @@ void Player::Update()
 	switch (currentScene_)
 	{
 	case SCENE_ID_PLAY:
-		//UpdateMovement();
-		//UpdateFloating();
+		UpdateMovement();
+		UpdateFloating();
 		break;
 	case SCENE_ID_BATTLE:
-		//UpdateBattle();
+		UpdateBattle();
 		break;
 	default:
 		break;

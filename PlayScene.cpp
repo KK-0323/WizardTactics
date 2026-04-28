@@ -21,10 +21,12 @@ PlayScene::~PlayScene()
 void PlayScene::Initialize()
 {
 	Instantiate<StageManager>(this);
-	Instantiate<Player>(this);
-	Instantiate<Enemy>(this, ENEMY_ZAKO);
-	Instantiate<Enemy>(this, ENEMY_BOSS);
-	Instantiate<Ally>(this);
+	auto player = Instantiate<Player>(this);
+	auto zEnemy = Instantiate<Enemy>(this, ENEMY_ZAKO);
+	auto bEnemy = Instantiate<Enemy>(this, ENEMY_BOSS);
+	auto ally = Instantiate<Ally>(this);
+
+	ally->SetTargetEnemy(zEnemy);
 }
 
 void PlayScene::Update()
